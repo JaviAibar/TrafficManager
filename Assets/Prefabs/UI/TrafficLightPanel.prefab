@@ -298,7 +298,18 @@ MonoBehaviour:
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6218639651656078398}
+        m_MethodName: SetRed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8990996263157437070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -922,7 +933,18 @@ MonoBehaviour:
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6218639651656078398}
+        m_MethodName: SetYellow
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &6695624497723776882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1253,6 +1275,7 @@ GameObject:
   - component: {fileID: 8990996264355553652}
   - component: {fileID: 8990996264355553658}
   - component: {fileID: 8990996264355553659}
+  - component: {fileID: 6218639651656078398}
   m_Layer: 5
   m_Name: TrafficLightPanel
   m_TagString: Untagged
@@ -1318,6 +1341,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6218639651656078398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8990996264355553653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b150c777317e4e94991a3402bc2cf639, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  redInputField: {fileID: 8990996265022043672}
+  yellowInputField: {fileID: 8990996264896075485}
+  greenInputField: {fileID: 8990996265002750116}
+  redSlider: {fileID: 8990996263157437071}
+  yellowSlider: {fileID: 8990996263799050770}
+  greenSlider: {fileID: 8990996264766467099}
 --- !u!1 &8990996264357095886
 GameObject:
   m_ObjectHideFlags: 0
@@ -1975,7 +2016,18 @@ MonoBehaviour:
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6218639651656078398}
+        m_MethodName: SetGreen
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &6718493892487407437
 MonoBehaviour:
   m_ObjectHideFlags: 0

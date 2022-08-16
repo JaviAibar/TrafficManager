@@ -11,6 +11,9 @@ TextureImporter:
   - first:
       213: -7971717296743112095
     second: TrafficLights_2
+  - first:
+      213: -3379144960095092179
+    second: TrafficLights_3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -111,7 +114,7 @@ TextureImporter:
       name: TrafficLights_0
       rect:
         serializedVersion: 2
-        x: 1
+        x: 0
         y: 8
         width: 4
         height: 24
@@ -132,7 +135,7 @@ TextureImporter:
       name: TrafficLights_1
       rect:
         serializedVersion: 2
-        x: 6
+        x: 4
         y: 8
         width: 4
         height: 24
@@ -153,7 +156,7 @@ TextureImporter:
       name: TrafficLights_2
       rect:
         serializedVersion: 2
-        x: 11
+        x: 8
         y: 8
         width: 4
         height: 24
@@ -166,6 +169,27 @@ TextureImporter:
       bones: []
       spriteID: 1622ac5ca55ce5190800000000000000
       internalID: -7971717296743112095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TrafficLights_3
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 8
+        width: 4
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d220bf0ff8dda11d0800000000000000
+      internalID: -3379144960095092179
       vertices: []
       indices: 
       edges: []
