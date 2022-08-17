@@ -1,19 +1,7 @@
 fileFormatVersion: 2
-guid: 3067319c9aebee741a160ecf39caa95b
+guid: 2c8b80639958e9c4c984e2d6b0e21355
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: -7080495786062622252
-    second: TrafficLights_0
-  - first:
-      213: -1972741785918757015
-    second: TrafficLights_1
-  - first:
-      213: -7971717296743112095
-    second: TrafficLights_2
-  - first:
-      213: -3379144960095092179
-    second: TrafficLights_3
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -59,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 8
+  spritePixelsToUnits: 0.15
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -80,7 +68,7 @@ TextureImporter:
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 32
     resizeAlgorithm: 0
-    textureFormat: 4
+    textureFormat: 1
     textureCompression: 2
     compressionQuality: 50
     crunchedCompression: 0
@@ -90,10 +78,22 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
-    maxTextureSize: 32
+    maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: 4
-    textureCompression: 2
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -102,10 +102,10 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: WebGL
-    maxTextureSize: 32
+    maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: 4
-    textureCompression: 2
+    textureFormat: -1
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -116,85 +116,85 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Green
+      name: Pause
       rect:
         serializedVersion: 2
         x: 0
-        y: 8
-        width: 4
-        height: 24
+        y: 1
+        width: 6
+        height: 7
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4d1561eb8960dbd90800000000000000
-      internalID: -7080495786062622252
+      spriteID: f9dd2224eb7ab8b4ba87285e550c5d90
+      internalID: -568121169
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Yellow
+      name: Play
       rect:
         serializedVersion: 2
-        x: 4
-        y: 8
-        width: 4
-        height: 24
+        x: 7
+        y: 1
+        width: 5
+        height: 7
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9672eb83cc96f94e0800000000000000
-      internalID: -1972741785918757015
+      spriteID: cd17fea519c207b45b14513133b1a8d6
+      internalID: -2011424881
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Red
+      name: Speed2
       rect:
         serializedVersion: 2
-        x: 8
-        y: 8
-        width: 4
-        height: 24
+        x: 13
+        y: 1
+        width: 8
+        height: 7
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1622ac5ca55ce5190800000000000000
-      internalID: -7971717296743112095
+      spriteID: 94ed28033581ea741ab4571b6a75228e
+      internalID: 1426770021
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Off
+      name: Speed3
       rect:
         serializedVersion: 2
-        x: 12
-        y: 8
-        width: 4
-        height: 24
+        x: 21
+        y: 1
+        width: 11
+        height: 7
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d220bf0ff8dda11d0800000000000000
-      internalID: -3379144960095092179
+      spriteID: 6e02e273f159e51449b9a49f0b03ae01
+      internalID: 1189707237
       vertices: []
       indices: 
       edges: []
@@ -210,10 +210,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Off: -3379144960095092179
-      Green: -7080495786062622252
-      Red: -7971717296743112095
-      Yellow: -1972741785918757015
+      Pause: -568121169
+      Play: -2011424881
+      Speed3: 1189707237
+      Speed2: 1426770021
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
