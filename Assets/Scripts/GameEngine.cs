@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameEngine : MonoBehaviour
 {
-    public enum trafficLightState:ushort
+    public enum trafficLightState : ushort
     {
         Off = 0,
         Red = 1,
@@ -20,10 +21,29 @@ public class GameEngine : MonoBehaviour
     }
 
     public Sprite[] trafficLightSprites = new Sprite[4];
+    public Image pauseImage;
+    public Image playImage;
+    public Image fastImage;
+    public Image fastestImage;
+
+    public void SetIconColor(GameStates state)
+    {
+
+        /*  switch (state)
+          {
+              case GameStates.Paused:
+                  pauseImage.color = 
+          }
+          pauseImage;
+        playImage;
+       fastImage;
+       fastestImage;*/
+    }
 
     public void PauseGame()
     {
         SetSpeed(GameStates.Paused);
+
     }
 
     public void ResumeGame()
