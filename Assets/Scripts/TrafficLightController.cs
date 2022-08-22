@@ -2,8 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-[RequireComponent(typeof(BoxCollider), typeof(SpriteRenderer))]
+[RequireComponent(typeof(BoxCollider))]
 public class TrafficLightController : MonoBehaviour
 {
     public GameEngine gameEngine;
@@ -11,13 +12,13 @@ public class TrafficLightController : MonoBehaviour
     public TrafficLightUIController trafficLightUIPanel;
     public float red, yellow, green;
     public float accumulativeYellow, accumulativeGreen;
-    public SpriteRenderer spriteRenderer;
+    public Image image;
     [SerializeField] private float timer;
-    public float speed = 1;
+    public float speed = 0;
 
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        image = GetComponent<Image>();
         gameEngine = FindObjectOfType<GameEngine>();
     }
     private void Start()
@@ -26,18 +27,24 @@ public class TrafficLightController : MonoBehaviour
     }
     void Update()
     {
+        
         timer += Time.deltaTime * speed;
-        if (timer % accumulativeYellow <= red)
+        if (speed > 0)
         {
-            spriteRenderer.sprite = gameEngine.trafficLightSprites[(int)GameEngine.trafficLightState.Red];
-        } else if (timer % accumulativeYellow <= accumulativeGreen) {
-            spriteRenderer.sprite = gameEngine.trafficLightSprites[(int)GameEngine.trafficLightState.Green];
+            if (timer % accumulativeYellow <= red)
+            {
+                image.sprite = gameEngine.trafficLightSprites[(int)GameEngine.trafficLightState.Red];
+            }
+            else if (timer % accumulativeYellow <= accumulativeGreen)
+            {
+                image.sprite = gameEngine.trafficLightSprites[(int)GameEngine.trafficLightState.Green];
+            }
+            else
+            {
+                image.sprite = gameEngine.trafficLightSprites[(int)GameEngine.trafficLightState.Yellow];
+            }
         }
-        else
-        {
-            spriteRenderer.sprite = gameEngine.trafficLightSprites[(int)GameEngine.trafficLightState.Yellow];
-        }
-        if (Input.GetMouseButtonDown(0))
+      /*  if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -48,10 +55,16 @@ public class TrafficLightController : MonoBehaviour
                 trafficLightUIPanel.SetValues(red, yellow, green);
                 trafficLightUIPanel.SetSender(gameObject.GetComponent<TrafficLightController>());
             }
-        }
+        }*/
     }
 
-    public void SetValues(float? redParam, float? yellowParam, float? greenParam)
+    public void OpenMenu()
+    {
+        trafficLightPanel.SetActive(true);
+        trafficLightUIPanel.SetValues(red, yellow, green);
+        trafficLightUIPanel.SetSender(gameObject.GetComponent<TrafficLightController>());
+    }
+        public void SetValues(float? redParam, float? yellowParam, float? greenParam)
     {
         if (redParam != null) red = redParam.Value; 
         if (yellowParam != null) yellow = yellowParam.Value; 

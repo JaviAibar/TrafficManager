@@ -45,7 +45,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trafficLightSprites:
-  - {fileID: -3379144960095092179, guid: 3067319c9aebee741a160ecf39caa95b, type: 3}
-  - {fileID: -7971717296743112095, guid: 3067319c9aebee741a160ecf39caa95b, type: 3}
-  - {fileID: -7080495786062622252, guid: 3067319c9aebee741a160ecf39caa95b, type: 3}
-  - {fileID: -1972741785918757015, guid: 3067319c9aebee741a160ecf39caa95b, type: 3}
+  - {fileID: -7859512, guid: c4d697c186bf91a43baf63bb1fccdd39, type: 3}
+  - {fileID: 1218718819, guid: c4d697c186bf91a43baf63bb1fccdd39, type: 3}
+  - {fileID: 517044528, guid: c4d697c186bf91a43baf63bb1fccdd39, type: 3}
+  - {fileID: -2014490064, guid: c4d697c186bf91a43baf63bb1fccdd39, type: 3}
+  pauseImage: {fileID: 0}
+  playImage: {fileID: 0}
+  fastImage: {fileID: 0}
+  fastestImage: {fileID: 0}
