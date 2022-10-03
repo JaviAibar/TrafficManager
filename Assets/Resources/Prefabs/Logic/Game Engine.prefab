@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6092718796654122346}
   - component: {fileID: 6092718796654122345}
+  - component: {fileID: 4275719906099716261}
   m_Layer: 0
   m_Name: Game Engine
   m_TagString: Untagged
@@ -45,11 +46,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trafficLightSprites:
-  - {fileID: -7859512, guid: c4d697c186bf91a43baf63bb1fccdd39, type: 3}
-  - {fileID: 1218718819, guid: c4d697c186bf91a43baf63bb1fccdd39, type: 3}
-  - {fileID: 517044528, guid: c4d697c186bf91a43baf63bb1fccdd39, type: 3}
-  - {fileID: -2014490064, guid: c4d697c186bf91a43baf63bb1fccdd39, type: 3}
+  - {fileID: 803734443, guid: 0523cc3f4e4249042b35572df32191ef, type: 3}
+  - {fileID: -357976818, guid: 0523cc3f4e4249042b35572df32191ef, type: 3}
+  - {fileID: -1016241327, guid: 0523cc3f4e4249042b35572df32191ef, type: 3}
+  - {fileID: -1073403556, guid: 0523cc3f4e4249042b35572df32191ef, type: 3}
   pauseImage: {fileID: 0}
   playImage: {fileID: 0}
   fastImage: {fileID: 0}
   fastestImage: {fileID: 0}
+--- !u!114 &4275719906099716261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6092718796654122347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b74dcef4223301d418195776373f04bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
