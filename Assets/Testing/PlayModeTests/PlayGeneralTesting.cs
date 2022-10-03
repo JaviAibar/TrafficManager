@@ -16,7 +16,7 @@ public class PlayGeneralTesting : MonoBehaviour
         TrafficLightUIController trafficLightUI = trafficLightPanelGO.GetComponent<TrafficLightUIController>();
 
         var trafficLight = gameObject.AddComponent<TrafficLightController>();
-        trafficLight.trafficLightPanel = trafficLightPanelGO;
+        //trafficLight.trafficLightPanel = trafficLightPanelGO;
         trafficLight.trafficLightUIPanel = trafficLightUI;
         trafficLight.SetValues(2, 8, 3);
 
