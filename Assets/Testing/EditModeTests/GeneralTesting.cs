@@ -113,7 +113,11 @@ public class GeneralTesting : MonoBehaviour
         // UpLeft
         Assert.AreEqual(GameEngine.Direction.UpLeft, GameEngine.Vector3ToDirection(new Vector3(-0.79f, 0.49f, 0)));
         Assert.AreEqual(GameEngine.Direction.UpLeft, GameEngine.Vector3ToDirection(new Vector3(-0.79f, 1, 0)));
+
+        // Specific cases
+        Assert.AreEqual(GameEngine.Direction.Right, GameEngine.Vector3ToDirection(new Vector3(0.99f, -0.16f, 0)));
     }
+
     
 
     /*public void AcceptCancelTrafficLightUI()

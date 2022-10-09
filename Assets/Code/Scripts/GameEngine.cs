@@ -6,20 +6,27 @@ using UnityEngine.UI;
 
 public class GameEngine : MonoBehaviour
 {
-    static GameEngine gameEngine;
+    public static GameEngine instance;
     public float x, y;
+    public bool verbose = true;
 
     private void Awake()
     {
-        if (gameEngine == null)
+        if (instance == null)
         {
-            gameEngine = this;
+            instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
+    }
+
+    public void Print(string msg)
+    {
+        if (verbose)
+            print(msg);
     }
 
     public enum GameState : ushort
@@ -100,10 +107,10 @@ public class GameEngine : MonoBehaviour
         return (int)speed;
     }
 
-    public static Direction Vector3ToDirection(Vector3 dir)
+    public static Direction Vector2ToDirection(Vector2 dir)
     {
-        float angle = Vector3.Angle(dir, Vector3.up);
-        float angle2 = Vector3.Angle(dir, Vector3.right);
+        float angle = Vector2.Angle(dir, Vector3.up);
+        float angle2 = Vector2.Angle(dir, Vector3.right);
 
         if (angle2 > 90)
         {
@@ -114,6 +121,11 @@ public class GameEngine : MonoBehaviour
         
     }
 
+    public static Direction Vector3ToDirection(Vector3 dir)
+    {
+        return Vector2ToDirection(dir);
+    }
+
     private void OnDrawGizmos()
 
     {
@@ -122,7 +134,8 @@ public class GameEngine : MonoBehaviour
 
         //Gizmos.DrawLine(transform.position, marker.position);
 
-        Gizmos.DrawRay(Vector3.zero, new Vector3(x, y, 0));
+       // Gizmos.DrawRay(Vector3.zero, bezier.transform.forward);
+        //Gizmos.DrawRay(Vector3.zero, new Vector3(x, y, 0));
 
 
 

@@ -36,7 +36,6 @@ public class TrafficLightUIController : MonoBehaviour
         SetRed(red);
         SetYellow(yellow);
         SetGreen(green);
-        print(red + " " + yellow + " " + green);
         SetSliders(red, yellow, green);
     }
 

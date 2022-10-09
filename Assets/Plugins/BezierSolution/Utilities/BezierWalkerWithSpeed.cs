@@ -35,7 +35,7 @@ namespace BezierSolution
 		private bool onPathCompletedCalledAt1 = false;
 		private bool onPathCompletedCalledAt0 = false;
 
-		private void Update()
+		private void FixedUpdate()
 		{
 			Execute( Time.deltaTime );
 		}
@@ -60,7 +60,9 @@ namespace BezierSolution
 				else
 					targetRotation = Quaternion.LookRotation( -segment.GetTangent(), segment.GetNormal() );
 
-				transform.rotation = Quaternion.Lerp( transform.rotation, targetRotation, rotationLerpModifier * deltaTime );
+				//transform.rotation = Quaternion.Lerp( transform.rotation, targetRotation, rotationLerpModifier * deltaTime );
+				//transform.rotation = targetRotation;
+				transform.up = segment.GetTangent();
 			}
 			else if( lookAt == LookAtMode.SplineExtraData )
 				transform.rotation = Quaternion.Lerp( transform.rotation, spline.GetExtraData( m_normalizedT, extraDataLerpAsQuaternionFunction ), rotationLerpModifier * deltaTime );
