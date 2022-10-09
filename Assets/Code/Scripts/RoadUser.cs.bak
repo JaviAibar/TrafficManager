@@ -33,23 +33,24 @@ public abstract class RoadUser : MonoBehaviour
     private void Update()
     {
         timer += Time.deltaTime;
-        if (timer >= timeOffset && timer <= timeOffset + 0.5f) // Start moving
+        if (timer >= timeOffset && timer <= timeOffset + 0.5f)
         {
             bezier.speed = speed;
+        } else if (timer >= timeToLoop && timer <= timeToLoop + 0.5f)
+        {
+            bezier.NormalizedT = 0;
+            timer = 0;
         }
     }
 
     void OnEnable()
     {
         EventManager.OnTrafficLightChanged += TrafficLightChanged;
-        EventManager.OnLoopEnded += LoopEnded;
     }
 
     void OnDisable()
     {
         EventManager.OnTrafficLightChanged -= TrafficLightChanged;
-        EventManager.OnLoopEnded -= LoopEnded;
-
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -77,15 +78,9 @@ public abstract class RoadUser : MonoBehaviour
 
     public void TrafficLightChanged(TrafficLightController.TrafficLightColour colour)
     {
-        GameEngine.instance.Print("Traffic light changed to " + colour);
+        GameEngine.instance.Print("Traffic light changed to " + colour); // Se llama en el verde
         if (trafficArea != null && trafficLight != null)
-            CheckMovingConditions();
-    }
-
-    public void LoopEnded()
-    {
-        timer = 0; 
-        bezier.NormalizedT = 0;
+            CheckMovingConditions(); // pero este no se ejecuta en PedestrianController
     }
 
     public abstract void CheckMovingConditions();

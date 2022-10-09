@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    
+    public float timeToLoop;
+    private float timer;
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        timer += Time.deltaTime;
+        if (timer >= timeToLoop)
+        {
+            EventManager.OnLoopEnded();
+            timer = 0;
+        }
     }
 }

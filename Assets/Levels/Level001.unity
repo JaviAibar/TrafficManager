@@ -1717,6 +1717,16 @@ PrefabInstance:
       propertyPath: spline
       value: 
       objectReference: {fileID: 1776551145}
+    - target: {fileID: 2138304424281457317, guid: f057d7fe1f2ab7149b7953df5a479793,
+        type: 3}
+      propertyPath: timeToLoop
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2138304424281457317, guid: f057d7fe1f2ab7149b7953df5a479793,
+        type: 3}
+      propertyPath: runningSpeed
+      value: 40
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f057d7fe1f2ab7149b7953df5a479793, type: 3}
 --- !u!1 &1357103732
@@ -2733,6 +2743,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fa217fd79b281841aed81a3ef996bf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeToLoop: 0
 --- !u!4 &2010949931
 Transform:
   m_ObjectHideFlags: 0
@@ -3089,13 +3100,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2768134455536975649, guid: 9d86438a09f99cb4fbe39431dbc88125,
         type: 3}
+      propertyPath: timeOffset
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2768134455536975649, guid: 9d86438a09f99cb4fbe39431dbc88125,
+        type: 3}
       propertyPath: trafficLightUIPanel
       value: 
       objectReference: {fileID: 467924218}
     - target: {fileID: 2768134455536975649, guid: 9d86438a09f99cb4fbe39431dbc88125,
         type: 3}
       propertyPath: trafficLightTimeAmounts.Array.data[0]
-      value: 9
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2768134455536975649, guid: 9d86438a09f99cb4fbe39431dbc88125,
         type: 3}
@@ -3105,7 +3121,7 @@ PrefabInstance:
     - target: {fileID: 2768134455536975649, guid: 9d86438a09f99cb4fbe39431dbc88125,
         type: 3}
       propertyPath: trafficLightTimeAmounts.Array.data[2]
-      value: 1
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 2768134455536975650, guid: 9d86438a09f99cb4fbe39431dbc88125,
         type: 3}
