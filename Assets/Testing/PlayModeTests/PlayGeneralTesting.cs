@@ -2,10 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
+using BezierSolution;
+using UnityEngine.UI;
 
 public class PlayGeneralTesting : MonoBehaviour
 {
+
+    bool sceneLoaded;
+    bool referencesSetup;
+    Transform pedestrianTransform;
+    TrafficLightController trafficLight;
+
+
+ 
+
     [UnityTest]
     public IEnumerator TrafficLightsTiming()
     {
@@ -15,6 +27,7 @@ public class PlayGeneralTesting : MonoBehaviour
         GameObject trafficLightPanelGO = (GameObject)Instantiate(Resources.Load("Prefabs/UI/TrafficLightPanel"));
         TrafficLightUIController trafficLightUI = trafficLightPanelGO.GetComponent<TrafficLightUIController>();
 
+        gameObject.AddComponent<Image>();
         var trafficLight = gameObject.AddComponent<TrafficLightController>();
         //trafficLight.trafficLightPanel = trafficLightPanelGO;
         trafficLight.trafficLightUIPanel = trafficLightUI;
@@ -44,6 +57,7 @@ public class PlayGeneralTesting : MonoBehaviour
         Assert.AreNotEqual("Green", trafficLight.image.sprite.name);
         Assert.AreNotEqual("Yellow", trafficLight.image.sprite.name);
     }
+
 }
 // Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType privateTypeMyClass = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType(trafficLight.GetType());
 

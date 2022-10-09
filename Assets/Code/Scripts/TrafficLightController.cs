@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(BoxCollider))]
 public class TrafficLightController : MonoBehaviour
 {
     [HideInInspector] public GameEngine gameEngine;
@@ -11,7 +10,7 @@ public class TrafficLightController : MonoBehaviour
     [HideInInspector] public Image image; // Kept public for the sake of Testing
     [SerializeField] private float timer;
     private TrafficLightColour trafficLightColour;
-
+    public int timeOffset = 0;
     public enum TrafficLightColour : ushort
     {
         Off = 0,
@@ -29,7 +28,7 @@ public class TrafficLightController : MonoBehaviour
     }
     private void Start()
     {
-        timer = 0;
+        timer = timeOffset;
     }
     void Update()
     {
@@ -44,12 +43,13 @@ public class TrafficLightController : MonoBehaviour
 
     public void OpenMenu()
     {
+        trafficLightUIPanel.gameObject.SetActive(true);
         trafficLightUIPanel.SetValues(trafficLightTimeAmounts[0], trafficLightTimeAmounts[1], trafficLightTimeAmounts[2]);
         trafficLightUIPanel.SetSender(gameObject.GetComponent<TrafficLightController>());
     }
     public void SetValues(int? redParam, int? greenParam, int? yellowParam)
     {
-        if (trafficLightTimeAmounts == null) trafficLightTimeAmounts = new int[3];
+        if (trafficLightTimeAmounts == null) trafficLightTimeAmounts = new int[] { 1, 1, 1};
         if (redParam != null) trafficLightTimeAmounts[0] = redParam.Value;
         if (greenParam != null) trafficLightTimeAmounts[1] = greenParam.Value;
         if (yellowParam != null) trafficLightTimeAmounts[2] = yellowParam.Value;
@@ -69,9 +69,9 @@ public class TrafficLightController : MonoBehaviour
         {
             if (trafficLightColour != TrafficLightColour.Red)
             {
+                trafficLightColour = TrafficLightColour.Red;
                 EventManager.TrafficLightChanged(TrafficLightColour.Red);
                 image.sprite = gameEngine.trafficLightSprites[(int)TrafficLightColour.Red];
-                trafficLightColour = TrafficLightColour.Red;
             }
             timerText.text = "" + (red == 1 ? "" : (int)(red - timerSumTimeColorsRest + 1));
         }
@@ -79,9 +79,9 @@ public class TrafficLightController : MonoBehaviour
         {
             if (trafficLightColour != TrafficLightColour.Green)
             {
+                trafficLightColour = TrafficLightColour.Green;
                 EventManager.TrafficLightChanged(TrafficLightColour.Green);
                 image.sprite = gameEngine.trafficLightSprites[(int)TrafficLightColour.Green];
-                trafficLightColour = TrafficLightColour.Green;
             }
             timerText.text = "" + (green == 1 ? "" : (int)(redGreen - timerSumTimeColorsRest + 1));
         }
@@ -89,9 +89,9 @@ public class TrafficLightController : MonoBehaviour
         {
             if (trafficLightColour != TrafficLightColour.Yellow)
             {
+                trafficLightColour = TrafficLightColour.Yellow;
                 EventManager.TrafficLightChanged(TrafficLightColour.Yellow);
                 image.sprite = gameEngine.trafficLightSprites[(int)TrafficLightColour.Yellow];
-                trafficLightColour = TrafficLightColour.Yellow;
             }
             timerText.text = "" + (yellow == 1 ? "" : (int)(sumTimeColors - timerSumTimeColorsRest + 1));
         }

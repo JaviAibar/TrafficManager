@@ -104,7 +104,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Normal_PoliceCar
+      name: PoliceCar_Left
       rect:
         serializedVersion: 2
         x: 0
@@ -112,7 +112,7 @@ TextureImporter:
         width: 460
         height: 942
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -125,7 +125,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Right_PoliceCar
+      name: PoliceCar_Right
       rect:
         serializedVersion: 2
         x: 460
@@ -133,7 +133,7 @@ TextureImporter:
         width: 460
         height: 942
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -146,7 +146,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Left_PoliceCar
+      name: PoliceCar_Normal
       rect:
         serializedVersion: 2
         x: 920
@@ -154,7 +154,7 @@ TextureImporter:
         width: 460
         height: 942
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -177,9 +177,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Normal_PoliceCar: -440193614
-      Right_PoliceCar: 981595665
-      Left_PoliceCar: 523530006
+      PoliceCar_Normal: 523530006
+      PoliceCar_Left: -440193614
+      PoliceCar_Right: 981595665
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
