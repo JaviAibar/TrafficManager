@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 5358139242883547632}
   - component: {fileID: 5358139242883547631}
   - component: {fileID: 5358139242883547633}
-  - component: {fileID: 5358139242883547635}
   - component: {fileID: 5358139242883547634}
-  m_Layer: 0
+  - component: {fileID: 1000739089516693030}
+  m_Layer: 8
   m_Name: Pedestrian
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5358139242883547629}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.24686432, y: 0.4823532, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -124,38 +124,14 @@ MonoBehaviour:
   timeOffset: 0
   timeToLoop: 10
   timer: 0
-  speed: 4
+  normalSpeed: 10
   runningSpeed: 15
   respectsTheRules: 0
   trafficLight: {fileID: 0}
   trafficArea: {fileID: 0}
+  baseSpeed: 0
+  canMove: 0
   anim: {fileID: 0}
---- !u!61 &5358139242883547635
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5358139242883547629}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4.266667, y: 4.266667}
-    newSize: {x: 1.28, y: 1.28}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 4.266667, y: 4.266667}
-  m_EdgeRadius: 0
 --- !u!50 &5358139242883547634
 Rigidbody2D:
   serializedVersion: 4
@@ -164,7 +140,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5358139242883547629}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -177,6 +153,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
+--- !u!58 &1000739089516693030
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5358139242883547629}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 2.1333334
 --- !u!1 &5358139242942089301
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,7 +179,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5358139242942089303}
   - component: {fileID: 5358139242942089302}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PedestrianRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -224,7 +216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spline: {fileID: 0}
   travelMode: 0
-  speed: 5
+  speed: 7
   m_normalizedT: 0
   rotationLerpModifier: 10
   lookAt: 1
@@ -297,6 +289,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Shadow
+      objectReference: {fileID: 0}
+    - target: {fileID: 8304366888587278335, guid: 253d3f2a52b294c41b71482a59d338ca,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 253d3f2a52b294c41b71482a59d338ca, type: 3}

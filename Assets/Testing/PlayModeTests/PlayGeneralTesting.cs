@@ -21,41 +21,45 @@ public class PlayGeneralTesting : MonoBehaviour
     [UnityTest]
     public IEnumerator TrafficLightsTiming()
     {
+        var expectedNameRed = "TrafficLight - Red";
+        var expectedNameYellow = "TrafficLight - Yellow";
+        var expectedNameGreen = "TrafficLight - Green";
         Debug.LogWarning("Testing Traffic Timming, this test takes up to 13 seconds, please be patient :)");
-        Instantiate<GameObject>((GameObject)Resources.Load("Prefabs/Logic/Game Engine"));
+        Instantiate((GameObject)Resources.Load("Prefabs/Logic/Game Engine"));
         var gameObject = new GameObject();
         GameObject trafficLightPanelGO = (GameObject)Instantiate(Resources.Load("Prefabs/UI/TrafficLightPanel"));
         TrafficLightUIController trafficLightUI = trafficLightPanelGO.GetComponent<TrafficLightUIController>();
 
-        gameObject.AddComponent<Image>();
-        var trafficLight = gameObject.AddComponent<TrafficLightController>();
+       
+        var trafficLightGO = (GameObject)Instantiate(Resources.Load("Prefabs/UI/TrafficLight"));
+        var trafficLight = trafficLightGO.GetComponent<TrafficLightController>();
         //trafficLight.trafficLightPanel = trafficLightPanelGO;
         trafficLight.trafficLightUIPanel = trafficLightUI;
         trafficLight.SetValues(2, 8, 3);
 
         yield return new WaitForSeconds(1);
-        Assert.AreEqual("Red", trafficLight.image.sprite.name);
+        Assert.AreEqual(expectedNameRed, trafficLight.image.sprite.name);
 
-        Assert.AreNotEqual("Green", trafficLight.image.sprite.name);
-        Assert.AreNotEqual("Yellow", trafficLight.image.sprite.name);
+        Assert.AreNotEqual(expectedNameGreen, trafficLight.image.sprite.name);
+        Assert.AreNotEqual(expectedNameYellow, trafficLight.image.sprite.name);
 
         yield return new WaitForSeconds(1);
-        Assert.AreEqual("Green", trafficLight.image.sprite.name);
+        Assert.AreEqual(expectedNameGreen, trafficLight.image.sprite.name);
 
-        Assert.AreNotEqual("Red", trafficLight.image.sprite.name);
-        Assert.AreNotEqual("Yellow", trafficLight.image.sprite.name);
+        Assert.AreNotEqual(expectedNameRed, trafficLight.image.sprite.name);
+        Assert.AreNotEqual(expectedNameYellow, trafficLight.image.sprite.name);
 
         yield return new WaitForSeconds(3);
-        Assert.AreEqual("Yellow", trafficLight.image.sprite.name);
+        Assert.AreEqual(expectedNameYellow, trafficLight.image.sprite.name);
 
-        Assert.AreNotEqual("Green", trafficLight.image.sprite.name);
-        Assert.AreNotEqual("red", trafficLight.image.sprite.name);
+        Assert.AreNotEqual(expectedNameGreen, trafficLight.image.sprite.name);
+        Assert.AreNotEqual(expectedNameRed, trafficLight.image.sprite.name);
 
         yield return new WaitForSeconds(8);
-        Assert.AreEqual("Red", trafficLight.image.sprite.name);
+        Assert.AreEqual(expectedNameRed, trafficLight.image.sprite.name);
 
-        Assert.AreNotEqual("Green", trafficLight.image.sprite.name);
-        Assert.AreNotEqual("Yellow", trafficLight.image.sprite.name);
+        Assert.AreNotEqual(expectedNameGreen, trafficLight.image.sprite.name);
+        Assert.AreNotEqual(expectedNameYellow, trafficLight.image.sprite.name);
     }
 
 }

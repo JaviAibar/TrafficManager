@@ -13,7 +13,10 @@ public class GeneralTesting : MonoBehaviour
     {
         var gameObject = new GameObject();
 
-        var trafficLight = gameObject.AddComponent<TrafficLightController>();
+        //var trafficLight = gameObject.AddComponent<TrafficLightController>();
+
+        var trafficLightGO = (GameObject)Instantiate(Resources.Load("Prefabs/UI/TrafficLight"));
+        var trafficLight = trafficLightGO.GetComponent<TrafficLightController>();
 
         trafficLight.SetValues(4, 6, 7);
 
@@ -59,6 +62,41 @@ public class GeneralTesting : MonoBehaviour
         trafficLightUI.SetRed(6);
         trafficLightUI.Accept();
         Assert.AreEqual(6, trafficLight.trafficLightTimeAmounts[0]);
+        trafficLightUI.SetGreen(4);
+        trafficLightUI.Accept();
+        Assert.AreEqual(4, trafficLight.trafficLightTimeAmounts[1]);
+        trafficLightUI.SetYellow(7);
+        trafficLightUI.Accept();
+
+        Assert.AreEqual(6, trafficLight.trafficLightTimeAmounts[0]);
+        Assert.AreEqual(4, trafficLight.trafficLightTimeAmounts[1]);
+        Assert.AreEqual(7, trafficLight.trafficLightTimeAmounts[2]);
+
+        for (int i = 1; i <= 10; i++)
+        {
+            trafficLightUI.SetRed(i);
+            trafficLightUI.Accept();
+            Assert.AreEqual(i, trafficLight.trafficLightTimeAmounts[0]);
+            trafficLightUI.SetGreen(i);
+            trafficLightUI.Accept();
+            Assert.AreEqual(i, trafficLight.trafficLightTimeAmounts[1]);
+            trafficLightUI.SetYellow(i);
+            trafficLightUI.Accept();
+            Assert.AreEqual(i, trafficLight.trafficLightTimeAmounts[2]);
+
+            var redRandom = Random.Range(1, 10);
+            var greenRandom = Random.Range(1, 10);
+            var yellowRandom = Random.Range(1, 10);
+            trafficLightUI.SetRed(redRandom);
+            trafficLightUI.Accept();
+            Assert.AreEqual(redRandom, trafficLight.trafficLightTimeAmounts[0]);
+            trafficLightUI.SetGreen(greenRandom);
+            trafficLightUI.Accept();
+            Assert.AreEqual(greenRandom, trafficLight.trafficLightTimeAmounts[1]);
+            trafficLightUI.SetYellow(yellowRandom);
+            trafficLightUI.Accept();
+            Assert.AreEqual(yellowRandom, trafficLight.trafficLightTimeAmounts[2]);
+        }
 
         //Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType privateTypeMyClass = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType(trafficLightUI.GetType());
         //Assert.AreEqual(2, privateTypeMyClass.GetStaticField("red"));
@@ -67,8 +105,6 @@ public class GeneralTesting : MonoBehaviour
     [Test]
     public void Vector3ToDirectionTest()
     {
-        print(Quaternion.LookRotation(new Vector3(3.2f - 0.1f, 2)).eulerAngles);
-
         // Easy ones
         Assert.AreEqual(GameEngine.Direction.Up, GameEngine.Vector3ToDirection(Vector3.up));
         Assert.AreEqual(GameEngine.Direction.Right, GameEngine.Vector3ToDirection(Vector3.right));
