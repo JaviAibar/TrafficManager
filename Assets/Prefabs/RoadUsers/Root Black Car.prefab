@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2138304423120133970}
   - component: {fileID: 2138304423120133997}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Root Black Car
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,9 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spline: {fileID: 0}
-  travelMode: 1
-  speed: 0
-  m_normalizedT: 0
+  travelMode: 0
+  speed: 1
+  m_normalizedT: 1
   rotationLerpModifier: 10
   lookAt: 1
   onPathCompleted:
@@ -67,7 +67,7 @@ GameObject:
   - component: {fileID: 2138304424281457317}
   - component: {fileID: 2138304424281457315}
   - component: {fileID: 2138304424281457312}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Black Car
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,13 +154,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeOffset: 0
-  timeToLoop: 10
+  timeToLoop: 0
   timer: 0
-  speed: 15
-  runningSpeed: 20
+  normalSpeed: 20
+  runningSpeed: 40
   respectsTheRules: 1
   trafficLight: {fileID: 0}
   trafficArea: {fileID: 0}
+  baseSpeed: 0
+  canMove: 0
   inAnEmergency: 0
 --- !u!61 &2138304424281457315
 BoxCollider2D:
@@ -175,7 +177,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.14866686, y: 5.339463}
+  m_Offset: {x: -0.14866686, y: -0.029628992}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -186,7 +188,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 4.604642, y: 1.0938816}
+  m_Size: {x: 4.604642, y: 11.832066}
   m_EdgeRadius: 0
 --- !u!50 &2138304424281457312
 Rigidbody2D:
@@ -196,7 +198,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2138304424281457323}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0

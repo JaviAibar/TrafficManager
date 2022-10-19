@@ -68,8 +68,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 3
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 90bb717c6f1392d40a1e257eddf26eb4, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 90bb717c6f1392d40a1e257eddf26eb4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -204,7 +204,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -475194895, guid: 0523cc3f4e4249042b35572df32191ef, type: 3}
+  m_Sprite: {fileID: 649761391, guid: 455e90b71d360f6458e8cdf87bd09307, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -228,9 +228,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameEngine: {fileID: 0}
   trafficLightUIPanel: {fileID: 0}
-  trafficLightTimeAmounts: 030000000100000002000000
+  trafficLightTimeAmounts: 070000000100000006000000
   image: {fileID: 0}
   timer: 0
+  timeOffset: 0
 --- !u!114 &2768134455536975650
 MonoBehaviour:
   m_ObjectHideFlags: 0

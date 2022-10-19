@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5259821962717407929}
   - component: {fileID: 5259821962717407926}
   - component: {fileID: 5259821962717407928}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PoliceCar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -142,14 +142,14 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5259821962717407922}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 100
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -168,14 +168,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeOffset: 0
-  timeToLoop: 10
+  timeToLoop: 0
   timer: 0
-  speed: 40
-  runningSpeed: 15
+  normalSpeed: 35
+  runningSpeed: 55
   respectsTheRules: 0
   trafficLight: {fileID: 0}
   trafficArea: {fileID: 0}
-  inAnEmergency: 1
+  baseSpeed: 0
+  canMove: 0
+  inAnEmergency: 0
 --- !u!1 &5259821963127813204
 GameObject:
   m_ObjectHideFlags: 0
@@ -186,7 +188,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5259821963127813206}
   - component: {fileID: 5259821963127813207}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Root Police Car
   m_TagString: Untagged
   m_Icon: {fileID: 0}

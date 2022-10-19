@@ -45,11 +45,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 722e5c7fa7e461f47b67e483a3a892b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  x: 0
+  y: 0
+  verbose: 1
   trafficLightSprites:
-  - {fileID: 803734443, guid: 0523cc3f4e4249042b35572df32191ef, type: 3}
-  - {fileID: -357976818, guid: 0523cc3f4e4249042b35572df32191ef, type: 3}
-  - {fileID: -1016241327, guid: 0523cc3f4e4249042b35572df32191ef, type: 3}
-  - {fileID: -1073403556, guid: 0523cc3f4e4249042b35572df32191ef, type: 3}
+  - {fileID: -700203502, guid: 455e90b71d360f6458e8cdf87bd09307, type: 3}
+  - {fileID: -824630475, guid: 455e90b71d360f6458e8cdf87bd09307, type: 3}
+  - {fileID: -410688167, guid: 455e90b71d360f6458e8cdf87bd09307, type: 3}
+  - {fileID: -1549166957, guid: 455e90b71d360f6458e8cdf87bd09307, type: 3}
   pauseImage: {fileID: 0}
   playImage: {fileID: 0}
   fastImage: {fileID: 0}

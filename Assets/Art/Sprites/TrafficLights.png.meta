@@ -1,19 +1,7 @@
 fileFormatVersion: 2
-guid: 3067319c9aebee741a160ecf39caa95b
+guid: 455e90b71d360f6458e8cdf87bd09307
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: -7080495786062622252
-    second: TrafficLights_0
-  - first:
-      213: -1972741785918757015
-    second: TrafficLights_1
-  - first:
-      213: -7971717296743112095
-    second: TrafficLights_2
-  - first:
-      213: -3379144960095092179
-    second: TrafficLights_3
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -45,7 +33,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -59,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 8
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -78,10 +66,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 32
+    maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: 4
-    textureCompression: 2
+    textureFormat: -1
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -90,10 +78,10 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
-    maxTextureSize: 32
+    maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: 4
-    textureCompression: 2
+    textureFormat: -1
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -101,11 +89,11 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: WebGL
-    maxTextureSize: 32
+    buildTarget: Server
+    maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: 4
-    textureCompression: 2
+    textureFormat: -1
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -116,13 +104,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Green
+      name: TrafficLight - Red
       rect:
         serializedVersion: 2
         x: 0
-        y: 8
-        width: 4
-        height: 24
+        y: 271.5
+        width: 144
+        height: 271.5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -130,20 +118,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4d1561eb8960dbd90800000000000000
-      internalID: -7080495786062622252
+      spriteID: 7e279a07d1961894a9e692151d372a70
+      internalID: -824630475
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Yellow
+      name: TrafficLight - Yellow
       rect:
         serializedVersion: 2
-        x: 4
-        y: 8
-        width: 4
-        height: 24
+        x: 144
+        y: 271.5
+        width: 144
+        height: 271.5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -151,20 +139,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9672eb83cc96f94e0800000000000000
-      internalID: -1972741785918757015
+      spriteID: af89b9aa70ba7ba4096af7d3ebf36b7f
+      internalID: -1549166957
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Red
+      name: TrafficLight - Green
       rect:
         serializedVersion: 2
-        x: 8
-        y: 8
-        width: 4
-        height: 24
+        x: 288
+        y: 271.5
+        width: 144
+        height: 271.5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -172,20 +160,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1622ac5ca55ce5190800000000000000
-      internalID: -7971717296743112095
+      spriteID: 678ca257ad8a9b74bbc0ca78a74744d7
+      internalID: -410688167
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Off
+      name: TrafficLight - None
       rect:
         serializedVersion: 2
-        x: 12
-        y: 8
-        width: 4
-        height: 24
+        x: 1
+        y: 1
+        width: 144
+        height: 272
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -193,8 +181,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d220bf0ff8dda11d0800000000000000
-      internalID: -3379144960095092179
+      spriteID: 0650ff1626223fa4ba1b9088fe2d8a00
+      internalID: -700203502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TrafficLight - Full
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 0.5
+        width: 144
+        height: 271.5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e844e993721ac5418c67a679035fe4f
+      internalID: 649761391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TrafficLight - Copy
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0.5
+        width: 144
+        height: 271.5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8cff90fb16d8e6a4eac541133671d102
+      internalID: -1875402180
       vertices: []
       indices: 
       edges: []
@@ -210,10 +240,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Off: -3379144960095092179
-      Green: -7080495786062622252
-      Red: -7971717296743112095
-      Yellow: -1972741785918757015
+      TrafficLight - Yellow: -1549166957
+      TrafficLight - None: -700203502
+      TrafficLight - Copy: -1875402180
+      TrafficLight - Red: -824630475
+      TrafficLight - Full: 649761391
+      TrafficLight - Green: -410688167
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

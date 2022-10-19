@@ -121,7 +121,7 @@ public class PlayGeneralTestingWithScene : MonoBehaviour
 
         Assert.IsTrue(pedestrian.respectsTheRules);
 
-        Assert.AreEqual(pedestrian.speed, pedestrianBezier.speed);
+        Assert.AreEqual(pedestrian.normalSpeed, pedestrianBezier.speed);
         yield return new WaitForSeconds(1);
         Assert.AreEqual(expected: 0f, pedestrianBezier.speed);
 
