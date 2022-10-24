@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
@@ -100,7 +101,7 @@ public class LevelManager : MonoBehaviour
     private void LevelSolved()
     {
         solvedPanel.SetActive(true);
-        // TODO: Set level as completed in save file
+        PlayerPrefs.SetInt(SceneManager.GetActiveScene().name, 1);
     }
 
     public void LevelInit()
@@ -137,7 +138,7 @@ public class LevelManager : MonoBehaviour
     }
     public void ShowAllLevels()
     {
-        throw new NotImplementedException();
+        SceneManager.LoadScene("Levels scene");
 
     }
 

@@ -30,6 +30,10 @@ MonoBehaviour:
     m_Localized: Salir
     m_Metadata:
       m_Items: []
+  - m_Id: 96629346193408
+    m_Localized: Niveles
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

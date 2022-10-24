@@ -30,6 +30,10 @@ MonoBehaviour:
     m_Localized: Spiel verlassen
     m_Metadata:
       m_Items: []
+  - m_Id: 96629346193408
+    m_Localized: Levels
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
