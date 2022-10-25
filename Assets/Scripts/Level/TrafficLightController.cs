@@ -140,4 +140,8 @@ public class TrafficLightController : MonoBehaviour
     {
         timerText.text = text;
     }
+
+    public float GetTimeInPlay() {
+        return timer;
+    }
 }

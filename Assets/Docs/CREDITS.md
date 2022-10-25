@@ -42,3 +42,5 @@ Photo by [Raimond Klavins](https://unsplash.com/@raimondklavins?utm_source=unspl
 Photo by [Sigmund](https://unsplash.com/@sigmund?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/es/s/fotos/crossroad?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
 <br>
 Concrete background texture by from [Rob Tuytel](https://www.artstation.com/tuytel) on [PolyHaven](https://polyhaven.com/a/concrete_floor_01)
+<br>
+Head of police by [Craftpix_net](https://twitter.com/craftpix_net?utm_campaign=Website&utm_source=opengameart.org&utm_medium=public) on [OpenGameArt](https://opengameart.org/content/police-2d-sprite)
