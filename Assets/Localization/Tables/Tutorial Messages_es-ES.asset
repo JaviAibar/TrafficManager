@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Tutorial Messages_es-ES
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: es-ES
+  m_SharedData: {fileID: 11400000, guid: 7ec08c8d779a1a84f8b76abd7ca9b50f, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 25746395136
+    m_Localized: "\xA1Bienvenido a tu primer d\xEDa como controlador de tr\xE1fico!\nTu
+      trabajo consistir\xE1 en que el tr\xE1fico fluya sin ninguna retenci\xF3n\n\xA1Es
+      m\xE1s complicado de lo que parece!\nAs\xED que presta mucha atenci\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3431017926656
+    m_Localized: "Para ello, deber\xE1s fijar la duraci\xF3n de cada color del sem\xE1foro.\n\xA1Veamos
+      unos ejemplos!"
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

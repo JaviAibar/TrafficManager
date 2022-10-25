@@ -18,6 +18,7 @@ public class GameEngine : MonoBehaviour
     public Image fastestImage;
     private GameSpeed speed = GameSpeed.None;
     public Image[] timeControlImages = new Image[4];
+    private float timeInPlay;
 
     private void Awake()
     {
@@ -30,11 +31,12 @@ public class GameEngine : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        ChangeSpeed((int)GameSpeed.Normal);
     }
 
     private void Start()
     {
-        ChangeSpeed((int)GameSpeed.Normal);
+        
     }
 
     public enum GameSpeed : ushort
@@ -62,6 +64,7 @@ public class GameEngine : MonoBehaviour
 
     public void ChangeSpeed(int newSpeed)
     {
+        print("EJECUTADO vel " +newSpeed );
         GameSpeed gameSpeed = ((GameSpeed)newSpeed);
         if (gameSpeed != speed) // If speed changed
         {
