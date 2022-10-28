@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2380897975527805077
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2380897975527805079}
+  - component: {fileID: 2380897975527805078}
+  m_Layer: 0
+  m_Name: Menu controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2380897975527805079
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2380897975527805077}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 663.8265, y: 198.93744, z: 5.99447}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2380897975527805078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2380897975527805077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 647b7b5f538731e4b9e0812854b71337, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelButtonPrefab: {fileID: 4603225141379621603, guid: a102b897e856c7d4793bcd71276e903a,
+    type: 3}
+  levelsGrid: {fileID: 0}
+  backButton: {fileID: 4285390158633119261, guid: 59e90ad30c7d0b6459dd65ee12a662c5,
+    type: 3}
+  nextButton: {fileID: 1423502681745392254, guid: 3ab3823d24fcd294d91914ce5a7e8276,
+    type: 3}
+  solvedSprites:
+  - {fileID: 21300000, guid: 7f95a84f05bb8e04596eae32b400009f, type: 3}
+  - {fileID: 21300000, guid: ca2d19c8e8c3e674d8e3f94a0790073e, type: 3}

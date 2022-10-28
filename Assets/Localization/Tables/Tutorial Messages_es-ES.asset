@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Tutorial Messages_es-ES
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: es-ES
+  m_SharedData: {fileID: 11400000, guid: 7ec08c8d779a1a84f8b76abd7ca9b50f, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 25746395136
+    m_Localized: "\xA1Bienvenido a tu primer d\xEDa como controlador de tr\xE1fico!\nTu
+      trabajo consistir\xE1 en que el tr\xE1fico fluya sin ninguna retenci\xF3n\n\xA1Es
+      m\xE1s complicado de lo que parece!\nAs\xED que presta mucha atenci\xF3n."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3431017926656
+    m_Localized: "Para ello, deber\xE1s fijar la duraci\xF3n de cada color del sem\xE1foro.\n\xA1Veamos
+      unos ejemplos!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11051879550976
+    m_Localized: "Este coche se dirige hacia un semaforo, pero lo va a encontrar
+      en rojo, ya que todav\xEDan quedan 8 segundos para que se ponga en verde."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 277075984044032
+    m_Localized: "Este es el indicador de tu desempe\xF1o.\nComo puedes ver, mientras
+      el coche est\xE9 parado en el semaforo, te impidir\xE1 avanzar de nivel."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 280040375504896
+    m_Localized: "Si haces click al semaforo en cuesti\xF3n, podr\xE1s editar su
+      configuraci\xF3n.\r\nPara hacerlo f\xE1cil, pon el rojo en un valor muy bajo,
+      como 1, por ejemplo."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 294699316989952
+    m_Localized: "Algunos niveles pueden ser m\xE1s largos e implicar a varios usuarios
+      de la v\xEDa diferentes.\r\nPor ello, hemos instalado en tu panel un controlador
+      de la velocidad, \xBFpor qu\xE9 no pruebas a ponerlo m\xE1s r\xE1pido?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 992086125629440
+    m_Localized: "\xA1Entendido!"
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []
