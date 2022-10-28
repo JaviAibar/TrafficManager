@@ -29,6 +29,33 @@ MonoBehaviour:
       Sie uns einige Beispiele sehen!"
     m_Metadata:
       m_Items: []
+  - m_Id: 11051879550976
+    m_Localized: "Dieses Auto f\xE4hrt auf eine Ampel zu, aber es wird sie bei Rot
+      finden, da noch 8 Sekunden verbleiben, bevor sie gr\xFCn wird."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 277075984044032
+    m_Localized: "Dies ist Ihr Leistungsindikator.\nWie Sie sehen k\xF6nnen, wird
+      das Auto, solange es an der Ampel steht, Sie daran hindern, im Level weiterzukommen."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 280040375504896
+    m_Localized: "Wenn Sie auf die betreffende Ampel klicken, k\xF6nnen Sie deren
+      Einstellungen bearbeiten.\r\nUm es einfach zu machen, setzen Sie den Rotwert
+      auf einen sehr niedrigen Wert, z. B. 1."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 294699316989952
+    m_Localized: "Einige Levels k\xF6nnen l\xE4nger sein und mehrere verschiedene
+      Verkehrsteilnehmer betreffen.\r\nAus diesem Grund haben wir einen Geschwindigkeitsregler
+      auf Ihrem Panel installiert, wieso versuchen Sie es nicht, es schneller zu
+      machen?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 992086125629440
+    m_Localized: Ich hab's!
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

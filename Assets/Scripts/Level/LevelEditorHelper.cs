@@ -46,7 +46,7 @@ public class LevelEditorHelper : EditorWindow
     [System.Serializable]
     public struct SolveIndicatorInfo
     {
-        public Color colour;
+        public Sprite solvedSprite;
         public string timeLeft;
     }
 
@@ -137,8 +137,7 @@ public class LevelEditorHelper : EditorWindow
                 trafficLights[i].GetComponentInChildren<TMPro.TMP_Text>().text = selectedTrafficLightInfo.text;
             }
             level.timeIndicator.text = selectedFrameInfo.solveIndicator.timeLeft;
-            level.shineImage.color = selectedFrameInfo.solveIndicator.colour;
-            level.iconImage.color = selectedFrameInfo.solveIndicator.colour;
+            level.iconImage.sprite = selectedFrameInfo.solveIndicator.solvedSprite;
             EditorGUILayout.LabelField("Time elapsed in seconds: " + selectedFrameInfo.time);
 
         }
@@ -241,7 +240,7 @@ public class LevelEditorHelper : EditorWindow
 
             timeElapsed += Time.deltaTime;
             frameInfo.time = (int)timeElapsed;
-            frameInfo.solveIndicator.colour = level.iconImage.color;
+            frameInfo.solveIndicator.solvedSprite = level.iconImage.sprite;
             frameInfo.solveIndicator.timeLeft = level.timeIndicator.text;
 
             frames.Add(frameInfo);
