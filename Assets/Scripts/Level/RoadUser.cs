@@ -17,8 +17,8 @@ public abstract class RoadUser : MonoBehaviour
     public float normalSpeed = 10;
     public float runningSpeed = 15; // This is used when the vehicles are crossing in yellow or when a pedestrian is stuck in green at a crossroad
     public bool respectsTheRules = true;
-    public TrafficLightController trafficLight;
-    public TrafficArea trafficArea;
+   /* [HideInInspector] */public TrafficLightController trafficLight;
+   /* [HideInInspector] */public TrafficArea trafficArea;
     public float baseSpeed; // This value is used when the GameSpeed is changed, because the car could be stopped while running for instance
     public bool canMove;
     protected virtual void Awake()
@@ -80,14 +80,16 @@ public abstract class RoadUser : MonoBehaviour
         trafficArea = other.GetComponent<TrafficArea>();
         trafficLight = trafficArea.GetTrafficLight();
         CheckMovingConditions();
-        GameEngine.instance.Print("Trigger enter 2D de " + name + " con " + other.name);
+        GameEngine.instance.Print(name + " reaches " + other.name);
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        bool stillColliding = Physics2D.CircleCast(transform.position, 0.02f, Vector2.right);
+        RaycastHit2D raycast = Physics2D.Linecast(transform.position, transform.position + transform.up * 0.02f, 1 << 9);
 
-        if (stillColliding) return;
+        GameEngine.instance.Print(transform.name + (raycast ?  "":" no")+ " está todavía colisionando con " +(raycast ? raycast.collider.name: ""));
+       // Debug.Break();
+        if (raycast) return;
         trafficLight = null;
         trafficArea = null;
     }
@@ -128,5 +130,4 @@ public abstract class RoadUser : MonoBehaviour
 
     public abstract void CheckMovingConditions();
 
-    
 }

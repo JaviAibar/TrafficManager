@@ -15,12 +15,13 @@ public class LevelManager : MonoBehaviour
     public GameObject solvedPanel;
 
     public Image iconImage;
-    public Image shineImage;
     public TMPro.TMP_Text timeIndicator;
     // Color ambar = new Color(1, 0.7461f, 0);
     private List<RoadUser> usersStopped;
     public Sprite minimumSpeedSprite;
     public Sprite forbiddenSprite;
+
+    public string nextLevel;
 
     private void OnEnable()
     {
@@ -56,10 +57,12 @@ public class LevelManager : MonoBehaviour
     }
     private void OnRoadUserMoving(RoadUser responsible)
     {
-        GameEngine.instance.Print(responsible.name + " is moving again");
+        GameEngine.instance.Print(responsible.name + " is moving again (was not necessary stopped). Lets list who's still stopped");
         usersStopped.Remove(responsible);
-       // print("users still stopped " + usersStopped.Count);
-       if (usersStopped.Count == 0)
+        // print("users still stopped " + usersStopped.Count);
+        GameEngine.instance.Print("There are " + usersStopped.Count + (usersStopped.Count == 1 ? " ("+usersStopped[0].name+")":" users stopped"));
+
+        if (usersStopped.Count == 0)
         {
             SetTrafficLightIndicator(Color.green);
         }
@@ -68,6 +71,7 @@ public class LevelManager : MonoBehaviour
     private void OnRoadUserCollision(RoadUser affected1, RoadUser affected2)
     {
         SetTrafficLightIndicator(Color.red);
+        GameEngine.instance.Print("Accident between " + affected1.name + " and " + affected2.name);
         // TODO: Restart in seconds
     }
 

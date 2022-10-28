@@ -37,6 +37,39 @@ MonoBehaviour:
       Let''s see some examples!'
     m_Metadata:
       m_Items: []
+  - m_Id: 11051879550976
+    m_Localized: This car is heading towards a traffic light, but it is going to
+      find it on red, as there are still 8 seconds left before it turns green.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 277075984044032
+    m_Localized: 'This is the indicator of your performance.
+
+      As you can see,
+      while the car is stopped at the traffic light, it will prevent you from advancing
+      the level.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 280040375504896
+    m_Localized: 'If you click on the traffic light in question, you can edit its
+      settings.
+
+      To make it easy, set the red to a very low value, like 1,
+      for example.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 294699316989952
+    m_Localized: 'Some levels can be longer and involve several different road users.
+
+      For
+      this reason, we have installed a speed controller on your panel, so why not
+      try setting it faster?'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 992086125629440
+    m_Localized: Got it!
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

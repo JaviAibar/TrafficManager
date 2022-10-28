@@ -64,7 +64,7 @@ public class GameEngine : MonoBehaviour
 
     public void ChangeSpeed(int newSpeed)
     {
-        print("EJECUTADO vel " +newSpeed );
+       // print("EJECUTADO vel " +newSpeed );
         GameSpeed gameSpeed = ((GameSpeed)newSpeed);
         if (gameSpeed != speed) // If speed changed
         {
