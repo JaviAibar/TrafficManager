@@ -29,14 +29,30 @@ public class Draggable : MonoBehaviour, IPointerDownHandler
         print($"Real mouse  {Input.mousePosition}");
         if (canvas && canvas.renderMode == RenderMode.ScreenSpaceOverlay)
             return Input.mousePosition;
-        return Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mousePos = Input.mousePosition;
+        mousePos.z = /*Camera.main.*/transform.position.z;
+        return Camera.main.ScreenToWorldPoint(mousePos);
     }
 
+   /* public Vector3 GetPosAccordingToCanvas()
+    {
+        Canvas canvas = transform.GetComponentInParent<Canvas>();
+        print($"Real pos  {transform.position}");
+        if (canvas && canvas.renderMode == RenderMode.ScreenSpaceOverlay)
+            return transform.position;
+        return Camera.main.ScreenToWorldPoint(transform.position);
+    }*/
 
     public void OnPointerDown(PointerEventData eventData)
     {
         // Offset to calculate correctly the position where the mouse clicked
-        positionOffset = transform.position - GetPosMouseAccordingToCanvas();
+        positionOffset = /*GetPosAccordingToCanvas()*/ transform.position - GetPosMouseAccordingToCanvas();
         dragging = true;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawSphere(GetPosMouseAccordingToCanvas(), 5);
     }
 }

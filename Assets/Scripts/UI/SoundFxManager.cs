@@ -5,6 +5,7 @@ using UnityEngine;
 public class SoundFxManager : MonoBehaviour
 {
     public AudioClip clickSound;
+    public AudioClip closeSound;
     private AudioSource audio;
     private void Awake()
     {
@@ -19,6 +20,12 @@ public class SoundFxManager : MonoBehaviour
     public void PlayClickSound()
     {
         audio.clip = clickSound;
+        audio.Play();
+    }
+
+    public void PlayCloseSound()
+    {
+        audio.clip = closeSound;
         audio.Play();
     }
 }

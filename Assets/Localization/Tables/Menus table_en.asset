@@ -35,7 +35,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3277255020826624
-    m_Localized: Next level!
+    m_Localized: Next level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3310779434192896
+    m_Localized: Level completed!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3311131252412416
+    m_Localized: Are you ready for the next level?
     m_Metadata:
       m_Items: []
   references:
