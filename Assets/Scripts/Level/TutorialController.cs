@@ -143,7 +143,7 @@ public class TutorialController : MonoBehaviour
         CanvasScaler canvasScaler = canvas?.GetComponent<CanvasScaler>();
         if (rect && canvas && canvasScaler)
             //return (RectTransformUtility.PixelAdjustRect(rect, canvas).size * (2.54f / Screen.dpi)) / canvasScaler.referencePixelsPerUnit;
-            return rect.rect.size / canvasScaler.referencePixelsPerUnit;
+            return rect.rect.size / (canvasScaler.referencePixelsPerUnit / 10);
         return Vector3.one;
     }
 

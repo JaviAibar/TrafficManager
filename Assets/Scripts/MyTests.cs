@@ -17,7 +17,7 @@ public class MyTests : MonoBehaviour
         CanvasScaler canvasScaler = canvas?.GetComponent<CanvasScaler>();
         if (rect && canvas && canvasScaler)
             //return (RectTransformUtility.PixelAdjustRect(rect, canvas).size * (2.54f / Screen.dpi)) / canvasScaler.referencePixelsPerUnit;
-            print(rect.rect.size / canvasScaler.referencePixelsPerUnit);
+            print(rect.rect.size / (canvasScaler.referencePixelsPerUnit / 10));
     }
 
 }

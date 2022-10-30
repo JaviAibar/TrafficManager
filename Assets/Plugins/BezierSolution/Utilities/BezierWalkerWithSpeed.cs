@@ -15,7 +15,7 @@ namespace BezierSolution
 		[Range( 0f, 1f )]
 		private float m_normalizedT = 0f;
 
-		public override BezierSpline Spline { get { return spline; } }
+		public override BezierSpline Spline {get { return spline; } }
 
 		public override float NormalizedT
 		{

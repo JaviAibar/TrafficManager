@@ -12,7 +12,7 @@ public abstract class RoadUser : MonoBehaviour
     [Min(0)] public float timeOffset = 0;
     [Min(0)] public float timeToLoop = 10;
     public float timer = 0;
-    protected BezierWalkerWithSpeed bezier;
+    public BezierWalkerWithSpeed bezier;
     protected Rigidbody2D rb;
     public float normalSpeed = 10;
     public float runningSpeed = 15; // This is used when the vehicles are crossing in yellow or when a pedestrian is stuck in green at a crossroad
@@ -126,6 +126,11 @@ public abstract class RoadUser : MonoBehaviour
     {
         if (state == GameEngine.GameSpeed.Paused) bezier.speed = 0;
         else bezier.speed = baseSpeed * (int)state;
+    }
+
+    public void SetSpline(BezierSpline spline)
+    {
+        bezier.spline = spline;
     }
 
     public abstract void CheckMovingConditions();

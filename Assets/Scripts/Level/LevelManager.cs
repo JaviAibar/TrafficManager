@@ -13,6 +13,8 @@ public class LevelManager : MonoBehaviour
 
     public float timer;
     public GameObject solvedPanel;
+    public AudioClip[] solvedSounds;
+    public AudioClip failSound;
 
     public Image iconImage;
     public TMPro.TMP_Text timeIndicator;
@@ -22,6 +24,9 @@ public class LevelManager : MonoBehaviour
     public Sprite forbiddenSprite;
 
     public string nextLevel;
+    private AudioSource audioSource;
+    public List<ParticleSystem> particleSystems;
+    public SoundFxManager sfx;
 
     private void OnEnable()
     {
@@ -37,6 +42,11 @@ public class LevelManager : MonoBehaviour
         EventManager.OnRoadUserCollision -= OnRoadUserCollision;
     }
 
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     private void Start()
     {
         usersStopped = new List<RoadUser>();
@@ -50,8 +60,7 @@ public class LevelManager : MonoBehaviour
         {
             GameEngine.instance.Print(responsible.name + " stopped!");
             usersStopped.Add(responsible);
-           // print("users stopped " + usersStopped.Count);
-            ResetTimeLeftToSolve();
+            // print("users stopped " + usersStopped.Count);
             SetTrafficLightIndicator(Color.red);
         }
     }
@@ -77,6 +86,7 @@ public class LevelManager : MonoBehaviour
 
     private void Update()
     {
+        if (timeToSolve <= 0) return;
         GameEngine.GameSpeed gameSpeed = GameEngine.instance.GetGameSpeed();
         if (gameSpeed != GameEngine.GameSpeed.Paused)
         {
@@ -90,6 +100,12 @@ public class LevelManager : MonoBehaviour
             if (usersStopped.Count == 0)
             {
                 timeLeftToSolve -= timeIncrement;
+                int timeInt = (int) timeLeftToSolve;
+                if (timeInt < solvedSounds.Length && audioSource.clip != solvedSounds[timeInt])
+                {
+                    audioSource.clip = solvedSounds[timeInt];
+                    audioSource.Play();
+                }
                 if (timeLeftToSolve >= 0)
                 {
                     timeIndicator.text = ((int)timeLeftToSolve).ToString();
@@ -105,7 +121,13 @@ public class LevelManager : MonoBehaviour
     private void LevelSolved()
     {
         solvedPanel.SetActive(true);
+        ActivateParticleSystems();
         PlayerPrefs.SetInt(SceneManager.GetActiveScene().name, 1);
+    }
+
+    private void ActivateParticleSystems()
+    {
+        particleSystems.ForEach(e => e.Play());
     }
 
     public void LevelInit()
@@ -126,6 +148,11 @@ public class LevelManager : MonoBehaviour
         {
             timeIndicator.text = "";
             iconImage.sprite = forbiddenSprite;
+            if ((int)timeLeftToSolve < 3 && audioSource.clip != failSound)
+            {
+                audioSource.clip = failSound;
+                audioSource.Play();
+            }
             ResetTimeLeftToSolve();
         } else if (colour == Color.green && iconImage.sprite == forbiddenSprite) // If we are changing from red to green
         {
@@ -138,12 +165,14 @@ public class LevelManager : MonoBehaviour
 
     public void NextLevel()
     {
-        throw new NotImplementedException();
+        if (!string.IsNullOrEmpty(nextLevel))
+        {
+            SceneManager.LoadScene(nextLevel);
+        }
     }
     public void ShowAllLevels()
     {
         SceneManager.LoadScene("Levels scene");
-
     }
 
 }
