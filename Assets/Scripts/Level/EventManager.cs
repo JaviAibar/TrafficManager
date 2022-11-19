@@ -1,20 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static GameEngine;
 
 public class EventManager : MonoBehaviour
 {
     public delegate void TrafficLightControlEvent(TrafficLightController.TrafficLightColour colour);
     public delegate void LevelConditionAlteredEvent(RoadUser responsible);
     public delegate void AccidentEvent(RoadUser affected1, RoadUser affected2);
-    public delegate void GameSpeedControlEvent(GameEngine.GameSpeed speed);
+    public delegate void GameSpeedControlEvent(GameSpeed speed);
     public delegate void TimeControlEvent();
 
 
 
     public static event TrafficLightControlEvent OnTrafficLightChanged;
 
-    public static event TimeControlEvent OnLoopEnded;
+    public static event TimeControlEvent OnLoopStarted;
 
     public static event LevelConditionAlteredEvent OnRoadUserStopped;
     public static event LevelConditionAlteredEvent OnRoadUserMoving;
@@ -29,14 +30,14 @@ public class EventManager : MonoBehaviour
 
     public static void RaiseOnTimeIsOver()
     {
-        if (OnLoopEnded != null) OnLoopEnded();
+        if (OnLoopStarted != null) OnLoopStarted();
     }
 
     public static void RaiseOnRoadUserStopped(RoadUser responsible)
     {
         if (OnRoadUserStopped != null) OnRoadUserStopped(responsible);
     }
-    public static void RaiseOnGameSpeedChanged(GameEngine.GameSpeed speed)
+    public static void RaiseOnGameSpeedChanged(GameSpeed speed)
     {
         if (OnGameSpeedChanged != null) OnGameSpeedChanged(speed);
     }
@@ -46,9 +47,9 @@ public class EventManager : MonoBehaviour
         if (OnRoadUserCollision != null) OnRoadUserCollision(affected1, affected2);
     }
 
-    public static void RaiseOnLoopEnded()
+    public static void RaiseOnLoopStarted()
     {
-        if (OnLoopEnded != null) OnLoopEnded();
+        if (OnLoopStarted != null) OnLoopStarted();
     }
 
     public static void RaiseOnRoadUserMoving(RoadUser responsible)

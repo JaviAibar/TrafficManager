@@ -14,10 +14,10 @@ public class PlayGeneralTesting : MonoBehaviour
     bool referencesSetup;
     Transform pedestrianTransform;
     TrafficLightController trafficLight;
+    bool waiting;
 
 
-
-
+    /*
     [UnityTest]
     public IEnumerator TrafficLightsTiming()
     {
@@ -60,7 +60,7 @@ public class PlayGeneralTesting : MonoBehaviour
 
         Assert.AreNotEqual(expectedNameGreen, trafficLight.image.sprite.name);
         Assert.AreNotEqual(expectedNameYellow, trafficLight.image.sprite.name);
-    }
+    }*/
 
     [UnityTest]
     public IEnumerator ScenesHistoryTesting()
@@ -217,6 +217,99 @@ public class PlayGeneralTesting : MonoBehaviour
         MenuController.instance.LoadLevel(1);
         yield return new WaitForSeconds(1);
 
+    }
+
+    [UnityTest]
+    public IEnumerator TrafficLightsTiming()
+    {
+        Debug.LogWarning("Testing Traffic Timming, this test takes up to 13 seconds, please be patient :)");
+        /*GameEngine engine = (Instantiate((GameObject)Resources.Load("Prefabs/Logic/Game Engine"))).GetComponent<GameEngine>();
+        var gameObject = new GameObject();
+        GameObject trafficLightPanelGO = (GameObject)Instantiate(Resources.Load("Prefabs/UI/TrafficLightPanel"));
+        TrafficLightUIController trafficLightUI = trafficLightPanelGO.GetComponent<TrafficLightUIController>();
+        ((GameObject)Instantiate(Resources.Load("Prefabs/UI/Time Control Panel Root"));
+        var trafficLight = gameObject.AddComponent<TrafficLightController>();
+        //trafficLight.trafficLightPanel = trafficLightPanelGO;*/
+        GameObject gameKernel = Instantiate((GameObject)Resources.Load("Prefabs/Game Kernel"));
+        LevelManager lm = gameKernel.GetComponentInChildren<LevelManager>();
+        lm.timeToSolve = 100;
+        lm.timeToLoop = 100;
+        print(gameKernel.GetComponentInChildren<GameEngine>());
+        //trafficLight.trafficLightUIPanel = trafficLightUI;
+        trafficLight = gameKernel.GetComponentInChildren<TrafficLightController>();
+        //TrafficLightUIController TLUIController = GameKernel.GetComponentInChildren<TrafficLightUIController>();
+        trafficLight.SetValues(2, 8, 3);
+
+        var expectedNameRed = "TrafficLight - Red";
+        var expectedNameYellow = "TrafficLight - Yellow";
+        var expectedNameGreen = "TrafficLight - Green";
+
+        yield return new WaitForSeconds(1);
+
+        Assert.AreEqual(expectedNameRed, trafficLight.image.sprite.name);
+
+        Assert.AreNotEqual(expectedNameGreen, trafficLight.image.sprite.name);
+        Assert.AreNotEqual(expectedNameYellow, trafficLight.image.sprite.name);
+
+        yield return new WaitForSeconds(1);
+        Assert.AreEqual(expectedNameGreen, trafficLight.image.sprite.name);
+
+        Assert.AreNotEqual(expectedNameRed, trafficLight.image.sprite.name);
+        Assert.AreNotEqual(expectedNameYellow, trafficLight.image.sprite.name);
+
+        yield return new WaitForSeconds(3);
+        Assert.AreEqual(expectedNameYellow, trafficLight.image.sprite.name);
+
+        Assert.AreNotEqual(expectedNameGreen, trafficLight.image.sprite.name);
+        Assert.AreNotEqual(expectedNameRed, trafficLight.image.sprite.name);
+
+        yield return new WaitForSeconds(8);
+        Assert.AreEqual(expectedNameRed, trafficLight.image.sprite.name);
+
+        Assert.AreNotEqual(expectedNameGreen, trafficLight.image.sprite.name);
+        Assert.AreNotEqual(expectedNameYellow, trafficLight.image.sprite.name);
+    }
+
+    [UnityTest]
+    public IEnumerator GameSpeedChangingCarTesting()
+    {
+        float normalizedTCompletedLoop = 0.95f;
+        GameObject gameKernel = Instantiate((GameObject)Resources.Load("Prefabs/Game Kernel"));
+        GameEngine gameEngine = gameKernel.GetComponentInChildren<GameEngine>();
+        GameObject roadUsers = GameObject.Find("RoadUsers");
+        TrafficLightController trafficLight = gameKernel.GetComponentInChildren<TrafficLightController>();
+        trafficLight.SetValues(0, 0, 90); // Traffic light always green
+        // Avoid an exception in Vehicle caused because it expects to have BezierSpline on Awake (selected in Inspector)
+        LogAssert.Expect(LogType.Exception, @"Exception: Root of Black Car(Clone)'s Bezier needs a reference to a BezierSpline component");
+        GameObject blackCar = Instantiate((GameObject)Resources.Load("Prefabs/RoadUsers/Black Car"), roadUsers.transform);
+        
+        VehicleController vehicle = blackCar?.GetComponent<VehicleController>();
+        vehicle.Spline = gameKernel.GetComponentsInChildren<BezierSpline>()[2]; // Asign the Spline 2 because we want it to go left
+        vehicle.enabled = true; // Set enable because it disables automatically due to the aforementioned Exception
+
+        LevelManager lm = gameKernel.GetComponentInChildren<LevelManager>();
+        lm.timeToSolve = 100; // Make level not solvable
+        lm.timeToLoop = 100;  // Make level not loopable
+
+        BezierWalkerWithSpeedVariant bezier = blackCar.GetComponent<BezierWalkerWithSpeedVariant>();
+        
+        yield return new WaitForSeconds(1); // Wait for all the corresponding Awake and Start
+
+        gameEngine.Speed = GameEngine.GameSpeed.Normal;
+        vehicle.LoopStarted();
+        float t = Time.realtimeSinceStartup;
+        yield return new WaitWhile(() =>  bezier.NormalizedT <= normalizedTCompletedLoop);
+        float normalDuration = Time.realtimeSinceStartup - t;
+
+        gameEngine.Speed = GameEngine.GameSpeed.Fast;
+        vehicle.LoopStarted();
+        t = Time.realtimeSinceStartup;
+        yield return new WaitWhile(() => bezier.NormalizedT <= normalizedTCompletedLoop);
+        float fastDuration = Time.realtimeSinceStartup - t;
+
+        print($"normal duration {normalDuration}, fast {fastDuration}");
+        //Debug.Break();
+        Assert.IsTrue(Mathf.Approximately(normalDuration / 2, fastDuration));
     }
 
 

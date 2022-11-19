@@ -15,12 +15,12 @@ public class RandomBezier : MonoBehaviour
         if (roadUser)
         {
             int random = Random.Range(0, splines.Length);
-            roadUser.SetSpline(splines[random]);
+            roadUser.Spline = splines[random];
             SpriteRenderer rend = roadUser.GetComponent<SpriteRenderer>();
             rend.sortingOrder = int.Parse(splines[random].name.Split(" ")[1]) - 3;
             rend.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
             roadUser.normalSpeed = roadUser.normalSpeed + Mathf.Lerp(0.6f, 1.3f, Random.Range(0f, 1f));
-            roadUser.timeToLoop = -1;
+            roadUser.TimeToLoop = -1;
         }
 
     }

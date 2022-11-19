@@ -46,6 +46,27 @@ MonoBehaviour:
     m_Localized: Are you ready for the next level?
     m_Metadata:
       m_Items: []
+  - m_Id: 4151766528217088
+    m_Localized: Accept
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4151985202450432
+    m_Localized: Cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4418809869553664
+    m_Localized: Tutorial
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4419185918267392
+    m_Localized: First level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4419537971367936
+    m_Localized: Is this your first time playing TrafficManager? Maybe it'd be a
+      great idea to begin with the tutorial. It's super short but explanatory!
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

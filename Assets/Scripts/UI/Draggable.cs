@@ -8,7 +8,7 @@ public class Draggable : MonoBehaviour, IPointerDownHandler
 {
     private bool dragging;
     private Vector3 positionOffset;
-
+    public Canvas canvas;
     void Update()
     {
         if (dragging && Input.GetMouseButton(0))
@@ -25,12 +25,14 @@ public class Draggable : MonoBehaviour, IPointerDownHandler
 
     public Vector3 GetPosMouseAccordingToCanvas()
     {
-        Canvas canvas = transform.GetComponentInParent<Canvas>();
+        //Canvas canvas = /*transform.GetComponentInParent<Canvas>();*/ transform.parent.GetComponent<Canvas>();
+        Canvas[] canvases = FindObjectsOfType<Canvas>();
+        canvas = canvases.FirstOrDefault(e => e.GetComponentInChildren<Draggable>().gameObject.name == name);
         print($"Real mouse  {Input.mousePosition}");
         if (canvas && canvas.renderMode == RenderMode.ScreenSpaceOverlay)
             return Input.mousePosition;
         Vector3 mousePos = Input.mousePosition;
-        mousePos.z = /*Camera.main.*/transform.position.z;
+        mousePos.z = /*Camera.main.*/canvas.transform.position.z;
         return Camera.main.ScreenToWorldPoint(mousePos);
     }
 
@@ -52,7 +54,9 @@ public class Draggable : MonoBehaviour, IPointerDownHandler
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawSphere(GetPosMouseAccordingToCanvas(), 5);
+        Gizmos.color = Color.red;
+      //  Gizmos.DrawSphere(GetPosMouseAccordingToCanvas(), 2);
+        Vector2 size = ((RectTransform)transform).sizeDelta;
+        //Gizmos.DrawCube(canvas.transform.position, new Vector3(size.x, size.y, 1));
     }
 }

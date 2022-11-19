@@ -228,7 +228,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameEngine: {fileID: 0}
   trafficLightUIPanel: {fileID: 0}
-  trafficLightTimeAmounts: 070000000100000006000000
+  timeAmounts: 050000000500000005000000
   image: {fileID: 0}
   timer: 0
   timeOffset: 0

@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
+using static GameEngine;
 
 public class TutorialController : MonoBehaviour
 {
@@ -28,18 +29,14 @@ public class TutorialController : MonoBehaviour
     public float curtainThreshold = 2f;
 
 
-    private void Awake()
-    {
-        gameEngine = FindObjectOfType<GameEngine>();
-    }
+    private void Awake() => gameEngine = FindObjectOfType<GameEngine>();
+
     private void Start()
     {
-        //moments.ForEach(m => print(m));
-
         momentEnumerator = moments.GetEnumerator();
         momentEnumerator.Reset();
         momentEnumerator.MoveNext();
-        
+
         // This action is performed with priority to prevent timer to update sooner than it should
         if (momentEnumerator.Current.eventType == EventType.ChangeSpeed && momentEnumerator.Current.time == 0)
             ChangeSpeed(momentEnumerator.Current.newSpeed);
@@ -47,14 +44,14 @@ public class TutorialController : MonoBehaviour
 
     private void Update()
     {
-        int speed = (int)gameEngine.GetGameSpeed();
+        int speed = (int)gameEngine.Speed;
         timer += Time.deltaTime * speed;
         Moment moment = momentEnumerator.Current;
         float nextTimestamp = momentEnumerator.Current.time;
         //print(moment);
-        if (moment.asap || (timer >= nextTimestamp && nextTimestamp <= nextTimestamp + timeThreshold))
+        if (moment.asap || IsTheMoment(nextTimestamp))
         {
-            switch(moment.eventType)
+            switch (moment.eventType)
             {
                 case EventType.ChangeSpeed:
                     ChangeSpeed(moment.newSpeed);
@@ -69,13 +66,15 @@ public class TutorialController : MonoBehaviour
                     ShowTutorialMessage(moment.messageIndex);
                     break;
                 case EventType.MoveToTarget:
-                    StartMovingCurtain();
+                    StartCoroutine(MoveCurtain(moment.target));
                     break;
             }
         }
-       // Debug.Break();
-        if (moving)
-            MoveCurtain(moment.target);
+    }
+
+    private bool IsTheMoment(float nextTimestamp)
+    {
+        return timer >= nextTimestamp && nextTimestamp <= nextTimestamp + timeThreshold;
     }
 
     private void HideMessageWindow()
@@ -91,14 +90,39 @@ public class TutorialController : MonoBehaviour
     }
 
     [ContextMenu("Move to target")]
-    public void StartMovingCurtain()
+    public IEnumerator MoveCurtain(Transform target)
     {
         curtain.SetActive(true);
         //  initialPosition = mask.position;
-        moving = true;
+        //moving = true;
+
+        /*if (moving)
+            MoveCurtain(moment.target);*/
+        // Transform target = moments.Current.target;
+        Vector3 gameObjectSize = GameObjectSize(target);
+        float maxValue = Mathf.Max(gameObjectSize.x, gameObjectSize.y);
+        gameObjectSize = new Vector3(maxValue, maxValue, 0);
+        mask.transform.localScale = /* originalMaskScale +*/ gameObjectSize + gameObjectSize * additionalScalePercentage;
+        //print(target.GetComponent<Renderer>().bounds.center);
+        //print(target.GetComponent<Image>().)
+        // print("MOVIENDO");
+        //RectTransform rect = (RectTransform) target; //.GetComponent<RectTransform>();
+        //Vector3 center = new Vector3(rect.rect.width * rect.pivot.x, rect.rect.height * rect.pivot.y, 0);
+        // print("Min "+rect.offsetMin);
+        // print("Max "+rect.offsetMax);
+
+        //Vector3 endPos = rect.position;
+        // print(endPos);
+        //moving = Vector3.Distance(mask.position, target.position) >= curtainThreshold;
+        ChangeSpeed(GameSpeed.Paused); // ChangeSpeed does move the IEnumerator to next
+        while (Vector3.Distance(mask.position, target.position) >= curtainThreshold)
+        {
+            mask.position = Vector3.Lerp(mask.position, target.position, speed * Time.deltaTime);
+            yield return null;
+        }
     }
 
-    public void MoveCurtain(Transform target)
+   /* public void MoveCurtain(Transform target)
     {
         //  print($"TargetTransform ");
         //  print(target);
@@ -110,27 +134,8 @@ public class TutorialController : MonoBehaviour
 
         //sprint(Vector3.Distance(mask.position, target.position));
 
-        Vector3 gameObjectSize = GameObjectSize(target);
-        float maxValue = Mathf.Max(gameObjectSize.x, gameObjectSize.y);
-        gameObjectSize = new Vector3(maxValue, maxValue, 0);
-        mask.transform.localScale = /* originalMaskScale +*/ gameObjectSize + gameObjectSize * additionalScalePercentage;
-        //print(target.GetComponent<Renderer>().bounds.center);
-        //print(target.GetComponent<Image>().)
-       // print("MOVIENDO");
-        //RectTransform rect = (RectTransform) target; //.GetComponent<RectTransform>();
-       //Vector3 center = new Vector3(rect.rect.width * rect.pivot.x, rect.rect.height * rect.pivot.y, 0);
-        // print("Min "+rect.offsetMin);
-        // print("Max "+rect.offsetMax);
 
-        //Vector3 endPos = rect.position;
-       // print(endPos);
-        mask.position = Vector3.Lerp(mask.position, target.position, speed * Time.deltaTime);
-        moving = Vector3.Distance(mask.position, target.position) >= curtainThreshold;
-        if (!moving)
-        {
-            ChangeSpeed(GameEngine.GameSpeed.Paused); // ChangeSpeed does move the IEnumerator to next
-        }
-    }
+    }*/
 
     private Vector3 GameObjectSize(Transform transform)
     {
@@ -165,7 +170,7 @@ public class TutorialController : MonoBehaviour
         tutorialText.text = LocalizationSettings.StringDatabase.GetLocalizedString("Tutorial Messages", messageIndex.ToString("D3"));
     }
 
-    public void ChangeSpeed(GameEngine.GameSpeed newSpeed)
+    public void ChangeSpeed(GameSpeed newSpeed)
     {
         gameEngine.ChangeSpeed((int)newSpeed);
         momentEnumerator.MoveNext();
@@ -187,7 +192,7 @@ public class TutorialController : MonoBehaviour
         public EventType eventType;
         public Transform target;    // Only used when eventType = MoveToTarget, otherwise, ignored
         public int messageIndex;    // Only used when eventType = ShowMessage, otherwise ignored
-        public GameEngine.GameSpeed newSpeed; // Only used when eventType = ChangeSpeed, otherwise ignored
+        public GameSpeed newSpeed; // Only used when eventType = ChangeSpeed, otherwise ignored
         public override string ToString()
         {
             string msg = eventType + " " + (asap ? "as soon as posible" : time);
@@ -201,6 +206,16 @@ public class TutorialController : MonoBehaviour
                 case EventType.MoveToTarget: msg += " moving the curtain to " + target.name; break;
             }
             return msg;
+        }
+
+        public Moment(float time, bool asap, EventType eventType, Transform target, int messageIndex, GameSpeed newSpeed)
+        {
+            this.time = time;
+            this.asap = asap;
+            this.eventType = eventType;
+            this.target = target;
+            this.messageIndex = messageIndex;
+            this.newSpeed = newSpeed;
         }
     }
 

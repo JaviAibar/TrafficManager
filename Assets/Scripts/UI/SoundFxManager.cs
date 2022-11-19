@@ -7,14 +7,12 @@ public class SoundFxManager : MonoBehaviour
     public AudioClip clickSound;
     public AudioClip closeSound;
     private AudioSource audio;
+    public AudioClip[] solvedSounds;
+    public AudioClip failSound;
+    public AudioClip tickTackSound;
     private void Awake()
     {
         audio = GetComponent<AudioSource>();
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void PlayClickSound()
@@ -26,6 +24,27 @@ public class SoundFxManager : MonoBehaviour
     public void PlayCloseSound()
     {
         audio.clip = closeSound;
+        audio.Play();
+    }
+
+    public void PlaySolvedSound(int id)
+    {
+        if (id >= 0 &&  id < solvedSounds.Length && audio.clip != solvedSounds[id])
+        {
+            audio.clip = solvedSounds[id];
+            audio.Play();
+        }
+    }
+
+    public void PlayFailSound()
+    {
+        audio.clip = failSound;
+        audio.Play();
+    }
+
+    public void PlayTickTack()
+    {
+        audio.clip = tickTackSound;
         audio.Play();
     }
 }

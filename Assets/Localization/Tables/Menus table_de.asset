@@ -46,6 +46,27 @@ MonoBehaviour:
     m_Localized: "Sind Sie bereit f\xFCr die n\xE4chste Level?"
     m_Metadata:
       m_Items: []
+  - m_Id: 4151766528217088
+    m_Localized: Akzeptieren
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4151985202450432
+    m_Localized: Abbrechen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4418809869553664
+    m_Localized: Tutorial
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4419185918267392
+    m_Localized: Erste Level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4419537971367936
+    m_Localized: "Spielen Sie zum ersten Mal TrafficManager? Vielleicht w\xE4re es
+      eine gute Idee, mit dem Tutorial zu beginnen. Es ist super kurz, aber erkl\xE4rend!"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

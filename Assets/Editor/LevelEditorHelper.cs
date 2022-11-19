@@ -13,7 +13,6 @@ public class LevelEditorHelper : EditorWindow
 {
     static int frame = 0;
     static float timeElapsed = 0;
-    // static float fixedTime = 0;
     [SerializeField]
     public static bool stopAtLoop;
 
@@ -31,7 +30,7 @@ public class LevelEditorHelper : EditorWindow
         public List<RoadUserInfo> users;
         public List<TrafficLightInfo> lights;
         public SolveIndicatorInfo solveIndicator;
-        public int time;
+        public float time;
     }
 
     [System.Serializable]
@@ -74,7 +73,7 @@ public class LevelEditorHelper : EditorWindow
         public override string ToString() => "[" + x + ", " + y + "]";
     }
 
-    [MenuItem("Examples/Level Creator Helper")]
+    [MenuItem("Window/Level Creator Helper")]
     static void Init()
     {
         EditorWindow window = GetWindow(typeof(LevelEditorHelper));
@@ -104,7 +103,14 @@ public class LevelEditorHelper : EditorWindow
 
     void OnGUI()
     {
-        level = GameObject.Find("Level Manager").GetComponent<LevelManager>();
+        level = GameObject.Find("Level Manager")?.GetComponent<LevelManager>();
+        if (!level)
+        {
+            EditorGUILayout.LabelField("This window works only on a Level Scene:");
+            EditorGUILayout.LabelField("Change to a Level Scene or add a Level Manager to this Scene");
+            return;
+        }
+
         roadUsers = FindObjectsOfType<RoadUser>();
         trafficLights = FindObjectsOfType<TrafficLightController>();
         EditorGUILayout.LabelField("Level time " + level.timeToLoop);
@@ -126,14 +132,14 @@ public class LevelEditorHelper : EditorWindow
             {
                 RoadUserInfo selectedRoadUserInfo = selectedFrameInfo.users.Find(x => x.instanceID == roadUsers[i].GetInstanceID());
 
-                roadUsers[i].transform.parent.transform.position = new Vector3(selectedRoadUserInfo.position.x, selectedRoadUserInfo.position.y);
-                roadUsers[i].transform.parent.eulerAngles = new Vector3(0, 0, selectedRoadUserInfo.zRotation);
+                roadUsers[i].transform.transform.position = new Vector3(selectedRoadUserInfo.position.x, selectedRoadUserInfo.position.y);
+                roadUsers[i].transform.eulerAngles = new Vector3(0, 0, selectedRoadUserInfo.zRotation);
             }
 
             for (int i = 0; i < trafficLights.Length; i++)
             {
                 TrafficLightInfo selectedTrafficLightInfo = selectedFrameInfo.lights.Find(x => x.instanceID == trafficLights[i].GetInstanceID());
-                trafficLights[i].GetComponent<Image>().sprite = GameEngine.instance.trafficLightSprites[(int)selectedTrafficLightInfo.colour];
+                trafficLights[i].GetComponent<Image>().sprite = GameEngine.instance.TrafficLightSprites[(int)selectedTrafficLightInfo.colour];
                 trafficLights[i].GetComponentInChildren<TMPro.TMP_Text>().text = selectedTrafficLightInfo.text;
             }
             level.timeIndicator.text = selectedFrameInfo.solveIndicator.timeLeft;
@@ -142,20 +148,13 @@ public class LevelEditorHelper : EditorWindow
 
         }
         if (GUILayout.Button("Play"))
-        {
             EditorApplication.EnterPlaymode();
-        }
 
         if (GUILayout.Button("Reset"))
-        {
             ResetInfo();
-        }
     }
 
-    void ResetInfo()
-    {
-        frames = new List<FrameInfo>();
-    }
+    void ResetInfo() => frames = new List<FrameInfo>();
 
     void OnInspectorUpdate()
     {
@@ -207,6 +206,7 @@ public class LevelEditorHelper : EditorWindow
     {
         if (EditorApplication.isPlaying)
         {
+            if (!level) return;
             if (Time.frameCount <= 5)
             {
                 frames = new List<FrameInfo>();
@@ -233,13 +233,13 @@ public class LevelEditorHelper : EditorWindow
             {
                 TrafficLightInfo tli = new TrafficLightInfo();
                 tli.instanceID = t.GetInstanceID();
-                tli.colour = t.GetState();
-                tli.text = t.GetTimerText();
+                tli.colour = t.State;
+                tli.text = t.TimerText;
                 frameInfo.lights.Add(tli);
             }
 
             timeElapsed += Time.deltaTime;
-            frameInfo.time = (int)timeElapsed;
+            frameInfo.time = timeElapsed;
             frameInfo.solveIndicator.solvedSprite = level.iconImage.sprite;
             frameInfo.solveIndicator.timeLeft = level.timeIndicator.text;
 
@@ -293,6 +293,4 @@ public class LevelEditorHelper : EditorWindow
         memStream.Seek(0, SeekOrigin.Begin);
         frames = (List<FrameInfo>)binForm.Deserialize(memStream);
     }
-
-    void print(string txt) => Debug.Log(txt);
 }
