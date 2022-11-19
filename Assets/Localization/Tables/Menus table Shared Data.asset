@@ -43,6 +43,26 @@ MonoBehaviour:
     m_Key: Ready_next_levl
     m_Metadata:
       m_Items: []
+  - m_Id: 4151766528217088
+    m_Key: accept
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4151985202450432
+    m_Key: cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4418809869553664
+    m_Key: Tutorial
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4419185918267392
+    m_Key: First_Level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4419537971367936
+    m_Key: start_tutorial_msg
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

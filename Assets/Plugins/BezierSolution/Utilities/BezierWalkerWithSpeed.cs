@@ -13,7 +13,7 @@ namespace BezierSolution
 		public float speed = 5f;
 		[SerializeField]
 		[Range( 0f, 1f )]
-		private float m_normalizedT = 0f;
+		protected float m_normalizedT = 0f;
 
 		public override BezierSpline Spline {get { return spline; } }
 
@@ -23,17 +23,17 @@ namespace BezierSolution
 			set { m_normalizedT = value; }
 		}
 
-		//public float movementLerpModifier = 10f;
+		public float movementLerpModifier = 10f;
 		public float rotationLerpModifier = 10f;
 
 		public LookAtMode lookAt = LookAtMode.Forward;
 
-		private bool isGoingForward = true;
+		protected bool isGoingForward = true;
 		public override bool MovingForward { get { return ( speed > 0f ) == isGoingForward; } }
 
 		public UnityEvent onPathCompleted = new UnityEvent();
-		private bool onPathCompletedCalledAt1 = false;
-		private bool onPathCompletedCalledAt0 = false;
+		protected bool onPathCompletedCalledAt1 = false;
+		protected bool onPathCompletedCalledAt0 = false;
 
 		private void FixedUpdate()
 		{

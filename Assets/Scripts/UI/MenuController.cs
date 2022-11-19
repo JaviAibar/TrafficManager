@@ -7,6 +7,8 @@ using System.Runtime.ExceptionServices;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using System.IO;
+using static GameEngine;
 
 public class MenuController : MonoBehaviour
 {
@@ -14,6 +16,7 @@ public class MenuController : MonoBehaviour
     public GameObject levelsGrid;
     public GameObject backButton;
     public GameObject nextButton;
+    public GameObject pauseMenu;
     public static MenuController instance;
     private static List<int> prevScenes;
     private static int historyIndex = -1;
@@ -22,22 +25,6 @@ public class MenuController : MonoBehaviour
     /// </summary>
     public Sprite[] solvedSprites = new Sprite[2];
 
-    private void Awake()
-    {
-        if (prevScenes == null) 
-            prevScenes = new List<int>();
-            
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-       
-    }
     private void OnEnable()
     {
         SceneManager.sceneLoaded += SceneManager_sceneLoaded;
@@ -47,6 +34,30 @@ public class MenuController : MonoBehaviour
         SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
     }
 
+    private void Awake()
+    {
+        if (prevScenes == null)
+            prevScenes = new List<int>();
+
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            pauseMenu.SetActive(true);
+            GameEngine.instance.ChangeSpeed(GameSpeed.Paused);
+        }
+    }
     private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode loadMode)
     {
         print($"Scene {scene.name} loaded");
@@ -63,7 +74,7 @@ public class MenuController : MonoBehaviour
     public void GenerateBackAndNextButtons()
     {
 
-       // print($"Enable, history: {historyIndex}, prev: {prevScenes.Count}");
+        // print($"Enable, history: {historyIndex}, prev: {prevScenes.Count}");
         Canvas canvas = FindObjectOfType<Canvas>();
         if (historyIndex > 0 && canvas)
             Instantiate(backButton, canvas.transform).GetComponent<Button>().onClick.AddListener(
@@ -81,14 +92,14 @@ public class MenuController : MonoBehaviour
 
     public void NewGame()
     {
-        LoadSceneAndSave("Tutorial Scene");
+        LoadSceneAndSave("Level001");
     }
 
     private void SavePrevScene()
     {
         historyIndex++;
-        if (prevScenes.Count - historyIndex > 0)print($"Eliminando desde ind {historyIndex} un total de {prevScenes.Count - historyIndex} y añadiendo la escena {SceneManager.GetActiveScene().name} a la lista");
-        
+        if (prevScenes.Count - historyIndex > 0) print($"Eliminando desde ind {historyIndex} un total de {prevScenes.Count - historyIndex} y añadiendo la escena {SceneManager.GetActiveScene().name} a la lista");
+
         prevScenes.RemoveRange(historyIndex, prevScenes.Count - historyIndex);
         prevScenes.Add(SceneManager.GetActiveScene().buildIndex);
         print($"(SavePrevScene) Guardada escena {SceneManager.GetActiveScene().name}");
@@ -102,7 +113,7 @@ public class MenuController : MonoBehaviour
 
     public void LoadTutorial()
     {
-        LoadSceneAndSave("Tutorial Scene");
+        LoadSceneAndSave("Tutorial 1");
     }
 
     public void LoadMainMenuScene()
@@ -129,7 +140,10 @@ public class MenuController : MonoBehaviour
         int pediremos = historyIndex - 1;
         int buildIndex = prevScenes[pediremos];
         print($"(LoadPreviousScene: Se va a cargar la escena de indice {pediremos} cuya build index es {buildIndex} de nombre '{SceneManager.GetSceneByBuildIndex(buildIndex).name}' es valido? {SceneManager.GetSceneByBuildIndex(buildIndex).IsValid()}");
-        SceneManager.LoadScene(prevScenes[historyIndex--]);
+        if (prevScenes.Count > 1)
+            SceneManager.LoadScene(prevScenes[historyIndex--]);
+        else
+            LoadMainMenuScene();
         print($"LoadPreviousScene historyIndex: {historyIndex}");
         //historyIndex--;
     }
@@ -147,36 +161,36 @@ public class MenuController : MonoBehaviour
 
     private void LoadLevelsList()
     {
-        int sceneCount = UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings;
-        string[] scenes = new string[sceneCount];
+        int sceneCount = SceneManager.sceneCountInBuildSettings;
+        List<string> scenes = new List<string>();
         Transform levelsTransform = GameObject.Find("Levels").transform;
         for (int i = 0; i < sceneCount; i++)
         {
-            scenes[i] = System.IO.Path.GetFileNameWithoutExtension(UnityEngine.SceneManagement.SceneUtility.GetScenePathByBuildIndex(i));
+            string sceneName = Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(i));
+            scenes.Add(sceneName);
         }
+
+        // Filtering
+        scenes = scenes.FindAll(e => e.Contains("Level"));
+        scenes.Remove("Levels Scene");
 
         foreach (string sceneName in scenes)
         {
-            if (sceneName.Contains("Level") && sceneName != "Levels Scene")
-            {
-                GameObject levelButton = Instantiate(levelButtonPrefab, levelsTransform);
-                levelButton.name = sceneName;
-                levelButton.GetComponentInChildren<TMP_Text>().text = int.Parse(sceneName.Substring(5)).ToString();
-                Image checkedImage = levelButton.transform.GetComponent<Image>();
-                checkedImage.sprite = solvedSprites[PlayerPrefs.GetInt(sceneName, 0)];
+            GameObject levelButton = Instantiate(levelButtonPrefab, levelsTransform);
+            levelButton.name = sceneName;
+            levelButton.GetComponentInChildren<TMP_Text>().text = int.Parse(sceneName.Substring(5)).ToString();
+            Image checkedImage = levelButton.transform.GetComponent<Image>();
+            checkedImage.sprite = solvedSprites[PlayerPrefs.GetInt(sceneName, 0)];
 
-                levelButton.GetComponent<Button>().onClick.AddListener(
-                delegate
-                {
-                    /*LevelLoader.currentLevel = (ScriptableObjectLevel)Resources.Load(LocalizationSettings.SelectedLocale.Formatter + "/Levels/Level " + levelButton.name.Split(" ")[1]);
-                    SceneManager.LoadScene("Level");*/
-                    SceneManager.LoadScene(levelButton.name);
-                });
-            }
+            levelButton.GetComponent<Button>().onClick.AddListener(
+            delegate
+            {
+                SceneManager.LoadScene(levelButton.name);
+            });
         }
     }
 
-    
+
 
     public int GetHistoryIndex()
     {
@@ -190,6 +204,6 @@ public class MenuController : MonoBehaviour
 
     public void QuitGame()
     {
-        Application.Quit();    
+        Application.Quit();
     }
 }

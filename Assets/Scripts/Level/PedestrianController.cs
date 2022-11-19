@@ -1,53 +1,70 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static GameEngine;
 
 [System.Serializable]
 public class PedestrianController : RoadUser
 {
-    public Animator anim;
+    private Animator anim;
+    private SpriteRenderer rend;
+    public Sprite ranOverSprite;
 
     protected override void Awake()
     {
         base.Awake();
         anim = GetComponent<Animator>();
+        rend = GetComponent<SpriteRenderer>();
     }
     // Called both when the pedestrian reaches a collider or when the trafficlight changes
     public override void CheckMovingConditions()
     {
-        if (canMove) // This flag takes offsetTime condition into account
+        if (hasStartedMoving && trafficArea) // This flag takes offsetTime condition into account
         {
-            if (trafficArea != null && trafficArea.stopArea && GameEngine.Vector3ToDirection(transform.parent.up) == trafficArea.direction && trafficLight.GetState() == TrafficLightController.TrafficLightColour.Green)
+            if (trafficArea.StopArea && trafficArea.SameDirection(transform.up) && trafficLight.IsGreen)
             {
                 Moving(false);
-                bezier.speed = 0;
-                anim.SetBool("isWalking", false);
-                baseSpeed = 0;
-            }
-            else if (trafficArea != null && trafficLight.GetState() == TrafficLightController.TrafficLightColour.Green && trafficArea.direction == GameEngine.Direction.Center)
-            {
+                StartCoroutine(Accelerate(0));
 
+                baseSpeed = 0;
+                anim.SetBool("isWalking", false);
+            }
+            else if (trafficLight.IsGreen && trafficArea.IsCenter)
+            {
                 Moving(true);
+                StartCoroutine(Accelerate(runningSpeed * (int)GameEngine.instance.Speed));
                 anim.speed = 1.7f;
-                bezier.speed = runningSpeed * (int)GameEngine.instance.GetGameSpeed();
-                anim.SetBool("isWalking", true);
                 baseSpeed = runningSpeed;
+                anim.SetBool("isWalking", true);
             }
             else
             {
                 Moving(true);
-                bezier.speed = normalSpeed * (int)GameEngine.instance.GetGameSpeed();
-                anim.SetBool("isWalking", true);
+                StartCoroutine(Accelerate(normalSpeed * (int)GameEngine.instance.Speed));
                 anim.speed = 1f;
 
                 baseSpeed = normalSpeed;
+                anim.SetBool("isWalking", true);
             }
         }
     }
 
-    public override void SpeedChanged(GameEngine.GameSpeed state)
+    public override void GameSpeedChanged(GameSpeed state)
     {
-        base.SpeedChanged(state);
+        base.GameSpeedChanged(state);
         anim.speed = (float)state;
+    }
+
+    internal void BeRanOver()
+    {
+        anim.enabled = false;
+        rend.sprite = ranOverSprite;
+    }
+
+    public override void LoopStarted()
+    {
+        base.LoopStarted();
+        anim.enabled = true;
     }
 }

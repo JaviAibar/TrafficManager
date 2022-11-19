@@ -39,7 +39,7 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 11051879550976
     m_Localized: This car is heading towards a traffic light, but it is going to
-      find it on red, as there are still 8 seconds left before it turns green.
+      find it on red, as there are still 4 seconds left before it turns green.
     m_Metadata:
       m_Items: []
   - m_Id: 277075984044032
@@ -68,6 +68,30 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 992086125629440
     m_Localized: Got it!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4310297390796800
+    m_Localized: Noooo!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4309695554310144
+    m_Localized: 'Oh no! There''s a drunk driver!
+
+      Unfortunately, these types
+      of drivers exist and are very dangerous.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4310048668569600
+    m_Localized: Oh no! As the traffic light was green for pedestrians, he crossed,
+      and because of that, he has been run over by the drunk driver, it is terrible!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4310277274914816
+    m_Localized: 'I will restart the level for you so you can change the traffic
+      light settings, stop the pedestrian and thus you can save his life.
+
+      Let''s
+      go!'
     m_Metadata:
       m_Items: []
   references:

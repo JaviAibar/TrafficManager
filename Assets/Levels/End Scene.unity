@@ -4615,11 +4615,15 @@ MonoBehaviour:
   timeLeftToSolve: -1
   timer: 0
   solvedPanel: {fileID: 244815979}
+  solvedSounds: []
+  failSound: {fileID: 0}
   iconImage: {fileID: 1489124566}
   timeIndicator: {fileID: 2099277922}
   minimumSpeedSprite: {fileID: 21300000, guid: 65d3f8c2afcea66428a8ef4d465d2aae, type: 3}
   forbiddenSprite: {fileID: 21300000, guid: 55f2b441a301fcb49889206ce7b320ba, type: 3}
   nextLevel: Level002
+  particleSystems: []
+  sfx: {fileID: 0}
 --- !u!4 &2010949931
 Transform:
   m_ObjectHideFlags: 0
@@ -4915,7 +4919,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vehicles:
   - {fileID: 5259821963127813204, guid: 0cf64bd5111817e4887b5b3c4bffca6a, type: 3}
-  - {fileID: 2138304423120133971, guid: f057d7fe1f2ab7149b7953df5a479793, type: 3}
+  - {fileID: 1492570544018406416, guid: 51d2c6af76a4252449db11cd0d12a66f, type: 3}
   probability: 0.025
   size: 0.24
 --- !u!1 &2084326865

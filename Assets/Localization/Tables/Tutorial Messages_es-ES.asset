@@ -55,6 +55,25 @@ MonoBehaviour:
     m_Localized: "\xA1Entendido!"
     m_Metadata:
       m_Items: []
+  - m_Id: 4309695554310144
+    m_Localized: "\xA1Oh, no! \xA1Un conductor borracho!\nLamentablemente este tipo
+      de conductores existen y son muy peligrosos."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4310048668569600
+    m_Localized: "\xA1Oh no! \xA1Como el semaforo estaba en verde para peatones,
+      ha cruzado, y por ello, ha sido atropellado por el conductor borracho, es terrible!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4310297390796800
+    m_Localized: "\xA1Noooo!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4310277274914816
+    m_Localized: "Te reiniciar\xE9 el nivel para que puedas cambiar la configuraci\xF3n
+      del semaforo, que se detenga el peat\xF3n y as\xED podr\xE1s salvar su vida.\nVamos!"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

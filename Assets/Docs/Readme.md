@@ -1,3 +1,18 @@
+# Order in layer for every visual layer in levels
+For the sake of the confortability, OiL will be an abreviation of Order in Layer
+Starting from the point of view of the Camera (from closer to further):
+1. Tutorial Canvas (as it is the only Canvas Overlay it will stay OiL = 0)
+2. Curtain OiL = 300
+3. Confeti OiL (inside Renderer) = 200
+4. Interactable Canvas (that with time control, solve check, next level window, etc - Camera Canvas) OiL = 100
+5. Road Users (with a Sorting Group for comfortability) OiL = 0
+6. Screen Background (Still not implemented due to lack of time) OiL = -100
+7. Road Background OiL = -200
+8. Office Background (as Screen BG, not implemented) OiL = -300
+
+# Why Curtain is not inside a Canvas?
+Because Masks are still not prepared to work as intended inside a Canvas, since for a Mask to be applied to an Image, this latter must be child of the mask, and in this case we needed the mask move around the image and not the other way around
+
 # How to create a new Level
 It is highly recommended to duplicate one of the already developed levels and
 perform the following changes:

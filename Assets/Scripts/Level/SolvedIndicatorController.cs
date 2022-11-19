@@ -9,13 +9,4 @@ public class SolvedIndicatorController : MonoBehaviour
     public Image shineImage;
     public TMPro.TMP_Text timeIndicator;
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
 }
