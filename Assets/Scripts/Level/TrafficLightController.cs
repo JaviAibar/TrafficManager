@@ -77,16 +77,16 @@ public class TrafficLightController : MonoBehaviour
     public void OpenMenu()
     {
         trafficLightUIPanel.gameObject.SetActive(true);
-        trafficLightUIPanel.SetValues(TimeRed, TimeGreen, TimeYellow);
-        trafficLightUIPanel.SetSender(gameObject.GetComponent<TrafficLightController>());
+        trafficLightUIPanel.SetValues(TimeRed, TimeYellow, TimeGreen);
+        trafficLightUIPanel.Sender = gameObject.GetComponent<TrafficLightController>();
     }
 
-    public void SetValues(int? redParam, int? yellowParam, int? greenParam)
+    public void SetValues(int redParam, int yellowParam, int greenParam)
     {
         if (timeAmounts == null) timeAmounts = new int[] { 1, 1, 1 };
-        if (redParam != null) TimeRed = redParam.Value;
-        if (greenParam != null) TimeGreen = greenParam.Value;
-        if (yellowParam != null) TimeYellow = yellowParam.Value;
+        TimeRed = redParam;
+        TimeYellow = yellowParam;
+        TimeGreen = greenParam;
     }
 
     public void DecideTrafficLightColor()

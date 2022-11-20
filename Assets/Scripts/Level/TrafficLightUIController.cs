@@ -14,6 +14,12 @@ public class TrafficLightUIController : MonoBehaviour
     public Slider greenSlider;
     public Slider yellowSlider;
 
+    public int Red { get => (int)redSlider.value; set => redSlider.value = value;}
+    public int Yellow { get => (int)yellowSlider.value; set => yellowSlider.value = value; }
+    public int Green { get => (int)greenSlider.value; set => greenSlider.value = value;}
+
+    public TrafficLightController Sender { get => sender; set => sender = value; }
+
     private TrafficLightController sender;
 
     private void OnEnable()
@@ -38,6 +44,25 @@ public class TrafficLightUIController : MonoBehaviour
         yellowSlider.onValueChanged.RemoveListener(yellowSliderChange);
     }
 
+    public void SetValues(int red, int yellow, int green)
+    {
+        Red = red;
+        Yellow = yellow;
+        Green = green;
+    }
+    void redSliderChange(float value)
+    {
+        redInputField.text = value.ToString();
+    }
+
+    void greenSliderChange(float value)
+    {
+        greenInputField.text = value.ToString();
+    }
+    void yellowSliderChange(float value)
+    {
+        yellowInputField.text = value.ToString();
+    }
     void redInputFieldChange(string value)
     {
         float valueFloat;
@@ -59,28 +84,15 @@ public class TrafficLightUIController : MonoBehaviour
         yellowSlider.value = valueFloat;
     }
 
-    void redSliderChange(float value)
-    {
-        redInputField.text = value.ToString();
-    }
+    public void Cancel() => gameObject.SetActive(false);
 
-    void greenSliderChange(float value)
+    public void Accept()
     {
-        greenInputField.text = value.ToString();
+        sender.SetValues(Red, Yellow, Green) ;
+        gameObject.SetActive(false);
     }
-    void yellowSliderChange(float value)
-    {
-        yellowInputField.text = value.ToString();
-    }
+}
 
-    public void SetValues(int red, int green, int yellow)
-    {
-        // SetSliders(red, green, yellow);
-        // SetInputFields(red, green, yellow);
-        SetRed(red);
-        SetGreen(green);
-        SetYellow(yellow);
-    }
 
    /* private void SetInputFields(int red, int green, int yellow)
     {
@@ -96,53 +108,3 @@ public class TrafficLightUIController : MonoBehaviour
         yellowSlider.value = yellow;
     }
    */
-    public void SetRed(float value)
-    {
-        redInputField.text = value.ToString();
-    }
-    public void SetGreen(float value)
-    {
-        greenInputField.text = value.ToString();
-    }
-    public void SetYellow(float value)
-    {
-        yellowInputField.text = value.ToString();
-    }
-   
-    public int? GetRed()
-    {
-        int value;
-        if (int.TryParse(redInputField.text, out value)) return value;
-        return null;
-    }
-
-    public int? GetGreen()
-    {
-        int value;
-        if (int.TryParse(greenInputField.text, out value)) return value;
-        return null;
-    }
-
-    public int? GetYellow()
-    {
-        int value;
-        if (int.TryParse(yellowInputField.text, out value)) return value;
-        return null;
-    }
-
-    public void SetSender(TrafficLightController senderParam)
-    {
-        sender = senderParam;
-    }
-
-    public void Cancel()
-    {
-        gameObject.SetActive(false);
-    }
-
-    public void Accept()
-    {
-        sender.SetValues(GetRed(), GetGreen(), GetYellow()) ;
-        gameObject.SetActive(false);
-    }
-}

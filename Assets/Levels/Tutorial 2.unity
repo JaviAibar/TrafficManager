@@ -1186,6 +1186,11 @@ PrefabInstance:
       propertyPath: timeOffset
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 6365454548188606733, guid: ab00729f89417ca499d768df6540ed79,
+        type: 3}
+      propertyPath: verbose
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6522342080081591715, guid: ab00729f89417ca499d768df6540ed79,
         type: 3}
       propertyPath: m_AnchorMax.y

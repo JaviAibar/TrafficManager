@@ -29,25 +29,17 @@ public class VehicleController : RoadUser
         {
             if (MustStop())
             {
-                Moving(false);
-                StartCoroutine(Accelerate(0));
-
-                baseSpeed = 0;
+                ChangeSpeed(0);
             }
             // Yellow and before or middle cross, then boost
             // or Red but in middle cross, then boost
             else if (MustRun())
             {
-                Moving(true);
-                StartCoroutine(Accelerate(runningSpeed * (int)GameEngine.instance.Speed));
-                baseSpeed = runningSpeed;
-
+                ChangeSpeed(runningSpeed);
             }
             else
             {
-                Moving(true);
-                StartCoroutine(Accelerate(normalSpeed * (int)GameEngine.instance.Speed));
-                baseSpeed = normalSpeed;
+                ChangeSpeed(normalSpeed);
             }
         }
     }
