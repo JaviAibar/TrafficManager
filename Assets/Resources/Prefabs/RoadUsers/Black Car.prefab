@@ -7,6 +7,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6057282357512317577, guid: a1c565a5c04bcd94f9369e48e93d118c,
+        type: 3}
+      propertyPath: timeToLoop
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6057282357512317577, guid: a1c565a5c04bcd94f9369e48e93d118c,
+        type: 3}
+      propertyPath: Acceleration
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6145195130738850694, guid: a1c565a5c04bcd94f9369e48e93d118c,
         type: 3}
       propertyPath: m_RootOrder
@@ -65,7 +75,7 @@ PrefabInstance:
     - target: {fileID: 6145195130738850695, guid: a1c565a5c04bcd94f9369e48e93d118c,
         type: 3}
       propertyPath: m_Name
-      value: Root Vehicle
+      value: Black Car
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a1c565a5c04bcd94f9369e48e93d118c, type: 3}

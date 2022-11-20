@@ -6,18 +6,16 @@ using System;
 using System.Linq;
 using static GameEngine;
 
-[RequireComponent(typeof(Collider2D))]
 [RequireComponent(typeof(Rigidbody2D))]
 //[RequireComponent(typeof(BezierWalkerWithSpeed))]
 [System.Serializable]
 public abstract class RoadUser : MonoBehaviour
 {
-    public AnimationCurve curve = new AnimationCurve();
     protected Vector2 InitPos => new Vector2(1000, 1000);
     [SerializeField] protected float Acceleration = 5f;
     [Min(0)] public float timeOffset = 0;
     [Min(0)] [SerializeField] private float timeToLoop = 10;
-    protected float Epsilon => 0.1f;
+    protected float Epsilon => 0.01f;
     public float TimeToLoop
     {
         get => timeToLoop;
@@ -33,6 +31,7 @@ public abstract class RoadUser : MonoBehaviour
     public float timer = 0;
     [HideInInspector] public BezierWalkerWithSpeed bezier;
     [SerializeField] private BezierSpline spline;
+    public float Speed => bezier.speed;
     public BezierSpline Spline { get => spline; set { spline = value; bezier.spline = value; } }
     protected Rigidbody2D rb;
     public float normalSpeed = 10;
@@ -47,14 +46,13 @@ public abstract class RoadUser : MonoBehaviour
     public bool HasStartedMoving => hasStartedMoving;
     public bool HasWaitedEnough => timer >= timeOffset && timer <= timeOffset + 0.1f;
     public bool TimeToRepeat => timer >= timeToLoop && timer <= timeToLoop + 0.5f;
-    protected Collider2D collider;
+    protected new Collider2D collider;
     protected bool colliding;
     protected Vector3 collisionDirection;
     protected Vector3 endOfCollision;
     private float otherMass;
     protected bool accelerating;
     public bool Accelerating => accelerating;
-
     public Vector3 UserDir => transform.up;
 
     void OnEnable()
@@ -96,7 +94,6 @@ public abstract class RoadUser : MonoBehaviour
             throw new Exception($"Root of {name} needs a Bezier Walker With Speed component");
         else if (!spline)
             throw new Exception($"Root of {name}'s Bezier needs a reference to a BezierSpline component");
-            //Debug.LogWarning($"{name}'s Bezier is taking a random reference to a BezierSpline component");
     }
 
     protected virtual void Start()
@@ -111,13 +108,14 @@ public abstract class RoadUser : MonoBehaviour
             LoopStarted();
         if (colliding)
             MoveCollision();
-        if (HasWaitedEnough) // Start moving after timeOffset time
+        if (HasWaitedEnough) // Start moving after timeOffset time (limited to a couple of frames)
         {
             hasStartedMoving = true;
-            /*bezier.speed = */StartCoroutine(Accelerate(normalSpeed));//normalSpeed * (int)GameEngine.instance.Speed;
-            baseSpeed = normalSpeed;
-            // collider.enabled = true;
+            collider.enabled = true;
+            ChangeSpeed(normalSpeed);
         }
+        if (accelerating)
+            Accelerate();
     }
 
     private void MoveCollision()
@@ -140,12 +138,10 @@ public abstract class RoadUser : MonoBehaviour
         endOfCollision = transform.position + collisionDirection * otherMass;
         bezier.enabled = false;
         colliding = true;
-        //        Debug.Break();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        //   print($"trigger culpable {other.name}");
         trafficArea = other.GetComponent<TrafficArea>();
         trafficLight = trafficArea.TrafficLight;
         CheckMovingConditions();
@@ -166,7 +162,6 @@ public abstract class RoadUser : MonoBehaviour
 
     public void TrafficLightChanged(TrafficLightController.TrafficLightColour colour)
     {
-        //  print("Semaforo culpable");
         Print("Traffic light changed to " + colour);
         if (trafficArea != null && trafficLight != null)
             CheckMovingConditions();
@@ -181,6 +176,11 @@ public abstract class RoadUser : MonoBehaviour
 
     public virtual void LoopStarted()
     {
+        StartCoroutine(LoopStartedCoroutine());
+    }
+    public virtual IEnumerator LoopStartedCoroutine()
+    {
+
         /*
          * Disabling collider and moving to a different position were intented to fix a visual bug:
          * When there's an accident with a pedestrian, it changes its sprite to ranOver and aparently
@@ -192,60 +192,68 @@ public abstract class RoadUser : MonoBehaviour
          */
         //      collider.enabled = false;
         //      transform.position = InitPos;
+        collider.enabled = false;
         hasStartedMoving = false;
-        // ResetSpline();
         bezier.enabled = true;
         bezier.NormalizedT = 0;
-        bezier.speed = 0;
 
-        timer = 0;
+        /*
+         * This speed to 1 and the fact that this method is a coroutine is because in order to not hit anybody while backing
+         * to the start, I need to disable the collider, but bezier won't move back to the start until we have a couple of
+         * frames moving.
+         * 
+         * */
+        bezier.speed = 1f;
+        yield return new WaitWhile(() => bezier.NormalizedT <= 0f);
+        accelerating = false;
+        bezier.speed = 0;
         baseSpeed = 0;
+        timer = 0;
     }
 
+    /*
+     * Executed when Game changes speed. Changes to speed are applied instantly
+     * because in a Game speed change makes no sense an acceleration effect
+     */
     public virtual void GameSpeedChanged(GameSpeed state)
     {
         if (state == GameSpeed.Paused) bezier.speed = 0;
         else if (!accelerating) bezier.speed = baseSpeed * (int)state;
     }
 
-    
-    /* public void ResetSpline()
-     {
-         bezier.spline = spline;
-     }*/
-
-    public IEnumerator Accelerate(float newSpeed)
+    public void ChangeSpeed(float newSpeed)
     {
-        accelerating = true;
-        print($"{name} Accelerating from {bezier.speed} to {newSpeed} with an acceleration of {Acceleration} and game speed of {instance.Speed} ({(int)instance.Speed})");
-        //curve.AddKey(Time.realtimeSinceStartup, 0);
-        float initialSpeed = bezier.speed;
-        float time = 0;
-        int counter = 0;
-        while (Mathf.Abs(bezier.speed - newSpeed) > Epsilon)
+       if (newSpeed != baseSpeed/* && !accelerating*/)
         {
-            counter++;
-            time += Time.deltaTime;
-           // print($"Increasing {name} speed to {Mathf.Lerp(bezier.speed, newSpeed, Acceleration * (int)instance.Speed * time)} t={ Acceleration * (int)instance.Speed * time}");
-            bezier.speed = Mathf.Lerp(initialSpeed, newSpeed, Acceleration * (int)instance.Speed * time);
-            yield return null;
+            Moving(newSpeed != 0); // If new speed is diff of 0, then Moving(true)
+            baseSpeed = newSpeed;
+            accelerating = true;
+            initialSpeed = bezier.speed;
+            timeAccelerating = 0;
+            counterAccelIterations = 0;
+            targetSpeed = newSpeed;
+         }
+    }
+    private float initialSpeed;
+    private float timeAccelerating = 0;
+    private int counterAccelIterations = 0;
+    private float targetSpeed;
+    public void Accelerate()
+    {
+        accelerating = Mathf.Abs(bezier.speed - targetSpeed) > Double.Epsilon;
+        if (accelerating)
+        {
+            counterAccelIterations++;
+            timeAccelerating += /*Time.deltaTime*/ 0.1f * (int)instance.Speed; // We multiply with Speed in this moment because if game is stop
+                                                                               // print($"Increasing {name} speed to { Mathf.Lerp(initialSpeed, targetSpeed, Acceleration * timeAccelerating)} t={ Acceleration * (int)instance.Speed * timeAccelerating} (delta={timeAccelerating} * gameSpeed={instance.Speed} * Accl={Acceleration})");
+            bezier.speed = Mathf.Lerp(initialSpeed, targetSpeed, Acceleration * timeAccelerating) * (int)instance.Speed;
         }
-        Print($"Velocidad objetivo de {name} ({newSpeed}) alcanzada: actual {bezier.speed} in {counter} iterations");
-        accelerating = false;
+        else
+        {
+            //      Print($"Velocidad objetivo de {name} ({targetSpeed * (int)instance.Speed}) alcanzada: actual {bezier.speed} in {counterAccelIterations} iterations");
+        }
     }
 
     public abstract void CheckMovingConditions();
 
-    /*private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, endOfCollision);
-        Gizmos.color = Color.white;
-        Gizmos.DrawSphere(transform.position, sizeOfSphere);
-        // Gizmos.color = Color.magenta;
-        // Gizmos.DrawLine(origin, destinys);
-        // Gizmos.color = Color.cyan;
-        //normals?.ForEach(e => Gizmos.DrawLine(transform.position, e*));
-        // Gizmos.DrawLine(origin+Vector3.up, Vector3.Lerp(origin, destinys+Vector3.up, 5));
-    }*/
 }

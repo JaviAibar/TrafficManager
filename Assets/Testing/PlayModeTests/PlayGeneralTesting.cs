@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 using BezierSolution;
 using UnityEngine.UI;
+using System.Linq;
 
 public class PlayGeneralTesting : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class PlayGeneralTesting : MonoBehaviour
     Transform pedestrianTransform;
     TrafficLightController trafficLight;
     bool waiting;
-
+    float Epsilon => 0.13f;
 
     /*
     [UnityTest]
@@ -69,7 +70,7 @@ public class PlayGeneralTesting : MonoBehaviour
         string mainMenuSceneName = "Main Menu";
         string levelsSceneName = "Levels Scene";
         string level1SceneName = "Level001";
-        string tutorialSceneName = "Tutorial Scene";
+        string tutorialSceneName = "Tutorial 1";
         Instantiate((GameObject)Resources.Load("Prefabs/UI/Menu controller"));
         yield return new WaitForSeconds(1);
         // Initial values
@@ -94,9 +95,9 @@ public class PlayGeneralTesting : MonoBehaviour
         Assert.AreEqual(levelsSceneName, SceneManager.GetActiveScene().name);
 
 
-        // Loading New Game again (Tutorial)
+        // Loading Tutorial
         // Current state index = 2 | [0] Main menu, [1] Levels, [2] Tutorial
-        MenuController.instance.NewGame();
+        MenuController.instance.LoadTutorial();
         yield return new WaitForSeconds(1);
         Assert.AreEqual(2, MenuController.instance.GetHistoryIndex());
         Assert.AreEqual(3, MenuController.instance.GetSavedScenes());
@@ -273,45 +274,174 @@ public class PlayGeneralTesting : MonoBehaviour
     [UnityTest]
     public IEnumerator GameSpeedChangingCarTesting()
     {
-        float normalizedTCompletedLoop = 0.95f;
-        GameObject gameKernel = Instantiate((GameObject)Resources.Load("Prefabs/Game Kernel"));
-        GameEngine gameEngine = gameKernel.GetComponentInChildren<GameEngine>();
-        GameObject roadUsers = GameObject.Find("RoadUsers");
-        TrafficLightController trafficLight = gameKernel.GetComponentInChildren<TrafficLightController>();
-        trafficLight.SetValues(0, 0, 90); // Traffic light always green
-        // Avoid an exception in Vehicle caused because it expects to have BezierSpline on Awake (selected in Inspector)
-        LogAssert.Expect(LogType.Exception, @"Exception: Root of Black Car(Clone)'s Bezier needs a reference to a BezierSpline component");
-        GameObject blackCar = Instantiate((GameObject)Resources.Load("Prefabs/RoadUsers/Black Car"), roadUsers.transform);
-        
-        VehicleController vehicle = blackCar?.GetComponent<VehicleController>();
-        vehicle.Spline = gameKernel.GetComponentsInChildren<BezierSpline>()[2]; // Asign the Spline 2 because we want it to go left
-        vehicle.enabled = true; // Set enable because it disables automatically due to the aforementioned Exception
+        //float normalizedTCompletedLoop = 0.95f;
+        PrepareScene(trafficAreasInteraction: false);
 
-        LevelManager lm = gameKernel.GetComponentInChildren<LevelManager>();
-        lm.timeToSolve = 100; // Make level not solvable
-        lm.timeToLoop = 100;  // Make level not loopable
+            gameEngine.Speed = GameEngine.GameSpeed.Normal;
+            // Wait for all the corresponding Awake and Start
+            yield return new WaitForEndOfFrame();
+            yield return new WaitForEndOfFrame();
 
-        BezierWalkerWithSpeedVariant bezier = blackCar.GetComponent<BezierWalkerWithSpeedVariant>();
-        
-        yield return new WaitForSeconds(1); // Wait for all the corresponding Awake and Start
+            float t = Time.realtimeSinceStartup;
+            while (1 - bezier.NormalizedT >= double.Epsilon)
+            {
+                // print($"bezier.NormalizedT {bezier.NormalizedT}");
+                yield return null;
+            }
+            //yield return new WaitWhile(() => 1 - bezier.NormalizedT <=  double.Epsilon);
+            float normalDuration = Time.realtimeSinceStartup - t;
 
-        gameEngine.Speed = GameEngine.GameSpeed.Normal;
-        vehicle.LoopStarted();
-        float t = Time.realtimeSinceStartup;
-        yield return new WaitWhile(() =>  bezier.NormalizedT <= normalizedTCompletedLoop);
-        float normalDuration = Time.realtimeSinceStartup - t;
 
-        gameEngine.Speed = GameEngine.GameSpeed.Fast;
-        vehicle.LoopStarted();
-        t = Time.realtimeSinceStartup;
-        yield return new WaitWhile(() => bezier.NormalizedT <= normalizedTCompletedLoop);
-        float fastDuration = Time.realtimeSinceStartup - t;
 
-        print($"normal duration {normalDuration}, fast {fastDuration}");
-        //Debug.Break();
-        Assert.IsTrue(Mathf.Approximately(normalDuration / 2, fastDuration));
+            vehicle.LoopStarted();
+            gameEngine.Speed = GameEngine.GameSpeed.Fast;
+            yield return new WaitWhile(() => vehicle.Accelerating);
+
+            bezier.NormalizedT = 0;
+
+            t = Time.realtimeSinceStartup;
+            yield return new WaitWhile(() => 1 - bezier.NormalizedT >= double.Epsilon);
+            float fastDuration = Time.realtimeSinceStartup - t;
+
+
+
+
+            vehicle.LoopStarted();
+            gameEngine.Speed = GameEngine.GameSpeed.SuperFast;
+            yield return new WaitWhile(() => vehicle.Accelerating);
+
+            bezier.NormalizedT = 0;
+
+            t = Time.realtimeSinceStartup;
+            yield return new WaitWhile(() => 1 - bezier.NormalizedT >= double.Epsilon);
+            float fastestDuration = Time.realtimeSinceStartup - t;
+
+            print($"normal duration {normalDuration}, fast {fastDuration}");
+            print($"normal duration {normalDuration}, fast {fastestDuration}");
+            //Debug.Break();
+            Assert.IsTrue(normalDuration / 2 - fastDuration < Epsilon);
+            Assert.IsTrue(normalDuration / 3 - fastestDuration < Epsilon);
     }
 
+    [UnityTest]
+    public IEnumerator GameSpeedChangingCarTesting2()
+    {
+        float[] speedsToTest = new float[] { 10, 5, 30, 50, 80 };
+        //float normalizedTCompletedLoop = 0.95f;
+        PrepareScene(trafficAreasInteraction: false);
+
+        foreach (float s in speedsToTest)
+        {
+            gameEngine.Speed = GameEngine.GameSpeed.Normal;
+            // Wait for all the corresponding Awake and Start
+            yield return new WaitForEndOfFrame();
+            yield return new WaitForEndOfFrame();
+
+            vehicle.ChangeSpeed(s);
+            bezier.NormalizedT = 0;
+            float t = Time.realtimeSinceStartup;
+            while (1 - bezier.NormalizedT >= double.Epsilon)
+            {
+                // print($"bezier.NormalizedT {bezier.NormalizedT}");
+                yield return null;
+            }
+            //yield return new WaitWhile(() => 1 - bezier.NormalizedT <=  double.Epsilon);
+            float normalDuration = Time.realtimeSinceStartup - t;
+
+
+
+            //vehicle.LoopStarted();
+            gameEngine.Speed = GameEngine.GameSpeed.Fast;
+            vehicle.ChangeSpeed(s);
+            yield return new WaitWhile(() => vehicle.Accelerating);
+
+            bezier.NormalizedT = 0;
+
+            t = Time.realtimeSinceStartup;
+            yield return new WaitWhile(() => 1 - bezier.NormalizedT >= double.Epsilon);
+            float fastDuration = Time.realtimeSinceStartup - t;
+
+
+
+
+            gameEngine.Speed = GameEngine.GameSpeed.SuperFast;
+            yield return new WaitWhile(() => vehicle.Accelerating);
+
+            bezier.NormalizedT = 0;
+
+            t = Time.realtimeSinceStartup;
+            yield return new WaitWhile(() => 1 - bezier.NormalizedT >= double.Epsilon);
+            float fastestDuration = Time.realtimeSinceStartup - t;
+
+            print($"normal duration {normalDuration}, fast {fastDuration}");
+            print($"normal duration {normalDuration}, fastest {fastestDuration}");
+            //Debug.Break();
+            Assert.IsTrue(normalDuration / 2 - fastDuration < Epsilon);
+            Assert.IsTrue(normalDuration / 3 - fastestDuration < Epsilon);
+        }
+    }
+    GameObject gameKernel;
+    GameEngine gameEngine;
+    GameObject roadUsersGO;
+    GameObject blackCar;
+    VehicleController vehicle;
+    LevelManager levelManager;
+    BezierWalkerWithSpeedVariant bezier;
+
+    [UnityTest]
+    public IEnumerator SpeedChangingCarTesting()
+    {
+        float normalizedTCompletedLoop = 0.95f;
+        float epsilon = 0.1f;
+        float[] speedsToTest = new float[] { 1, 10, 5, 30, 0, 50 };
+        PrepareScene(false);
+        gameEngine.verbose = true;
+        //yield return new WaitForSeconds(1); // Wait for all the corresponding Awake and Start
+
+        gameEngine.Speed = GameEngine.GameSpeed.Normal;
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+
+        yield return new WaitWhile(() => vehicle.Accelerating);
+
+        foreach (float s in speedsToTest)
+        {
+            vehicle.ChangeSpeed(s);
+            yield return new WaitWhile(() => vehicle.Accelerating);
+            Assert.True(Mathf.Approximately(s, vehicle.Speed));
+        }
+    }
+
+    private void PrepareScene(bool trafficAreasInteraction)
+    {
+        float tooLongTime = 200;
+        gameKernel = Instantiate((GameObject)Resources.Load("Prefabs/Game Kernel"));
+        if (!trafficAreasInteraction)
+        {
+            gameKernel.GetComponentsInChildren<TrafficLightController>().ToList().ForEach(e => e.gameObject.SetActive(false));
+            gameKernel.GetComponentsInChildren<TrafficArea>().ToList().ForEach(e => e.gameObject.SetActive(false));
+        }
+        else
+        {
+            trafficLight = gameKernel.GetComponentInChildren<TrafficLightController>();
+            trafficLight.SetValues(0, 0, (int)tooLongTime); // Traffic light always green
+        }
+        gameEngine = gameKernel.GetComponentInChildren<GameEngine>();
+        roadUsersGO = GameObject.Find("RoadUsers");
+        // Avoid an exception in Vehicle caused because it expects to have BezierSpline on Awake (selected in Inspector)
+        LogAssert.Expect(LogType.Exception, @"Exception: Root of Black Car(Clone)'s Bezier needs a reference to a BezierSpline component");
+        blackCar = Instantiate((GameObject)Resources.Load("Prefabs/RoadUsers/Black Car"), roadUsersGO.transform);
+
+        vehicle = blackCar.GetComponent<VehicleController>();
+        vehicle.Spline = gameKernel.GetComponentsInChildren<BezierSpline>()[2]; // Asign the Spline 2 because we want it to go left
+        vehicle.enabled = true; // Set enable because it disables automatically due to the aforementioned Exception
+        vehicle.TimeToLoop = tooLongTime;
+        levelManager = gameKernel.GetComponentInChildren<LevelManager>();
+        levelManager.timeToSolve = tooLongTime; // Make level not solvable
+        levelManager.timeToLoop = tooLongTime;  // Make level not loopable
+
+        bezier = blackCar.GetComponent<BezierWalkerWithSpeedVariant>();
+    }
 
     // Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType privateTypeMyClass = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType(trafficLight.GetType());
 

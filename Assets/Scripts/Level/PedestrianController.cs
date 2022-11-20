@@ -24,27 +24,19 @@ public class PedestrianController : RoadUser
         {
             if (trafficArea.StopArea && trafficArea.SameDirection(transform.up) && trafficLight.IsGreen)
             {
-                Moving(false);
-                StartCoroutine(Accelerate(0));
-
-                baseSpeed = 0;
+                ChangeSpeed(0);
                 anim.SetBool("isWalking", false);
             }
             else if (trafficLight.IsGreen && trafficArea.IsCenter)
             {
-                Moving(true);
-                StartCoroutine(Accelerate(runningSpeed * (int)GameEngine.instance.Speed));
+                ChangeSpeed(runningSpeed);
                 anim.speed = 1.7f;
-                baseSpeed = runningSpeed;
                 anim.SetBool("isWalking", true);
             }
             else
             {
-                Moving(true);
-                StartCoroutine(Accelerate(normalSpeed * (int)GameEngine.instance.Speed));
+                ChangeSpeed(normalSpeed);
                 anim.speed = 1f;
-
-                baseSpeed = normalSpeed;
                 anim.SetBool("isWalking", true);
             }
         }

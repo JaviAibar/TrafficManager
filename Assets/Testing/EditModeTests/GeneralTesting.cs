@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using BezierSolution;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -21,9 +23,21 @@ public class GeneralTesting : MonoBehaviour
 
         trafficLight.SetValues(4, 6, 7);
 
-        Assert.AreEqual(4, trafficLight.timeAmounts[0]);
-        Assert.AreEqual(6, trafficLight.timeAmounts[1]);
-        Assert.AreEqual(7, trafficLight.timeAmounts[2]);
+        Assert.AreEqual(4, trafficLight.TimeRed);
+        Assert.AreEqual(6, trafficLight.TimeYellow);
+        Assert.AreEqual(7, trafficLight.TimeGreen);
+    }
+
+    [Test]
+    public void PassValuesToTrafficLightUI()
+    {
+        PrepareScene(true);
+        trafficLight.SetValues(3, 8, 2);
+        trafficLight.OpenMenu();
+        TrafficLightUIController tfuic = gameKernel.GetComponentInChildren<TrafficLightUIController>();
+        Assert.AreEqual(tfuic.Red, 3);
+        Assert.AreEqual(tfuic.Yellow, 8);
+        Assert.AreEqual(tfuic.Green, 2);
     }
 
     [Test]
@@ -59,44 +73,93 @@ public class GeneralTesting : MonoBehaviour
         trafficLight.trafficLightUIPanel = trafficLightUI;
         trafficLight.SetValues(2, 8, 3);
         trafficLightUI.SetValues(2, 8, 3);
-        trafficLightUI.SetSender(trafficLight);
-        trafficLightUI.SetRed(6);
+        trafficLightUI.Sender = trafficLight;
+        trafficLightUI.Red = 6;
         trafficLightUI.Accept();
-        Assert.AreEqual(6, trafficLight.timeAmounts[0]);
-        trafficLightUI.SetGreen(4);
+        Assert.AreEqual(6, trafficLight.TimeRed);
+        trafficLightUI.Green = 4;
         trafficLightUI.Accept();
-        Assert.AreEqual(4, trafficLight.timeAmounts[1]);
-        trafficLightUI.SetYellow(7);
+        Assert.AreEqual(4, trafficLight.TimeGreen);
+        trafficLightUI.Yellow = 7;
         trafficLightUI.Accept();
 
-        Assert.AreEqual(6, trafficLight.timeAmounts[0]);
-        Assert.AreEqual(4, trafficLight.timeAmounts[1]);
-        Assert.AreEqual(7, trafficLight.timeAmounts[2]);
+        Assert.AreEqual(6, trafficLight.TimeRed);
+        Assert.AreEqual(4, trafficLight.TimeGreen);
+        Assert.AreEqual(7, trafficLight.TimeYellow);
 
         for (int i = 1; i <= 10; i++)
         {
-            trafficLightUI.SetRed(i);
+            trafficLightUI.Red = i;
             trafficLightUI.Accept();
-            Assert.AreEqual(i, trafficLight.timeAmounts[0]);
-            trafficLightUI.SetGreen(i);
+            Assert.AreEqual(i, trafficLight.TimeRed);
+            trafficLightUI.Green = i;
             trafficLightUI.Accept();
-            Assert.AreEqual(i, trafficLight.timeAmounts[1]);
-            trafficLightUI.SetYellow(i);
+            Assert.AreEqual(i, trafficLight.TimeGreen);
+            trafficLightUI.Yellow = i;
             trafficLightUI.Accept();
-            Assert.AreEqual(i, trafficLight.timeAmounts[2]);
+            Assert.AreEqual(i, trafficLight.TimeYellow);
 
             var redRandom = Random.Range(1, 10);
             var greenRandom = Random.Range(1, 10);
             var yellowRandom = Random.Range(1, 10);
-            trafficLightUI.SetRed(redRandom);
+            trafficLightUI.Red = redRandom;
             trafficLightUI.Accept();
-            Assert.AreEqual(redRandom, trafficLight.timeAmounts[0]);
-            trafficLightUI.SetGreen(greenRandom);
+            Assert.AreEqual(redRandom, trafficLight.TimeRed);
+            trafficLightUI.Green = greenRandom;
             trafficLightUI.Accept();
-            Assert.AreEqual(greenRandom, trafficLight.timeAmounts[1]);
-            trafficLightUI.SetYellow(yellowRandom);
+            Assert.AreEqual(greenRandom, trafficLight.TimeGreen);
+            trafficLightUI.Yellow = yellowRandom;
             trafficLightUI.Accept();
-            Assert.AreEqual(yellowRandom, trafficLight.timeAmounts[2]);
+            Assert.AreEqual(yellowRandom, trafficLight.TimeYellow);
+        }
+
+        //Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType privateTypeMyClass = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType(trafficLightUI.GetType());
+        //Assert.AreEqual(2, privateTypeMyClass.GetStaticField("red"));
+    }
+
+
+    [Test]
+    public void AcceptInTrafficLightUI2()
+    {
+        var gameObject = new GameObject();
+        GameObject trafficLightPanelGO = (GameObject)Instantiate(Resources.Load("Prefabs/UI/TrafficLightPanel"));
+        TrafficLightUIController trafficLightUI = trafficLightPanelGO.GetComponent<TrafficLightUIController>();
+        var trafficLight = gameObject.AddComponent<TrafficLightController>();
+        //trafficLight.trafficLightPanel = trafficLightPanelGO;
+        trafficLight.trafficLightUIPanel = trafficLightUI;
+        trafficLight.SetValues(2, 8, 3);
+        trafficLightUI.SetValues(5, 1, 9);
+        trafficLightUI.Sender = trafficLight;
+        //trafficLightUI.SetRed(6);
+       // trafficLightUI.Accept();
+    //    Assert.AreEqual(6, trafficLight.timeAmounts[0]);
+      //  trafficLightUI.SetGreen(4);
+     //   trafficLightUI.Accept();
+       // Assert.AreEqual(4, trafficLight.timeAmounts[1]);
+       // trafficLightUI.SetYellow(7);
+
+        trafficLightUI.Accept();
+
+        Assert.AreEqual(5, trafficLight.TimeRed);
+        Assert.AreEqual(1, trafficLight.TimeYellow);
+        Assert.AreEqual(9, trafficLight.TimeGreen);
+
+        for (int i = 1; i <= 10; i++)
+        {
+            trafficLightUI.SetValues(i, i, i);
+            trafficLightUI.Accept();
+            Assert.AreEqual(i, trafficLight.TimeRed);
+            Assert.AreEqual(i, trafficLight.TimeGreen);
+            Assert.AreEqual(i, trafficLight.TimeYellow);
+
+            var redRandom = Random.Range(1, 10);
+            var greenRandom = Random.Range(1, 10);
+            var yellowRandom = Random.Range(1, 10);
+            trafficLightUI.SetValues(redRandom, yellowRandom, greenRandom);
+            trafficLightUI.Accept();
+            Assert.AreEqual(redRandom, trafficLight.TimeRed);
+            Assert.AreEqual(greenRandom, trafficLight.TimeGreen);
+            Assert.AreEqual(yellowRandom, trafficLight.TimeYellow);
         }
 
         //Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType privateTypeMyClass = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType(trafficLightUI.GetType());
@@ -155,7 +218,45 @@ public class GeneralTesting : MonoBehaviour
         Assert.AreEqual(Direction.Right, GameEngine.Vector3ToDirection(new Vector3(0.99f, -0.16f, 0)));
     }
 
-    
+    GameObject gameKernel;
+    TrafficLightController trafficLight;
+    GameEngine gameEngine;
+    GameObject roadUsersGO;
+    GameObject blackCar;
+    VehicleController vehicle;
+    LevelManager levelManager;
+    private void PrepareScene(bool trafficAreasInteraction)
+    {
+        float tooLongTime = 200;
+        gameKernel = Instantiate((GameObject)Resources.Load("Prefabs/Game Kernel"));
+        if (!trafficAreasInteraction)
+        {
+            gameKernel.GetComponentsInChildren<TrafficLightController>().ToList().ForEach(e => e.gameObject.SetActive(false));
+            gameKernel.GetComponentsInChildren<TrafficArea>().ToList().ForEach(e => e.gameObject.SetActive(false));
+        }
+        else
+        {
+            trafficLight = gameKernel.GetComponentInChildren<TrafficLightController>();
+            trafficLight.SetValues(0, 0, (int)tooLongTime); // Traffic light always green
+        }
+        gameEngine = gameKernel.GetComponentInChildren<GameEngine>();
+        roadUsersGO = GameObject.Find("RoadUsers");
+        // Avoid an exception in Vehicle caused because it expects to have BezierSpline on Awake (selected in Inspector)
+       // LogAssert.Expect(LogType.Exception, @"Exception: Root of Black Car(Clone)'s Bezier needs a reference to a BezierSpline component");
+        blackCar = Instantiate((GameObject)Resources.Load("Prefabs/RoadUsers/Black Car"), roadUsersGO.transform);
+
+        vehicle = blackCar?.GetComponent<VehicleController>();
+        vehicle.bezier = blackCar.AddComponent<BezierWalkerWithSpeedVariant>();
+        vehicle.Spline = gameKernel.GetComponentsInChildren<BezierSpline>()[2]; // Asign the Spline 2 because we want it to go left
+        vehicle.enabled = true; // Set enable because it disables automatically due to the aforementioned Exception
+        vehicle.TimeToLoop = tooLongTime;
+        levelManager = gameKernel.GetComponentInChildren<LevelManager>();
+        levelManager.timeToSolve = tooLongTime; // Make level not solvable
+        levelManager.timeToLoop = tooLongTime;  // Make level not loopable
+
+    }
+
+
 
     /*public void AcceptCancelTrafficLightUI()
     {
