@@ -3,20 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class TrafficLightUIController : MonoBehaviour
 {
-    public InputField redInputField;
-    public InputField greenInputField;
-    public InputField yellowInputField;
+    public TMP_InputField redInputField;
+    public TMP_InputField greenInputField;
+    public TMP_InputField yellowInputField;
 
     public Slider redSlider;
     public Slider greenSlider;
     public Slider yellowSlider;
 
-    public int Red { get => (int)redSlider.value; set => redSlider.value = value;}
-    public int Yellow { get => (int)yellowSlider.value; set => yellowSlider.value = value; }
-    public int Green { get => (int)greenSlider.value; set => greenSlider.value = value;}
+    public int Red { get => (int)redSlider.value; set { redSlider.value = value; redInputField.text = value.ToString(); } }
+    public int Yellow { get => (int)yellowSlider.value; set { yellowSlider.value = value; yellowInputField.text = value.ToString(); } }
+    public int Green { get => (int)greenSlider.value; set { greenSlider.value = value; greenInputField.text = value.ToString(); } }
 
     public TrafficLightController Sender { get => sender; set => sender = value; }
 
