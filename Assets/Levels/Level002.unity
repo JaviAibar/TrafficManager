@@ -147,20 +147,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: Black Car (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1492570544018406416, guid: 51d2c6af76a4252449db11cd0d12a66f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1492570544018406417, guid: 51d2c6af76a4252449db11cd0d12a66f,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1492570544018406417, guid: 51d2c6af76a4252449db11cd0d12a66f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -80.9
       objectReference: {fileID: 0}
     - target: {fileID: 1492570544018406417, guid: 51d2c6af76a4252449db11cd0d12a66f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 18.6
       objectReference: {fileID: 0}
     - target: {fileID: 1492570544018406417, guid: 51d2c6af76a4252449db11cd0d12a66f,
         type: 3}
@@ -207,6 +212,11 @@ PrefabInstance:
       propertyPath: spline
       value: 
       objectReference: {fileID: 122429599}
+    - target: {fileID: 1581178396510563614, guid: 51d2c6af76a4252449db11cd0d12a66f,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1581178396510563614, guid: 51d2c6af76a4252449db11cd0d12a66f,
         type: 3}
       propertyPath: timeOffset
@@ -408,6 +418,41 @@ PrefabInstance:
       propertyPath: timeToLoop
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 5419349017312661307, guid: ab00729f89417ca499d768df6540ed79,
+        type: 3}
+      propertyPath: timeToSolve
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5957681409344202951, guid: ab00729f89417ca499d768df6540ed79,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.044439316
+      objectReference: {fileID: 0}
+    - target: {fileID: 5957681409344202951, guid: ab00729f89417ca499d768df6540ed79,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.41986084
+      objectReference: {fileID: 0}
+    - target: {fileID: 5957681410087310292, guid: ab00729f89417ca499d768df6540ed79,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.0051879883
+      objectReference: {fileID: 0}
+    - target: {fileID: 6365454548188606733, guid: ab00729f89417ca499d768df6540ed79,
+        type: 3}
+      propertyPath: verbose
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6365454548188606733, guid: ab00729f89417ca499d768df6540ed79,
+        type: 3}
+      propertyPath: verbEnum
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6365454548188606733, guid: ab00729f89417ca499d768df6540ed79,
+        type: 3}
+      propertyPath: verbose.m_Bits
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6522342080081591715, guid: ab00729f89417ca499d768df6540ed79,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -512,20 +557,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: Black Car
       objectReference: {fileID: 0}
-    - target: {fileID: 1492570544018406417, guid: 51d2c6af76a4252449db11cd0d12a66f,
+    - target: {fileID: 1492570544018406416, guid: 51d2c6af76a4252449db11cd0d12a66f,
         type: 3}
-      propertyPath: m_RootOrder
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1492570544018406417, guid: 51d2c6af76a4252449db11cd0d12a66f,
         type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1492570544018406417, guid: 51d2c6af76a4252449db11cd0d12a66f,
+        type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10
+      value: 53.2
       objectReference: {fileID: 0}
     - target: {fileID: 1492570544018406417, guid: 51d2c6af76a4252449db11cd0d12a66f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10
+      value: -15.3
       objectReference: {fileID: 0}
     - target: {fileID: 1492570544018406417, guid: 51d2c6af76a4252449db11cd0d12a66f,
         type: 3}
@@ -622,17 +672,17 @@ PrefabInstance:
     - target: {fileID: 817735654644671526, guid: 51a033e4d6cb30f49a794ee994ec7438,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 817735654644671526, guid: 51a033e4d6cb30f49a794ee994ec7438,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 33.8
       objectReference: {fileID: 0}
     - target: {fileID: 817735654644671526, guid: 51a033e4d6cb30f49a794ee994ec7438,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 21.9
       objectReference: {fileID: 0}
     - target: {fileID: 817735654644671526, guid: 51a033e4d6cb30f49a794ee994ec7438,
         type: 3}
@@ -679,6 +729,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Red Car
       objectReference: {fileID: 0}
+    - target: {fileID: 817735654644671527, guid: 51a033e4d6cb30f49a794ee994ec7438,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8510394222063994857, guid: 51a033e4d6cb30f49a794ee994ec7438,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51a033e4d6cb30f49a794ee994ec7438, type: 3}
 --- !u!1001 &1869981591
@@ -696,7 +756,7 @@ PrefabInstance:
     - target: {fileID: 5625076930150364588, guid: 0ecbbaf7766125540b4384fc3a418f7d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5625076930150364588, guid: 0ecbbaf7766125540b4384fc3a418f7d,
         type: 3}
@@ -752,6 +812,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pedestrian1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5625076930150364589, guid: 0ecbbaf7766125540b4384fc3a418f7d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ecbbaf7766125540b4384fc3a418f7d, type: 3}
@@ -844,6 +909,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 2739795988647258829, guid: 7aa97c1f240db3b4ebfe9af54b16ef4d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2739795988647258867, guid: 7aa97c1f240db3b4ebfe9af54b16ef4d,
         type: 3}
       propertyPath: spline
@@ -863,6 +933,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7876029453111803671, guid: 7aa97c1f240db3b4ebfe9af54b16ef4d,
+        type: 3}
+      propertyPath: test
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7876029453111803671, guid: 7aa97c1f240db3b4ebfe9af54b16ef4d,
         type: 3}

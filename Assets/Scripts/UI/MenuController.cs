@@ -8,7 +8,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using System.IO;
-using static GameEngine;
+using static Level.GameEngine;
 
 public class MenuController : MonoBehaviour
 {
@@ -55,7 +55,7 @@ public class MenuController : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Escape))
         {
             pauseMenu.SetActive(true);
-            GameEngine.instance.ChangeSpeed(GameSpeed.Paused);
+            Level.GameEngine.instance.ChangeSpeed(GameSpeed.Paused);
         }
     }
     private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode loadMode)
@@ -98,7 +98,7 @@ public class MenuController : MonoBehaviour
     private void SavePrevScene()
     {
         historyIndex++;
-        if (prevScenes.Count - historyIndex > 0) print($"Eliminando desde ind {historyIndex} un total de {prevScenes.Count - historyIndex} y añadiendo la escena {SceneManager.GetActiveScene().name} a la lista");
+        if (prevScenes.Count - historyIndex > 0) print($"Eliminando desde ind {historyIndex} un total de {prevScenes.Count - historyIndex} y aï¿½adiendo la escena {SceneManager.GetActiveScene().name} a la lista");
 
         prevScenes.RemoveRange(historyIndex, prevScenes.Count - historyIndex);
         prevScenes.Add(SceneManager.GetActiveScene().buildIndex);

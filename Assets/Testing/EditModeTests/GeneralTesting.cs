@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BezierSolution;
+using Level;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using UnityEngine.UI;
-using static GameEngine;
+using static Level.GameEngine;
 
 public class GeneralTesting : MonoBehaviour
 {

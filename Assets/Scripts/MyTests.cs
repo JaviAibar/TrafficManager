@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,9 @@ using UnityEngine.UI;
 
 public class MyTests : MonoBehaviour
 {
+    public float a;
+    public float b;
+    public float t;
     [ContextMenu("Size")]
     public void Size()
     {
@@ -20,4 +24,11 @@ public class MyTests : MonoBehaviour
             print(rect.rect.size / (canvasScaler.referencePixelsPerUnit / 10));
     }
 
+
+    [ContextMenu("Lerp")]
+    public void PrintLerp()
+    {
+        print($"Lerp(a:{a}, b:{b}, t:{t})");
+        print(Mathf.Lerp(a,b, t));
+    }
 }
