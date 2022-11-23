@@ -4,8 +4,8 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Scripts",
-        "BezierSolution.Runtime"
+        "BezierSolution.Runtime",
+        "TrafficManager"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

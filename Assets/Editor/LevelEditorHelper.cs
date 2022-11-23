@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
+using Level;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
-using static TrafficLightController;
+using static Level.TrafficLightController;
 
 [ExecuteInEditMode]
 public class LevelEditorHelper : EditorWindow

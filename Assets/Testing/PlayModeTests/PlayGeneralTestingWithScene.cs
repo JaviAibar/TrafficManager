@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 using BezierSolution;
+using Level;
 
 public class PlayGeneralTestingWithScene : MonoBehaviour
 {
