@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -21,7 +22,7 @@ namespace Level
         private SoundFxManager soundFx;
 
         public Image iconImage;
-        public TMPro.TMP_Text timeIndicator;
+        public TMP_Text timeIndicator;
         // Color ambar = new Color(1, 0.7461f, 0);
         private List<RoadUser> stoppedUsers;
         public Sprite minimumSpeedSprite;
@@ -32,6 +33,8 @@ namespace Level
         public List<ParticleSystem> particleSystems;
         private bool blockedResolvabilityUntilRestart = false;
         public GameObject clock;
+        public bool unsolvable;
+        public TMP_Text levelTitle;
 
         private void OnEnable()
         {
@@ -50,28 +53,25 @@ namespace Level
         private void Awake()
         {
             soundFx = FindObjectOfType<SoundFxManager>();
+            stoppedUsers = new List<RoadUser>();
         }
 
         private void Start()
         {
-            stoppedUsers = new List<RoadUser>();
-            SetSolvedIndicator(true);
+            levelTitle.text = SceneManager.GetActiveScene().name;
             LevelInit();
+            if (unsolvable) Debug.LogWarning("Level set to unsolvable!");
         }
         private void OnRoadUserStopped(RoadUser responsible)
         {
-            if (stoppedUsers.Find(x => x.GetInstanceID() == responsible.GetInstanceID()) == null)
-            {
-                Print(responsible.name + " stopped!", VerboseEnum.SolutionConditions);
-                stoppedUsers.Add(responsible);
-                // print("users stopped " + usersStopped.Count);
-                SetSolvedIndicator(false);
-            }
+            if (WasAlreadyStopped(responsible)) return;
+            Print(responsible.name + " stopped!", VerboseEnum.SolutionConditions);
+            stoppedUsers.Add(responsible);
+            SetSolvedIndicator(false);
         }
         private void OnRoadUserMoving(RoadUser responsible)
         {
             stoppedUsers.Remove(responsible);
-            // print("users still stopped " + usersStopped.Count);
             string stoppedUsersString = ": "+string.Join(',',stoppedUsers.Select(e => e.name));
             Print($"{responsible.name} is moving again (was not necessary stopped).Lets list who's still stopped\nThere are {stoppedUsers.Count}{(stoppedUsers.Count > 0 ? stoppedUsersString : " users stopped")}", VerboseEnum.SolutionConditions);
 
@@ -84,26 +84,24 @@ namespace Level
             SetSolvedIndicator(false);
             blockedResolvabilityUntilRestart = true;
             Print("Accident between " + affected1.name + " and " + affected2.name, VerboseEnum.Physics);
-            timer = realTimeToLoop - timeToResetLevelAfterCollision; // Set some seconds, to understand the situation
+            timer = realTimeToLoop - timeToResetLevelAfterCollision * (int)instance.Speed; // Set some seconds, to understand the situation
             GameObject.Find("Jukebox")?.GetComponent<AudioSource>().Stop(); // TODO: When Music Controll is complete, change this
-            if (affected1 is PedestrianController)
-            {
-                ((PedestrianController)affected1).BeRanOver();
-            }
-            StartCoroutine("ActivateClock");
+            if (affected1 is PedestrianController pedestrian)
+                pedestrian.BeRunOver();
+            StartCoroutine(nameof(ActivateClock));
             /* affected1.bezier.speed = 0;
          affected2.bezier.speed = 0;
          affected2.GetHitMovement(affected1.transform.up);
          affected1.GetHitMovement(affected1.transform.up);*/
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (timeToSolve <= 0) return;
             GameSpeed gameSpeed = GameEngine.instance.Speed;
             if (gameSpeed == GameSpeed.Paused) return;
 
-            float timeIncrement = Time.deltaTime * (int)gameSpeed;
+            float timeIncrement = Time.fixedDeltaTime * (int)gameSpeed;
             timer += timeIncrement;
             realTimeToLoop = timeToLoop;
             if (timeToLoop <= 0)
@@ -113,12 +111,14 @@ namespace Level
              realTimeToLoop = trafficLightTimes.Max();*/
                 throw new Exception("Time to loop in Level Manager must never be 0 or below!");
             }
+            
             if (timer >= realTimeToLoop)
             {
+                Print($"Level reset", VerboseEnum.GameTrace);
                 LevelInit();
             }
 
-            if (stoppedUsers.Count != 0 || blockedResolvabilityUntilRestart) return;
+            if (stoppedUsers.Count != 0 || blockedResolvabilityUntilRestart || unsolvable) return;
 
             timeLeftToSolve -= timeIncrement;
             int timeInt = (int)timeLeftToSolve;
@@ -136,6 +136,7 @@ namespace Level
 
         private void LevelSolved()
         {
+            Print("Level solved: activating panel", VerboseEnum.GameTrace);
             solvedPanel.SetActive(true);
             ActivateParticleSystems();
             PlayerPrefs.SetInt(SceneManager.GetActiveScene().name, 1);
@@ -149,36 +150,36 @@ namespace Level
 
         public void LevelInit()
         {
+            blockedResolvabilityUntilRestart = false;
+          //  ResetTimeLeftToSolve();
+          ResetTimeLeftToSolve();
+            SetSolvedIndicator(true);
+
+           // SetSolvedIndicator(true);
             EventManager.RaiseOnLoopStarted();
-            ResetTimeLeftToSolve();
-            timer = 0;
         }
 
         public void ResetTimeLeftToSolve()
         {
             timeLeftToSolve = timeToSolve;
-            blockedResolvabilityUntilRestart = false;
+            timeIndicator.text = ((int)timeLeftToSolve).ToString();
+            timer = 0;
         }
 
-        public void SetSolvedIndicator(bool conditionsToSolveFullfilled)
+        public void SetSolvedIndicator(bool conditionsToSolveSatisfied)
         {
-            if (blockedResolvabilityUntilRestart)
+            if (!conditionsToSolveSatisfied)
             {
                 timeIndicator.text = "";
                 iconImage.sprite = forbiddenSprite;
-                return;
-            }
-            if (!conditionsToSolveFullfilled)
-            {
-                timeIndicator.text = "";
-                iconImage.sprite = forbiddenSprite;
+                if (blockedResolvabilityUntilRestart) return;
                 if ((int)timeLeftToSolve < 3)
                 {
                     soundFx.PlayFailSound();
                 }
                 ResetTimeLeftToSolve();
             }
-            else if (conditionsToSolveFullfilled && iconImage.sprite == forbiddenSprite) // If we are changing from red to green
+            else if (iconImage.sprite == forbiddenSprite && !blockedResolvabilityUntilRestart) // If we are changing from red to green
             {
                 iconImage.sprite = minimumSpeedSprite;
                 ResetTimeLeftToSolve();
@@ -202,8 +203,13 @@ namespace Level
         public IEnumerator ActivateClock()
         {
             clock.SetActive(true);
-            yield return new WaitForSeconds(timeToResetLevelAfterCollision);
+            yield return new WaitForSeconds(timeToResetLevelAfterCollision * (int)instance.Speed);
             clock.SetActive(false);
+        }
+
+        public bool WasAlreadyStopped(RoadUser responsible)
+        {
+            return stoppedUsers.Find(x => x.GetInstanceID() == responsible.GetInstanceID());
         }
     }
 }

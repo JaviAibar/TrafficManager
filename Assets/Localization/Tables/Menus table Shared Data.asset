@@ -63,6 +63,38 @@ MonoBehaviour:
     m_Key: start_tutorial_msg
     m_Metadata:
       m_Items: []
+  - m_Id: 16413960657620992
+    m_Key: general_vol
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16414483964153856
+    m_Key: fx_vol
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16414606836289536
+    m_Key: music_vol
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16415657039679488
+    m_Key: Quality_selection
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16489153547653120
+    m_Key: Continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16489608650608640
+    m_Key: Game_Paused
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16497816052092928
+    m_Key: Resolutions
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29765229201637376
+    m_Key: Languages
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

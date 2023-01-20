@@ -28,6 +28,7 @@ namespace Level
         private GameEngine gameEngine;
         public float timeThreshold = 0.5f;
         public float curtainThreshold = 2f;
+        public float debugFixedDelta;
 
 
         private void Awake() => gameEngine = FindObjectOfType<GameEngine>();
@@ -46,7 +47,8 @@ namespace Level
         private void Update()
         {
             int speed = (int)gameEngine.Speed;
-            timer += Time.deltaTime * speed;
+            debugFixedDelta = Time.fixedDeltaTime;
+            timer += Time.fixedDeltaTime * speed;
             Moment moment = momentEnumerator.Current;
             float nextTimestamp = momentEnumerator.Current.time;
             //print(moment);
@@ -70,6 +72,11 @@ namespace Level
                         StartCoroutine(MoveCurtain(moment.target));
                         break;
                 }
+            }
+
+            if (tutorialWindow && Input.GetKeyDown(KeyCode.Escape) && tutorialWindow.activeSelf)
+            {
+                HideMessageWindow();
             }
         }
 
@@ -116,9 +123,12 @@ namespace Level
             // print(endPos);
             //moving = Vector3.Distance(mask.position, target.position) >= curtainThreshold;
             ChangeSpeed(GameSpeed.Paused); // ChangeSpeed does move the IEnumerator to next
+            Vector3 originalPos = mask.position;
+            float t = 0;
             while (Vector3.Distance(mask.position, target.position) >= curtainThreshold)
             {
-                mask.position = Vector3.Lerp(mask.position, target.position, speed * Time.deltaTime);
+                t += Time.deltaTime;
+                mask.position = Vector3.Lerp(originalPos, target.position, speed * t);
                 yield return null;
             }
         }

@@ -12,11 +12,36 @@ namespace Level
     [System.Serializable]
     public abstract class RoadUser : MonoBehaviour
     {
-        public int GameSpeedInt => (int) instance.Speed;
+        #region Variables
 
         [Min(0)] public float timeOffset = 0;
         [Min(0)] [SerializeField] private float timeToLoop = 10;
-        protected float Epsilon => 0.01f;
+        public float timer = 0;
+        [HideInInspector] public BezierWalkerWithSpeed bezier;
+        [SerializeField] private BezierSpline spline;
+        protected Rigidbody2D rb;
+        public bool respectsTheRules = true;
+        protected TrafficLightController trafficLight;
+        protected TrafficArea trafficArea;
+        protected bool hasStartedMoving;
+        protected new Collider2D collider;
+        protected bool colliding;
+        protected Vector3 collisionDirection;
+        protected Vector3 endOfCollision;
+        private float otherMass;
+        private bool looping;
+        [SerializeField] protected SpeedController speedController;
+
+        public float normalSpeed = 10;
+
+        // Used eg. when the vehicles are crossing in yellow or when a pedestrian is stuck in green at a crossroad
+        public float runningSpeed = 15;
+
+        #endregion
+
+        #region Accessors
+
+        public int GameSpeedInt => (int)instance.Speed;
 
         public float TimeToLoop
         {
@@ -31,10 +56,6 @@ namespace Level
             }
         }
 
-        public float timer = 0;
-        [HideInInspector] public BezierWalkerWithSpeed bezier;
-        [SerializeField] private BezierSpline spline;
-
         public BezierSpline Spline
         {
             get => spline;
@@ -45,60 +66,50 @@ namespace Level
             }
         }
 
-        protected Rigidbody2D rb;
-        public bool respectsTheRules = true;
-        protected TrafficLightController trafficLight;
-        protected TrafficArea trafficArea;
-        
-        protected bool hasStartedMoving;
         public bool HasStartedMoving => hasStartedMoving;
 
-        // public bool HasWaitedEnough => timer >= timeOffset && timer <= timeOffset +0.1f/* && !hasStartedMoving*/;
-        public bool HasWaitedEnough => timer >= timeOffset && !hasStartedMoving && !looping;
+        /// <summary>
+        /// Is not looping, time offset is over and didn't started already
+        /// </summary>
+        public bool CanStartMoving => timer >= timeOffset && !hasStartedMoving && !looping;
+
+
+        public bool CanMove => timer >= timeOffset && !looping;
+
+        /// <summary>
+        /// If time set for the road user to loop is over
+        /// </summary>
         public bool TimeToRepeat => timer >= timeToLoop && timer <= timeToLoop + 0.5f;
-        protected new Collider2D collider;
-        protected bool colliding;
-        protected Vector3 collisionDirection;
-        protected Vector3 endOfCollision;
-        private float otherMass;
+
         public Vector3 UserDir => transform.up;
-        private bool looping;
         public bool Looping => looping;
-        
-        //     Speed variables    //
-        public float Acceleration => acceleration;
-        public float BaseAcceleration => 0.5f;
-        private float acceleration = 1f;
+        public float Acceleration => speedController.Acceleration;
+
         /// <summary>
         /// Speed in this precise moment
         /// </summary>
-        public float ActualSpeed => bezier.speed;
+        public float CurrentSpeed => bezier.speed;
 
-        //private float targetSpeed;
-        
         /// <summary>
-        /// Speed reached or in process of reaching
+        /// Speed without GameSpeed alterations
+        /// Used as a reference when changing game speed
+        /// actualSpeed = baseSpeed * GameSpeed
         /// </summary>
-        public float Speed => baseSpeed;
-        protected float
-            baseSpeed; // This value is used when the GameSpeed is changed, because the car could be stopped while running for instance
+        public float BaseSpeed => speedController.BaseSpeed;
 
         //public float Speed => bezier.speed;
-        public float normalSpeed = 10;
+        public bool IsWalking => speedController.BaseSpeed == normalSpeed;
+        public bool IsRunning => speedController.BaseSpeed == runningSpeed;
+        public bool IsStopped => BaseSpeed == 0;
+        public bool IsMoving => !IsStopped;
+        public bool Accelerating => speedController.CanAccelerate;
 
-        public float
-            runningSpeed =
-                15; // This is used when the vehicles are crossing in yellow or when a pedestrian is stuck in green at a crossroad
+        /// <summary>
+        /// If Game is not stopped, road user is not looping and should be accelerating
+        /// </summary>
+        public bool CanAccelerate => Accelerating && !Looping && instance.IsPlayed;
 
-        public bool IsWalking => baseSpeed == normalSpeed;
-        public bool IsRunning => baseSpeed == runningSpeed;
-        
-        protected bool accelerating;
-        public bool Accelerating => accelerating;
-        public float TargetSpeed => baseSpeed * GameSpeedInt;
-        private float initialSpeed;
-        private float accelerationStep = 0;
-        private int counterAccelIterations = 0;
+        #endregion
 
         protected virtual void OnEnable()
         {
@@ -106,6 +117,7 @@ namespace Level
             EventManager.OnTrafficLightChanged += TrafficLightChanged;
             EventManager.OnLoopStarted += LoopStarted;
             EventManager.OnGameSpeedChanged += GameSpeedChanged;
+            bezier.onPathCompleted.AddListener(PathFinished);
         }
 
         protected virtual void OnDisable()
@@ -114,11 +126,11 @@ namespace Level
             EventManager.OnTrafficLightChanged -= TrafficLightChanged;
             EventManager.OnLoopStarted -= LoopStarted;
             EventManager.OnGameSpeedChanged -= GameSpeedChanged;
+            bezier?.onPathCompleted.RemoveListener(PathFinished);
         }
 
-#if UNITY_EDITOR
-        private void OnValidate() => TimeToLoop = timeToLoop;
-#endif
+        #region Debug
+
         [ContextMenu("Mi prueba")]
         public void MiPrueba()
         {
@@ -131,17 +143,25 @@ namespace Level
             print($"bezier.speed:{bezier.speed}");
         }
 
+        #endregion
+
+/*
+#if UNITY_EDITOR
+        private void OnValidate() => TimeToLoop = timeToLoop;
+#endif
+*/
+
         void AddOnPathCompleteListener()
         {
+            print("aña list");
             bezier?.onPathCompleted.RemoveListener(LoopStarted);
             if (timeToLoop <= 0) bezier?.onPathCompleted.AddListener(LoopStarted);
-            bezier?.onPathCompleted.AddListener(PathFinished);
         }
 
         void RemoveOnOnPathCompleteListener()
         {
+            print("borrando list");
             bezier?.onPathCompleted.RemoveListener(LoopStarted);
-            bezier?.onPathCompleted.RemoveListener(PathFinished);
         }
 
         protected virtual void Awake()
@@ -151,9 +171,10 @@ namespace Level
             // bezier.spline = Spline ?? FindObjectOfType<BezierSpline>();
             bezier.spline = Spline ? Spline : GetComponent<BezierSpline>();
             rb = GetComponentInParent<Rigidbody2D>();
+            speedController = new SpeedController(name, bezier);
             if (!bezier)
                 throw new Exception($"Root of {name} needs a Bezier Walker With Speed component");
-            else if (!spline)
+            if (!spline)
                 throw new Exception($"Root of {name}'s Bezier needs a reference to a BezierSpline component");
         }
 
@@ -162,29 +183,24 @@ namespace Level
             LoopStarted();
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
-            timer += Time.deltaTime * GameSpeedInt;
+            timer += Time.fixedDeltaTime * GameSpeedInt;
             if (timeToLoop > 0 && TimeToRepeat)
                 LoopStarted();
             if (colliding)
                 MoveCollision();
-            if (HasWaitedEnough) // Start moving after timeOffset
-            {
-                Print($"[{name}] waited its offset time ({timeOffset} seconds)", VerboseEnum.Speed);
-                hasStartedMoving = true;
-                collider.enabled = true;
-                if (!accelerating) ChangeSpeed(normalSpeed);
-            }
-
-            if (accelerating && !looping && instance.IsPlayed)
-                Accelerate();
+            if (CanStartMoving) // Start moving after timeOffset
+                StartMoving();
+            if (CanAccelerate)
+                speedController.Accelerate();
         }
 
         private void MoveCollision()
         {
             Transform transform1;
-            (transform1 = transform).position = Vector3.Lerp(transform.position, endOfCollision, 5 * Time.deltaTime);
+            (transform1 = transform).position =
+                Vector3.Lerp(transform.position, endOfCollision, 5 * Time.fixedDeltaTime);
             colliding = Vector3.Distance(transform1.position, endOfCollision) >= 2f;
         }
 
@@ -213,12 +229,9 @@ namespace Level
                 CheckMovingConditions();
             }
             else
-            {
                 Print(
                     $"[{name}] is not entering OnTriggerEnter because {other.name} is not tagged as Road",
                     VerboseEnum.Physics);
-            }
-            //Print(name + " reaches " + other.name);
         }
 
         protected virtual void OnTriggerExit2D(Collider2D other)
@@ -230,18 +243,16 @@ namespace Level
             Print(
                 $"{transform.name} is {(raycast ? "still" : "no longer")} colliding {(raycast ? $"with {raycast.collider.name}" : "")}",
                 VerboseEnum.Physics);
-            // Debug.Break();
+
             if (raycast) return;
             trafficLight = null;
             trafficArea = null;
         }
 
-
         public void TrafficLightChanged(TrafficLightController.TrafficLightColour colour)
         {
-            Print(
-                $"[{name}] Traffic light changed to {colour} has{(trafficArea ? "" : "n't")} trafficArea and has{(trafficLight ? "" : "n't")} trafficLight",
-                VerboseEnum.TrafficLightChanges);
+            Print($"[{name}] Traffic light changed to {colour} has{(trafficArea ? "" : "n't")} " +
+                  $"trafficArea and has{(trafficLight ? "" : "n't")} trafficLight", VerboseEnum.TrafficLightChanges);
             if (trafficArea && trafficLight)
                 CheckMovingConditions();
         }
@@ -256,55 +267,80 @@ namespace Level
 
         public virtual void LoopStarted()
         {
-            StartCoroutine(LoopStartedCoroutine());
-        }
-
-        public virtual IEnumerator LoopStartedCoroutine()
-        {
-            /*
-         * Disabling collider and moving to a different position were intented to fix a visual bug:
-         * When there's an accident with a pedestrian, it changes its sprite to ranOver and aparently
-         * animator works sooner than Bezier, therefore there are some frames in which the pedestrian recovers in place.
-         * 
-         * This solution though working, created accidents at Start, because if more than one RoadUsers have TimeOffset
-         * different of zero, then all of them have an accident, opted then not to fix this little bug
-         * to avoid correcting a bigger one.
-         */
+            if (bezier.NormalizedT != 0) PathFinished();
             Print(
                 $"[{name}] began its looping coroutine (lopping true, collider false, statedMoving false, bezier true, normalizedT 0, baseSpeed 0 bezier.speed 1)",
                 VerboseEnum.GameTrace);
-            //      collider.enabled = false;
-            //      transform.position = InitPos;
-            looping = true;
-            accelerating = false;
-            collider.enabled = false;
-            hasStartedMoving = false;
-            bezier.enabled = true;
-            bezier.NormalizedT = 0;
-            baseSpeed = 1;
-            /*
-         * This speed to 1 and the fact that this method is a coroutine is because in order to not hit anybody while backing
-         * to the start, I need to disable the collider, but bezier won't move back to the start until we have a couple of
-         * frames moving.
-         * 
-         * */
-            bezier.speed = 1f;
-            yield return new WaitWhile(() => bezier.NormalizedT <= 0f);
-            // while (bezier.NormalizedT <= 0f)
-            // {
-            //     yield return null;
-            // }
-            //
-            // if (!accelerating)
-            // {
-            //     bezier.speed = 0;
-            //     baseSpeed = 0;
-            // }
-            bezier.speed = 0;
-            baseSpeed = 0;
+            looping = true; // Flag to lock other actions while looping
+            speedController.LoopStarted();
+            EnableColliderAndStartedMoving(false);
+            RecoverFromCollision();
+            // yield return speedController.LocateOnStartLine();
+            // baseSpeed = 0;
             timer = 0;
             looping = false;
             Print($"[{name}] finished looping coroutine (timer 0, looping false)", VerboseEnum.GameTrace);
+        }
+        /* public virtual IEnumerator LoopStartedCoroutine()
+         {
+             /*
+              * Disabling collider and moving to a different position were intended to fix a visual bug:
+              * When there's an accident with a pedestrian, it changes its sprite to ranOver and apparently
+              * animator works sooner than Bezier, therefore there are some frames in which the pedestrian recovers in place.
+              * 
+              * This solution though working, created accidents at Start, because if more than one RoadUsers have TimeOffset
+              * different of zero, then all of them have an accident, opted then not to fix this little bug
+              * to avoid correcting a bigger one.
+              * 
+              * transform.position = InitPosition;
+              * collider.enabled = false;
+              */
+
+
+        //  }
+
+        protected void PathFinished()
+        {
+            collider.enabled = false;
+            bezier.NormalizedT = 0;
+            bezier.SetAtStart();
+            Print($"[{name}] reached finish line (collider disabled)", VerboseEnum.GameTrace);
+            ChangeSpeedImmediately(0);
+        }
+
+        protected virtual void StartMoving()
+        {
+            Print($"[{name}] waited its offset time ({timeOffset} seconds)", VerboseEnum.Speed);
+            if (!Accelerating)
+            {
+                EnableColliderAndStartedMoving(true);
+                ChangeSpeed(normalSpeed);
+            }
+            else Print($"[{name}] was accelerating before CanStartMoving was true", VerboseEnum.Speed);
+        }
+
+        /// <summary>
+        /// Changes speed to value given with acceleration specified (recommended between 0.01 and 2)
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="acceleration"></param>
+        public void ChangeSpeed(float value, float? acceleration = null)
+        {
+            //bool worthCallMoving = SwitchStopped(value);
+            bool? moving = speedController.ChangeSpeed(value, acceleration);
+            // if (worthCallMoving && moving != null) Moving(moving.Value);
+        }
+
+        /// <summary>
+        /// Changes speed to value given with acceleration specified (recommended between 0.01 and 2)
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="acceleration"></param>
+        public void ChangeSpeedImmediately(float value)
+        {
+            //  bool worthCallMoving = SwitchStopped(value);
+            bool? moving = speedController.ChangeSpeed(value, 100);
+            //if (worthCallMoving && moving != null) Moving(moving.Value);
         }
 
         /// <summary>
@@ -314,73 +350,20 @@ namespace Level
         /// <param name="state"></param>
         public virtual void GameSpeedChanged(GameSpeed state)
         {
-            Print(
-                $"Speed of {name} {(state == GameSpeed.Paused || !accelerating ? $"changed to {(state == GameSpeed.Paused ? "0" : (bezier.speed = baseSpeed * (int)state))} due to GameSpeed changed to {state}" : "didn't change")}",
-                VerboseEnum.Speed);
-            if (state == GameSpeed.Paused) bezier.speed = 0;
-            else if (!accelerating) bezier.speed = baseSpeed * (int)state;
+            speedController.GameSpeedChanged(state);
         }
 
-        /// <summary>
-        /// Change the speed of the user for the given amount
-        /// </summary>
-        /// <param name="newSpeed"></param>
-        /// <param name="newAcceleration">default is base acceleration</param>
-        public void ChangeSpeed(float newSpeed, float newAcceleration=-1)
+        public bool SwitchStopped(float newSpeed) => newSpeed == 0 && IsMoving || IsStopped && newSpeed > 0;
+
+        public void EnableColliderAndStartedMoving(bool value)
         {
-            Print(
-                $"Asked {name} to change its speed to {newSpeed} {(Mathf.Approximately(newSpeed, baseSpeed) ? "but it was already" : $"target was {baseSpeed} and current {ActualSpeed}")} btw its {(accelerating ? "" : "NOT")} accelerating already",
-                VerboseEnum.Speed);
-            if (!hasStartedMoving) Debug.LogWarning($"[{name}] asked to move before its hasStartedMoving was completed!");
-            if (hasStartedMoving && Mathf.Approximately(newSpeed, baseSpeed)) return;
-            Moving(newSpeed != 0); // If new speed is diff of 0, then Moving(true)
-            baseSpeed = newSpeed;
-            accelerating = true;
-            acceleration = newAcceleration != -1 ? newAcceleration : BaseAcceleration; 
-            initialSpeed = bezier.speed;
-            accelerationStep = 0;
-            counterAccelIterations = 0;
+            hasStartedMoving = value;
+            collider.enabled = value;
         }
 
-        /// <summary>
-        /// Changes speed of user almost instantly
-        /// </summary>
-        /// <param name="newSpeed"></param>
-        public void ChangeSpeedImmediately(float newSpeed)
+        public void RecoverFromCollision()
         {
-            Print($"[{name}] forced to change its speed quickly to {newSpeed}", VerboseEnum.Speed);
-            ChangeSpeed(newSpeed, 100);
-        }
-
-        protected void PathFinished()
-        {
-            collider.enabled = false;
-            Print($"[{name}] reached finish line (collider disabled)", VerboseEnum.GameTrace);
-        }
-
-        public void Accelerate()
-        {
-            accelerating = Mathf.Abs(bezier.speed - TargetSpeed) > Epsilon;
-            if (accelerating)
-            {
-                var increment = bezier.speed;
-                Print(
-                    $"[{name}] {(Mathf.Approximately(bezier.speed, initialSpeed) ? "started" : "still")} {(bezier.speed > TargetSpeed ? "de" : "ac")}celerating from {bezier.speed} to {TargetSpeed}",
-                    VerboseEnum.Speed);
-                counterAccelIterations++;
-                accelerationStep += 0.1f; // We multiply with Speed in this moment because if game is stop
-                // print($"Increasing {name} speed to { Mathf.Lerp(initialSpeed, targetSpeed, Acceleration * timeAccelerating)} t={ Acceleration * (int)instance.Speed * timeAccelerating} (delta={timeAccelerating} * gameSpeed={instance.Speed} * Accl={Acceleration})");
-                bezier.speed = Mathf.Lerp(initialSpeed, TargetSpeed, Acceleration * accelerationStep/* * GameSpeedInt*/) ;
-                Print(
-                    $"[{name}] acceleration iteration ended up with bezier.speed={bezier.speed}.   {bezier.speed - increment} was added with Lerp(a:{initialSpeed}, b:{TargetSpeed}, t:{Acceleration * accelerationStep * GameSpeedInt}) t = Acceleration:{Acceleration} * accelerationStep:{accelerationStep}  * GameSpeed:{GameSpeedInt}",
-                    VerboseEnum.Speed);
-            }
-            else
-            {
-                Print(
-                    $"Target speed of {name} ({baseSpeed * GameSpeedInt}) reached: current {bezier.speed} in {counterAccelIterations} iterations",
-                    VerboseEnum.Speed);
-            }
+            bezier.enabled = true;
         }
 
         public abstract void CheckMovingConditions();

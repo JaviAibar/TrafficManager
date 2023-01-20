@@ -11,8 +11,6 @@ namespace Level
         public delegate void GameSpeedControlEvent(GameSpeed speed);
         public delegate void TimeControlEvent();
 
-
-
         public static event TrafficLightControlEvent OnTrafficLightChanged;
 
         public static event TimeControlEvent OnLoopStarted;
@@ -25,36 +23,36 @@ namespace Level
     
         public static void RaiseOnTrafficLightChanged(TrafficLightController.TrafficLightColour colour)
         {
-            if (OnTrafficLightChanged != null) OnTrafficLightChanged(colour);
+            OnTrafficLightChanged?.Invoke(colour);
         }
 
         public static void RaiseOnTimeIsOver()
         {
-            if (OnLoopStarted != null) OnLoopStarted();
+            OnLoopStarted?.Invoke();
         }
 
         public static void RaiseOnRoadUserStopped(RoadUser responsible)
         {
-            if (OnRoadUserStopped != null) OnRoadUserStopped(responsible);
+            OnRoadUserStopped?.Invoke(responsible);
         }
         public static void RaiseOnGameSpeedChanged(GameSpeed speed)
         {
-            if (OnGameSpeedChanged != null) OnGameSpeedChanged(speed);
+            OnGameSpeedChanged?.Invoke(speed);
         }
 
         public static void RaiseOnRoadUserCollision(RoadUser affected1, RoadUser affected2)
         {
-            if (OnRoadUserCollision != null) OnRoadUserCollision(affected1, affected2);
+            OnRoadUserCollision?.Invoke(affected1, affected2);
         }
 
         public static void RaiseOnLoopStarted()
         {
-            if (OnLoopStarted != null) OnLoopStarted();
+            OnLoopStarted?.Invoke();
         }
 
         public static void RaiseOnRoadUserMoving(RoadUser responsible)
         {
-            if (OnRoadUserMoving != null) OnRoadUserMoving(responsible);
+            OnRoadUserMoving?.Invoke(responsible);
         }
     }
 }

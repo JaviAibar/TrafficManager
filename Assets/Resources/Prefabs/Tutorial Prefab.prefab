@@ -80,6 +80,7 @@ MonoBehaviour:
   tutorialText: {fileID: 9092724640655882786}
   timeThreshold: 0.7
   curtainThreshold: 2
+  debugFixedDelta: 0
 --- !u!1 &6472575329730343626
 GameObject:
   m_ObjectHideFlags: 0

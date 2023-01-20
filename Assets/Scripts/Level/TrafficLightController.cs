@@ -40,7 +40,7 @@ namespace Level
 
         public int TotalAmountTime => timeAmounts.Sum();
 
-        public int timeOffset = 0;
+        public float timeOffset = 0;
         [System.Serializable]
         public  enum TrafficLightColour : ushort
         {
@@ -64,10 +64,10 @@ namespace Level
         }
         private void Start() => OnLoopStart();
 
-        void Update()
+        void FixedUpdate()
         {
             int speed = (int)gameEngine.Speed;
-            timer += Time.deltaTime * speed;
+            timer += Time.fixedDeltaTime * speed;
 
             if (speed > 0 && IsTimerWhole) // If timer is whole number
             {

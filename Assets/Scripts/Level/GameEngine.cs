@@ -1,5 +1,6 @@
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Level
@@ -9,21 +10,23 @@ namespace Level
     {
         public static GameEngine instance;
 
+        public bool menuOpen = false;
         //[HideInInspector]
         // public uint verbose = 0;
         // http://answers.unity.com/answers/1767255/view.html
         [System.Flags]
         public enum VerboseEnum
         {
-            Nothing = 0,
-            Speed = 1,
-            Physics = 2,
-            TrafficLightChanges = 4,
-            SolutionConditions = 8,
-            GameTrace = 16,
-            Everything = 0b11111
+            Nothing = ~1,
+            Speed = 1<<1,
+            SpeedDetail = 1<<2,
+            Physics = 1<<3,
+            TrafficLightChanges = 1<<4,
+            SolutionConditions = 1<<5,
+            GameTrace = 1<<6,
+            Everything = ~0
         }
-
+        
         public VerboseEnum verbose;
         [SerializeField] private Sprite[] trafficLightSprites = new Sprite[4];
         public Sprite[] TrafficLightSprites => trafficLightSprites;
@@ -33,6 +36,9 @@ namespace Level
         [SerializeField] private Canvas canvas;
         private GameSpeed speed = GameSpeed.None;
 
+        /// <summary>
+        /// Setting raises a call that can affect road users
+        /// </summary>
         public GameSpeed Speed
         {
             get => speed;
@@ -77,23 +83,14 @@ namespace Level
 
         private void OnEnable() => timeControlImages ??= timeControlImagesContainer.GetComponentsInChildren<Image>();
 
-        private void Awake()
+        public void Awake()
         {
             if (instance == null)
                 instance = this;
-            /*  if (instance == null)
-          {
-              instance = this;
-              DontDestroyOnLoad(gameObject);
-          }
-          else
-          {
-              Destroy(gameObject);
-          }*/
-            //mouse = Instantiate(mouse, canvas.transform);
             timeControlImages = timeControlImagesContainer.GetComponentsInChildren<Image>().Skip(1).Take(4).ToArray();
             ChangeSpeed(GameSpeed.Normal);
             canvas = FindObjectOfType<Canvas>();
+            Application.targetFrameRate = 120;
             //   CalculateBackgroundColor();
         }
 
@@ -116,6 +113,21 @@ namespace Level
         {
             if (Input.GetKeyDown(KeyCode.F1))
                 Instantiate(cheaterPanel, canvas.transform);
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                if (!menuOpen)
+                {
+                    menuOpen = true;
+                    SceneManager.LoadScene("Pause Menu", LoadSceneMode.Additive);
+                    GameEngine.instance.Speed = GameSpeed.Paused;
+                }
+
+                else
+                {
+                    SceneManager.UnloadSceneAsync("Pause Menu");
+                    menuOpen = false;
+                }
+            }
         }
 
         public void ChangeSpeed(GameSpeed gameSpeed)
@@ -157,8 +169,8 @@ namespace Level
 
         public static void Print(string msg, VerboseEnum type)
         {
-            if (!instance) print("No GameEnigne instance");
-            instance?.PrintInstance(msg, type);
+            if (!instance) print("No GameEngine instance");
+            instance.PrintInstance(msg, type);
         }
 
         private void SetCursorPosition()
@@ -168,5 +180,4 @@ namespace Level
             mouse.transform.position = Camera.main.ScreenToWorldPoint(pos);
         }
     }
-
 }

@@ -10,7 +10,7 @@ namespace BezierSolution
 		public BezierSpline spline;
 		public TravelMode travelMode;
 
-		public float speed = 5f;
+		public float speed = 0f;
 		[SerializeField]
 		[Range( 0f, 1f )]
 		protected float m_normalizedT = 0f;
@@ -37,7 +37,7 @@ namespace BezierSolution
 
 		private void FixedUpdate()
 		{
-			Execute( Time.deltaTime );
+			Execute( /*Time.deltaTime */ Time.fixedDeltaTime);
 		}
 
 		public override void Execute( float deltaTime )
@@ -123,6 +123,11 @@ namespace BezierSolution
 					onPathCompletedCalledAt0 = false;
 				}
 			}
+		}
+
+		public void SetAtStart()
+		{
+			transform.position = spline.GetPoint(0);
 		}
 	}
 }

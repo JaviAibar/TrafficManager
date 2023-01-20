@@ -74,7 +74,7 @@ public class LevelEditorHelper : EditorWindow
         public override string ToString() => "[" + x + ", " + y + "]";
     }
 
-    [MenuItem("Window/Level Creator Helper")]
+    [MenuItem("TrafficManager/Level Creator Helper")]
     static void Init()
     {
         EditorWindow window = GetWindow(typeof(LevelEditorHelper));

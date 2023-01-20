@@ -11,16 +11,18 @@ namespace Level
 		{
 			rb = GetComponent<Rigidbody2D>();
 		}
+
 		public override void Execute(float deltaTime)
 		{
 			float targetSpeed = (isGoingForward) ? speed : -speed;
-
-			Vector3 targetPos = spline.MoveAlongSpline(ref m_normalizedT, targetSpeed*Time.deltaTime);
+			
+			Vector3 targetPos = spline.MoveAlongSpline(ref m_normalizedT, targetSpeed*/*Time.deltaTime*/Time.fixedDeltaTime);
 
 			//rb.MovePosition(targetPos);
 			//transform.position = targetPos;
 			//transform.position = Vector3.Lerp( transform.position, targetPos, movementLerpModifier * deltaTime );
-			rb.MovePosition(Vector2.Lerp(rb.position, (Vector2)targetPos, movementLerpModifier));
+			//rb.MovePosition(Vector2.Lerp(rb.position, (Vector2)targetPos, movementLerpModifier* deltaTime));
+			rb.MovePosition(targetPos);
 			bool movingForward = MovingForward;
 
 			if (lookAt == LookAtMode.Forward)

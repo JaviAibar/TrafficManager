@@ -48,16 +48,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a039d89f9a3dbe045a3fe93e3c214cee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Acceleration: 5
   timeOffset: 0
   timeToLoop: 0
   timer: 0
   bezier: {fileID: 0}
   spline: {fileID: 0}
+  respectsTheRules: 1
+  speedController:
+    baseAcceleration: 0
   normalSpeed: 20
   runningSpeed: 40
-  respectsTheRules: 1
   inAnEmergency: 0
+  motorClip: {fileID: 8300000, guid: a81bd8164b860f74eb6bceaafd960268, type: 3}
+  emergencyClip: {fileID: 8300000, guid: 87c8a6d04ec7a1543a58fa87477c5299, type: 3}
+  fxMixer: {fileID: 6495489664900618310, guid: 4ff1fe652e4e1a54aa18af9bb721f71d, type: 2}
 --- !u!61 &1516915107314639281
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -65,7 +69,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6145195130738850695}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -91,7 +95,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6145195130738850695}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1

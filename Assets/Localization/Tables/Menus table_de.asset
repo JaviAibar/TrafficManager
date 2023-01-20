@@ -19,7 +19,7 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 41802190848
-    m_Localized: Spielen
+    m_Localized: Neues Spiel
     m_Metadata:
       m_Items: []
   - m_Id: 319926489088
@@ -65,6 +65,38 @@ MonoBehaviour:
   - m_Id: 4419537971367936
     m_Localized: "Spielen Sie zum ersten Mal TrafficManager? Vielleicht w\xE4re es
       eine gute Idee, mit dem Tutorial zu beginnen. Es ist super kurz, aber erkl\xE4rend!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16413960657620992
+    m_Localized: "Gesamtlautst\xE4rke"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16414483964153856
+    m_Localized: Soundeffekte
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16414606836289536
+    m_Localized: Musik
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16415657039679488
+    m_Localized: "Qualit\xE4t"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16489153547653120
+    m_Localized: Fortsetzen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16489608650608640
+    m_Localized: Spiel pausiert
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16497816052092928
+    m_Localized: "Aufl\xF6sungen"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29765229201637376
+    m_Localized: Sprachen
     m_Metadata:
       m_Items: []
   references:

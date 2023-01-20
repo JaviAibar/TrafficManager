@@ -9,6 +9,7 @@ using TMPro;
 using System;
 using System.IO;
 using static Level.GameEngine;
+using UnityEngine.Localization.Settings;
 
 public class MenuController : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class MenuController : MonoBehaviour
     public static MenuController instance;
     private static List<int> prevScenes;
     private static int historyIndex = -1;
+
     /// <summary>
     /// [0] unsolved level, [1] solved level
     /// </summary>
@@ -29,6 +31,7 @@ public class MenuController : MonoBehaviour
     {
         SceneManager.sceneLoaded += SceneManager_sceneLoaded;
     }
+
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
@@ -50,14 +53,26 @@ public class MenuController : MonoBehaviour
         }
     }
 
+    private IEnumerator Start()
+    {
+        yield return LocalizationSettings.InitializationOperation;
+        int selected = PlayerPrefs.GetInt("Language", -1);
+        if (selected > -1)
+            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[selected];
+    }
+
     private void Update()
     {
         if (Input.GetKeyUp(KeyCode.Escape))
         {
-            pauseMenu.SetActive(true);
-            Level.GameEngine.instance.ChangeSpeed(GameSpeed.Paused);
+            if (pauseMenu)
+            {
+                pauseMenu.SetActive(true);
+                Level.GameEngine.instance.ChangeSpeed(GameSpeed.Paused);
+            }
         }
     }
+
     private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode loadMode)
     {
         print($"Scene {scene.name} loaded");
@@ -73,21 +88,15 @@ public class MenuController : MonoBehaviour
 
     public void GenerateBackAndNextButtons()
     {
-
         // print($"Enable, history: {historyIndex}, prev: {prevScenes.Count}");
         Canvas canvas = FindObjectOfType<Canvas>();
         if (historyIndex > 0 && canvas)
             Instantiate(backButton, canvas.transform).GetComponent<Button>().onClick.AddListener(
-                delegate
-                {
-                    LoadPreviousScene();
-                });
+                delegate { LoadPreviousScene(); });
         if (historyIndex < prevScenes.Count - 1 && canvas)
             Instantiate(nextButton, canvas.transform).GetComponent<Button>().onClick.AddListener(
-                delegate
-                {
-                    LoadNextScene();
-                }); ;
+                delegate { LoadNextScene(); });
+        ;
     }
 
     public void NewGame()
@@ -98,7 +107,9 @@ public class MenuController : MonoBehaviour
     private void SavePrevScene()
     {
         historyIndex++;
-        if (prevScenes.Count - historyIndex > 0) print($"Eliminando desde ind {historyIndex} un total de {prevScenes.Count - historyIndex} y a�adiendo la escena {SceneManager.GetActiveScene().name} a la lista");
+        if (prevScenes.Count - historyIndex > 0)
+            print(
+                $"Eliminando desde ind {historyIndex} un total de {prevScenes.Count - historyIndex} y a�adiendo la escena {SceneManager.GetActiveScene().name} a la lista");
 
         prevScenes.RemoveRange(historyIndex, prevScenes.Count - historyIndex);
         prevScenes.Add(SceneManager.GetActiveScene().buildIndex);
@@ -110,6 +121,15 @@ public class MenuController : MonoBehaviour
         LoadSceneAndSave("Level" + level.ToString("D3"));
     }
 
+    public void LoadSettings()
+    {
+        SceneManager.LoadScene("Settings Menu", LoadSceneMode.Additive);
+    }
+
+    public void UnloadPauseMenu()
+    {
+        SceneManager.UnloadSceneAsync("Pause Menu");
+    }
 
     public void LoadTutorial()
     {
@@ -125,10 +145,12 @@ public class MenuController : MonoBehaviour
     {
         LoadSceneAndSave("Levels Scene");
     }
+
     public void LoadLevel(int level)
     {
         LoadLevel("Level" + level.ToString("D3"));
     }
+
     public void LoadLevel(string level)
     {
         LoadSceneAndSave(level);
@@ -139,7 +161,8 @@ public class MenuController : MonoBehaviour
         // This method saves no previous scene because it would create a loop!
         int pediremos = historyIndex - 1;
         int buildIndex = prevScenes[pediremos];
-        print($"(LoadPreviousScene: Se va a cargar la escena de indice {pediremos} cuya build index es {buildIndex} de nombre '{SceneManager.GetSceneByBuildIndex(buildIndex).name}' es valido? {SceneManager.GetSceneByBuildIndex(buildIndex).IsValid()}");
+        print(
+            $"(LoadPreviousScene: Se va a cargar la escena de indice {pediremos} cuya build index es {buildIndex} de nombre '{SceneManager.GetSceneByBuildIndex(buildIndex).name}' es valido? {SceneManager.GetSceneByBuildIndex(buildIndex).IsValid()}");
         if (prevScenes.Count > 1)
             SceneManager.LoadScene(prevScenes[historyIndex--]);
         else
@@ -183,13 +206,9 @@ public class MenuController : MonoBehaviour
             checkedImage.sprite = solvedSprites[PlayerPrefs.GetInt(sceneName, 0)];
 
             levelButton.GetComponent<Button>().onClick.AddListener(
-            delegate
-            {
-                SceneManager.LoadScene(levelButton.name);
-            });
+                delegate { SceneManager.LoadScene(levelButton.name); });
         }
     }
-
 
 
     public int GetHistoryIndex()
