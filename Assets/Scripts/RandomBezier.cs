@@ -15,22 +15,40 @@ public class RandomBezier : MonoBehaviour
         roadUser = GetComponent<RoadUser>() ?? GetComponentInChildren<RoadUser>();
         if (roadUser)
         {
-            int random = Random.Range(0, splines.Length);
-            roadUser.Spline = splines[random];
+            roadUser.Spline = GetARandomSpline();
             SpriteRenderer rend = roadUser.GetComponent<SpriteRenderer>();
-            rend.sortingOrder = int.Parse(splines[random].name.Split(" ")[1]) - 3;
+            rend.sortingOrder = GetSortingOrderFromSpline();
             rend.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
-            roadUser.normalSpeed = roadUser.normalSpeed + Mathf.Lerp(0.6f, 1.3f, Random.Range(0f, 1f));
-            roadUser.TimeToLoop = -1;
+            roadUser.normalSpeed = roadUser.normalSpeed + GetRandomSpeedVariability();
+            roadUser.bezier.speed = roadUser.normalSpeed;
+          //  roadUser.TimeToLoop = -1;
         }
 
     }
 
+    private float GetRandomSpeedVariability()
+    {
+        return Mathf.Lerp(0.6f, 1.3f, Random.Range(0f, 1f));
+    }
 
+    private int GetSortingOrderFromSpline()
+    {
+        // Spline name has the info of sorting order
+        return int.Parse(roadUser.Spline.name.Split(" ")[1]) - 3;
+    }
+
+    private BezierSpline GetARandomSpline()
+    {
+        return splines[Random.Range(0, splines.Length)];
+    }
 
     private void Update()
     {
-        if (roadUser.bezier.NormalizedT >= 1) Destroy(gameObject, 1f);
+        
+        if (roadUser.bezier.NormalizedT >= 0.99)
+        {
+            Destroy(gameObject, 1f);
+        }
     }
 
 }

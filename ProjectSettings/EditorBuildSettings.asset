@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Main Menu.unity
     guid: 42b0d9ca2d4333e498ac719b371fdf09
   - enabled: 1
-    path: Assets/Scenes/Options Menu.unity
+    path: Assets/Scenes/Settings Menu.unity
     guid: 920e58ef4449eff448c5af840862d465
   - enabled: 0
     path: Assets/Testing/PlayModeTests/TestingScene.unity
@@ -41,6 +41,30 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Pause Menu.unity
     guid: fbcf497cd297d294d99067d68156f9a8
+  - enabled: 1
+    path: Assets/Levels/Level003.unity
+    guid: d64b79a2f26c791419db479079ab9f31
+  - enabled: 1
+    path: Assets/Levels/Level004.unity
+    guid: ddc41577a083fe047ab98b64ec1cb8bf
+  - enabled: 1
+    path: Assets/Levels/Level005.unity
+    guid: 412eb94ea440f0f4c83914b50ecc53e8
+  - enabled: 1
+    path: Assets/Levels/Level006.unity
+    guid: c889374a1b7829748a709962da89030b
+  - enabled: 1
+    path: Assets/Levels/Level007.unity
+    guid: e90abfdf1e1ade34c9785e2c33de3a97
+  - enabled: 1
+    path: Assets/Levels/Level008.unity
+    guid: a0251390844ba9849a587bd51e30a5e6
+  - enabled: 1
+    path: Assets/Levels/Level009.unity
+    guid: ead5c124888335840b005bcd573b6b4e
+  - enabled: 1
+    path: Assets/Levels/Level010.unity
+    guid: 5b241e5f4dba8f74a8aebdd1af5ba6d8
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: ee7203909580bd143bdadaf38f444eb5,
       type: 2}

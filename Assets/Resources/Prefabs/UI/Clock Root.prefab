@@ -194,7 +194,7 @@ RectTransform:
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &8037464805322519511
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -211,7 +211,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!82 &8037464805322519510
 AudioSource:
   m_ObjectHideFlags: 0
@@ -221,7 +221,8 @@ AudioSource:
   m_GameObject: {fileID: 8037464805322519505}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 6495489664900618310, guid: 4ff1fe652e4e1a54aa18af9bb721f71d,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 897fb5e271f75ea4e8fddff1117e63a0, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1

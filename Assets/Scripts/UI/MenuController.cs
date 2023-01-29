@@ -82,7 +82,7 @@ public class MenuController : MonoBehaviour
             LoadLevelsList();
         }
 
-        GenerateBackAndNextButtons();
+       // GenerateBackAndNextButtons();
     }
 
 
@@ -192,10 +192,11 @@ public class MenuController : MonoBehaviour
             string sceneName = Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(i));
             scenes.Add(sceneName);
         }
-
+        print($"Scenes pre filter: {scenes.Count}");
         // Filtering
         scenes = scenes.FindAll(e => e.Contains("Level"));
         scenes.Remove("Levels Scene");
+        print($"Scenes post filter: {scenes.Count}");
 
         foreach (string sceneName in scenes)
         {

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -87,11 +88,16 @@ namespace Level
         {
             if (instance == null)
                 instance = this;
-            timeControlImages = timeControlImagesContainer.GetComponentsInChildren<Image>().Skip(1).Take(4).ToArray();
+            timeControlImages = GetTimeControlImagesExceptContainer();
             ChangeSpeed(GameSpeed.Normal);
             canvas = FindObjectOfType<Canvas>();
             Application.targetFrameRate = 120;
             //   CalculateBackgroundColor();
+        }
+
+        private Image[] GetTimeControlImagesExceptContainer()
+        {
+            return timeControlImagesContainer.GetComponentsInChildren<Image>().Skip(1).Take(4).ToArray();
         }
 
         /* 
@@ -119,6 +125,7 @@ namespace Level
                 {
                     menuOpen = true;
                     SceneManager.LoadScene("Pause Menu", LoadSceneMode.Additive);
+                   // SceneManager.LoadScene("Main Menu", LoadSceneMode.Additive);
                     GameEngine.instance.Speed = GameSpeed.Paused;
                 }
 

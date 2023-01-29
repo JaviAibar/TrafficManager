@@ -11,7 +11,6 @@ using UnityEngine.UI;
 
 public class SettingsManager : MonoBehaviour
 {
-    // TODO: Change fxSoundTester, it's annoying
     public AudioMixer audioMixer;
 
     public Slider masterVolumeSlider;
@@ -31,23 +30,6 @@ public class SettingsManager : MonoBehaviour
     {
         audioTester = gameObject.AddComponent<AudioSource>();
     }
-
-    void Start()
-    {
-        StartCoroutine(WaitForLanguageDropdown());
-
-        InitQualityDropdown();
-        InitResolutionDropdown();
-        InitOtherSettings();
-    }
-
-    private void InitOtherSettings()
-    {
-        masterVolumeSlider.value = PlayerPrefs.GetFloat("MasterVolume", 0);
-        musicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume", 0);
-        soundFXVolumeSlider.value = PlayerPrefs.GetFloat("SoundFxVolume", 0);
-    }
-
     private void OnEnable()
     {
         qualityDropdown.onValueChanged.AddListener(QualityChanged);
@@ -63,6 +45,43 @@ public class SettingsManager : MonoBehaviour
         soundFXVolumeSlider.onValueChanged.RemoveListener(FxVolumeChanged);
         masterVolumeSlider.onValueChanged.RemoveListener(MasterVolumeChanged);
     }
+
+    void Start()
+    {
+        StartCoroutine(WaitForLanguageDropdown());
+
+        InitQualityDropdown();
+        InitResolutionDropdown();
+        InitSoundSettings();
+    }
+
+    private void InitSoundSettings()
+    {
+        RetrieveMasterVolumeFromMemo();
+        RetrieveMusicVolumeFromMemo();
+        RetrieveSoundFxVolumeFromMemo();
+    }
+
+    private void RetrieveMasterVolumeFromMemo()
+    {
+        float masterVolume =  PlayerPrefs.GetFloat("MasterVolume", -20);
+        print($"valor de master desde memo {masterVolume}");
+        masterVolumeSlider.SetValueWithoutNotify(masterVolume);
+        audioMixer.SetFloat("MasterVolume", masterVolume);
+    }
+    private void RetrieveMusicVolumeFromMemo()
+    {
+        float musicVolume = PlayerPrefs.GetFloat("MusicVolume", 0);
+        musicVolumeSlider.SetValueWithoutNotify(musicVolume);
+        audioMixer.SetFloat("MusicVolume", musicVolume);
+    }
+    private void RetrieveSoundFxVolumeFromMemo()
+    {
+        float soundFXVolume = PlayerPrefs.GetFloat("SoundFxVolume", 0);
+        soundFXVolumeSlider.SetValueWithoutNotify(soundFXVolume);
+        audioMixer.SetFloat("SoundFxVolume", soundFXVolume);
+    }
+
     public IEnumerator WaitForLanguageDropdown()
     {
         // Wait for the localization system to initialize
@@ -105,10 +124,11 @@ public class SettingsManager : MonoBehaviour
         PlayerPrefs.DeleteKey("MusicVolume");
         PlayerPrefs.DeleteKey("SoundFxVolume");
 
-        InitOtherSettings();
+        InitSoundSettings();
     }
     private void MasterVolumeChanged(float vol)
     {
+        print($"Vol general cambiado a {vol}");
         audioTester.clip = fxTest;
         audioTester.outputAudioMixerGroup = masterMixer;
         audioMixer.SetFloat("MasterVolume", vol);
@@ -122,7 +142,6 @@ public class SettingsManager : MonoBehaviour
         audioMixer.SetFloat("MusicVolume", vol);
         TryPlaying();
     }
-
     private void FxVolumeChanged(float vol)
     {
         audioTester.clip = fxTest;
@@ -157,10 +176,23 @@ public class SettingsManager : MonoBehaviour
         while (audioTester.volume != 1)
         {
             audioTester.volume += speed;
-            print(audioTester.volume);
             yield return null;
         }
         yield return new WaitForSeconds(3);
+    }
+
+    public void AcceptChanges()
+    {
+        float volumeValue;
+        audioMixer.GetFloat("MasterVolume", out volumeValue);
+        PlayerPrefs.SetFloat("MasterVolume", volumeValue);
+
+        audioMixer.GetFloat("MusicVolume", out volumeValue);
+        PlayerPrefs.SetFloat("MusicVolume", volumeValue);
+
+        audioMixer.GetFloat("SoundFxVolume", out volumeValue);
+        PlayerPrefs.SetFloat("SoundFxVolume", volumeValue);
+        CloseMenu();
     }
 
     public void CloseMenu()

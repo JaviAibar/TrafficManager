@@ -58,4 +58,5 @@ MonoBehaviour:
   musicMixer: {fileID: -8347231691982847507, guid: 4ff1fe652e4e1a54aa18af9bb721f71d,
     type: 2}
   fxMixer: {fileID: 6495489664900618310, guid: 4ff1fe652e4e1a54aa18af9bb721f71d, type: 2}
+  masterMixer: {fileID: 24300002, guid: 4ff1fe652e4e1a54aa18af9bb721f71d, type: 2}
   audioMixer: {fileID: 24100000, guid: 4ff1fe652e4e1a54aa18af9bb721f71d, type: 2}

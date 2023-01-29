@@ -17,7 +17,9 @@ public class SoundFxManager : MonoBehaviour
 
     public AudioMixerGroup musicMixer;
     public AudioMixerGroup fxMixer;
+    public AudioMixerGroup masterMixer;
     public AudioMixer audioMixer;
+    private float previousVol = -80;
 
     private void Awake()
     {
@@ -64,5 +66,12 @@ public class SoundFxManager : MonoBehaviour
         }
 
         Destroy(audioSourceInstance);
+    }
+
+    public void SwitchMuteAllSounds()
+    {
+        float aux = previousVol;
+        audioMixer.GetFloat("MasterVolume", out previousVol);
+        audioMixer.SetFloat("MasterVolume", aux);
     }
 }
