@@ -72,3 +72,6 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 /PressKit
+/Assets/Art/Sprites/Originals
+/Assets/Art/Audio/Originals
+/Assets/Experimentation
