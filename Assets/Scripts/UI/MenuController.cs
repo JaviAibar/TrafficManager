@@ -15,12 +15,7 @@ public class MenuController : MonoBehaviour
 {
     public GameObject levelButtonPrefab;
     public GameObject levelsGrid;
-    public GameObject backButton;
-    public GameObject nextButton;
     public GameObject pauseMenu;
-    public static MenuController instance;
-    private static List<int> prevScenes;
-    private static int historyIndex = -1;
 
     /// <summary>
     /// [0] unsolved level, [1] solved level
@@ -37,29 +32,7 @@ public class MenuController : MonoBehaviour
         SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
     }
 
-    private void Awake()
-    {
-        if (prevScenes == null)
-            prevScenes = new List<int>();
-
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    private IEnumerator Start()
-    {
-        yield return LocalizationSettings.InitializationOperation;
-        int selected = PlayerPrefs.GetInt("Language", -1);
-        if (selected > -1)
-            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[selected];
-    }
+    
 
     private void Update()
     {
@@ -82,21 +55,6 @@ public class MenuController : MonoBehaviour
             LoadLevelsList();
         }
 
-       // GenerateBackAndNextButtons();
-    }
-
-
-    public void GenerateBackAndNextButtons()
-    {
-        // print($"Enable, history: {historyIndex}, prev: {prevScenes.Count}");
-        Canvas canvas = FindObjectOfType<Canvas>();
-        if (historyIndex > 0 && canvas)
-            Instantiate(backButton, canvas.transform).GetComponent<Button>().onClick.AddListener(
-                delegate { LoadPreviousScene(); });
-        if (historyIndex < prevScenes.Count - 1 && canvas)
-            Instantiate(nextButton, canvas.transform).GetComponent<Button>().onClick.AddListener(
-                delegate { LoadNextScene(); });
-        ;
     }
 
     public void NewGame()
@@ -104,17 +62,7 @@ public class MenuController : MonoBehaviour
         LoadSceneAndSave("Level001");
     }
 
-    private void SavePrevScene()
-    {
-        historyIndex++;
-        if (prevScenes.Count - historyIndex > 0)
-            print(
-                $"Eliminando desde ind {historyIndex} un total de {prevScenes.Count - historyIndex} y a�adiendo la escena {SceneManager.GetActiveScene().name} a la lista");
-
-        prevScenes.RemoveRange(historyIndex, prevScenes.Count - historyIndex);
-        prevScenes.Add(SceneManager.GetActiveScene().buildIndex);
-        print($"(SavePrevScene) Guardada escena {SceneManager.GetActiveScene().name}");
-    }
+    
 
     public void LoadGame(int level)
     {
@@ -158,28 +106,18 @@ public class MenuController : MonoBehaviour
 
     public void LoadPreviousScene()
     {
-        // This method saves no previous scene because it would create a loop!
-        int pediremos = historyIndex - 1;
-        int buildIndex = prevScenes[pediremos];
-        print(
-            $"(LoadPreviousScene: Se va a cargar la escena de indice {pediremos} cuya build index es {buildIndex} de nombre '{SceneManager.GetSceneByBuildIndex(buildIndex).name}' es valido? {SceneManager.GetSceneByBuildIndex(buildIndex).IsValid()}");
-        if (prevScenes.Count > 1)
-            SceneManager.LoadScene(prevScenes[historyIndex--]);
-        else
-            LoadMainMenuScene();
-        print($"LoadPreviousScene historyIndex: {historyIndex}");
-        //historyIndex--;
+        HistoryTracker.instance.LoadPreviousScene();
     }
 
     public void LoadNextScene()
     {
-        SceneManager.LoadScene(prevScenes[historyIndex++]);
+        HistoryTracker.instance.LoadNextScene();
     }
 
     public void LoadSceneAndSave(string name)
     {
         SceneManager.LoadScene(name);
-        SavePrevScene();
+        HistoryTracker.instance.SavePrevScene();
     }
 
     private void LoadLevelsList()
@@ -209,17 +147,6 @@ public class MenuController : MonoBehaviour
             levelButton.GetComponent<Button>().onClick.AddListener(
                 delegate { SceneManager.LoadScene(levelButton.name); });
         }
-    }
-
-
-    public int GetHistoryIndex()
-    {
-        return historyIndex;
-    }
-
-    public int GetSavedScenes()
-    {
-        return prevScenes.Count;
     }
 
     public void QuitGame()

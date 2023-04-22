@@ -65,66 +65,66 @@ public class PlayGeneralTesting : MonoBehaviour
         string level1SceneName = "Level001";
         string tutorialSceneName = "Tutorial 1";
 
-        Instantiate((GameObject)Resources.Load("Prefabs/UI/Menu controller"));
+        MenuController menu = Instantiate(Resources.Load("Prefabs/UI/Menu controller") as MenuController);
         yield return WaitForStart();
 
         // Initial values
-        Assert.AreEqual(-1, MenuController.instance.GetHistoryIndex());
-        Assert.AreEqual(0, MenuController.instance.GetSavedScenes());
+        Assert.AreEqual(-1, HistoryTracker.instance.GetHistoryIndex());
+        Assert.AreEqual(0, HistoryTracker.instance.GetSavedScenes());
 
         // Loading Main Menu (default scene)
         // Current state index = 0 | [0] Main menu (meaning after scene loaded)
-        MenuController.instance.LoadMainMenuScene();
+        menu.LoadMainMenuScene();
         yield return new WaitForSeconds(1);
         CheckExpectedScenes(0, 1, mainMenuSceneName);
 
         // Loading Levels scene
         // Saving Main Menu at index 0
         // Current state index = 1 | [0] Main menu, [1] Levels
-        MenuController.instance.LoadLevelsScene();
+        menu.LoadLevelsScene();
         yield return new WaitForSeconds(1);
         CheckExpectedScenes(1, 2, levelsSceneName);
 
         // Loading Tutorial
         // Current state index = 2 | [0] Main menu, [1] Levels, [2] Tutorial
-        MenuController.instance.LoadTutorial();
+        menu.LoadTutorial();
         yield return new WaitForSeconds(1);
         CheckExpectedScenes(2, 3, tutorialSceneName);
 
         // Loading Level001
         // Current state index = 3 | [0] Main menu, [1] Levels, [2] Tutorial, [3] Level001
-        MenuController.instance.LoadLevel(1);
+        menu.LoadLevel(1);
         yield return new WaitForSeconds(1);
         CheckExpectedScenes(3, 4, level1SceneName);
 
         // Go to previous scene (Tutorial)
         // Current state index = 2 | [0] Main menu, [1] Levels, [2] Tutorial, [3] Level001
-        MenuController.instance.LoadPreviousScene();
+        HistoryTracker.instance.LoadPreviousScene();
         yield return new WaitForSeconds(1);
         CheckExpectedScenes(2, 4, tutorialSceneName);
 
         // Go to previous scene (Levels)
         // Current state index = 1 | [0] Main menu, [1] Levels, [2] Tutorial, [3] Level001
-        MenuController.instance.LoadPreviousScene();
+        HistoryTracker.instance.LoadPreviousScene();
         yield return new WaitForSeconds(1);
         CheckExpectedScenes(1, 4, levelsSceneName);
 
 
         // Go to previous scene (Levels)
         // Current state index = 0 | [0] Main menu, [1] Levels, [2] Tutorial, [3] Level001
-        MenuController.instance.LoadPreviousScene();
+        HistoryTracker.instance.LoadPreviousScene();
         yield return new WaitForSeconds(1);
         CheckExpectedScenes(0, 4, mainMenuSceneName);
 
         // Go to next scene (Levels)
         // Current state index = 1 | [0] Main menu, [1] Levels, [2] Tutorial, [3] Level001
-        MenuController.instance.LoadNextScene();
+        HistoryTracker.instance.LoadNextScene();
         yield return new WaitForSeconds(1);
         CheckExpectedScenes(1, 4, levelsSceneName);
 
         // Load Main menu Scene (Main menu)
         // Current state index = 2 | [0] Main menu, [1] Levels, [2] Main menu (should replace history with the Main menu in position 2)
-        MenuController.instance.LoadMainMenuScene();
+        menu.LoadMainMenuScene();
         yield return new WaitForSeconds(1);
         CheckExpectedScenes(2, 3, levelsSceneName);
     }
@@ -137,22 +137,22 @@ public class PlayGeneralTesting : MonoBehaviour
         /* string levelsSceneName = "Levels Scene";
          string level1SceneName = "Level001";
          string tutorialSceneName = "Tutorial Scene";*/
-        Instantiate((GameObject)Resources.Load("Prefabs/UI/Menu controller"));
+        MenuController menu = Instantiate(Resources.Load("Prefabs/UI/Menu controller")) as MenuController;
         yield return new WaitForSeconds(1);
         // Initial values
-        Assert.AreEqual(-1, MenuController.instance.GetHistoryIndex());
-        Assert.AreEqual(0, MenuController.instance.GetSavedScenes());
+        Assert.AreEqual(-1, HistoryTracker.instance.GetHistoryIndex());
+        Assert.AreEqual(0, HistoryTracker.instance.GetSavedScenes());
 
 
-        MenuController.instance.LoadMainMenuScene();
+        menu.LoadMainMenuScene();
         yield return new WaitForSeconds(1);
         CheckExpectedScenes(0, 1, mainMenuSceneName);
 
-        MenuController.instance.LoadLevel(1);
+        menu.LoadLevel(1);
         yield return new WaitForSeconds(1);
 
 
-        MenuController.instance.LoadLevel(1);
+        menu.LoadLevel(1);
         yield return new WaitForSeconds(1);
         throw new NotImplementedException();
     }
@@ -409,8 +409,8 @@ public class PlayGeneralTesting : MonoBehaviour
 
     public void CheckExpectedScenes(int indexHistory, int scenesSaved, string sceneName)
     {
-        Assert.AreEqual(indexHistory, MenuController.instance.GetHistoryIndex());
-        Assert.AreEqual(scenesSaved, MenuController.instance.GetSavedScenes());
+        Assert.AreEqual(indexHistory, HistoryTracker.instance.GetHistoryIndex());
+        Assert.AreEqual(scenesSaved, HistoryTracker.instance.GetSavedScenes());
         Assert.AreEqual(sceneName, SceneManager.GetActiveScene().name);
     }
 
