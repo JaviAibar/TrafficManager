@@ -10,12 +10,12 @@ namespace BezierSolution
 		public BezierSpline spline;
 		public TravelMode travelMode;
 
-		public float speed = 5f;
+		public float speed = 0f;
 		[SerializeField]
 		[Range( 0f, 1f )]
-		private float m_normalizedT = 0f;
+		protected float m_normalizedT = 0f;
 
-		public override BezierSpline Spline { get { return spline; } }
+		public override BezierSpline Spline {get { return spline; } }
 
 		public override float NormalizedT
 		{
@@ -23,21 +23,21 @@ namespace BezierSolution
 			set { m_normalizedT = value; }
 		}
 
-		//public float movementLerpModifier = 10f;
+		public float movementLerpModifier = 10f;
 		public float rotationLerpModifier = 10f;
 
 		public LookAtMode lookAt = LookAtMode.Forward;
 
-		private bool isGoingForward = true;
+		protected bool isGoingForward = true;
 		public override bool MovingForward { get { return ( speed > 0f ) == isGoingForward; } }
 
 		public UnityEvent onPathCompleted = new UnityEvent();
-		private bool onPathCompletedCalledAt1 = false;
-		private bool onPathCompletedCalledAt0 = false;
+		protected bool onPathCompletedCalledAt1 = false;
+		protected bool onPathCompletedCalledAt0 = false;
 
 		private void FixedUpdate()
 		{
-			Execute( Time.deltaTime );
+			Execute( /*Time.deltaTime */ Time.fixedDeltaTime);
 		}
 
 		public override void Execute( float deltaTime )
@@ -123,6 +123,11 @@ namespace BezierSolution
 					onPathCompletedCalledAt0 = false;
 				}
 			}
+		}
+
+		public void SetAtStart()
+		{
+			transform.position = spline.GetPoint(0);
 		}
 	}
 }

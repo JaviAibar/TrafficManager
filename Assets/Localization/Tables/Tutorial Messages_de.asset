@@ -31,7 +31,7 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 11051879550976
     m_Localized: "Dieses Auto f\xE4hrt auf eine Ampel zu, aber es wird sie bei Rot
-      finden, da noch 8 Sekunden verbleiben, bevor sie gr\xFCn wird."
+      finden, da noch 4 Sekunden verbleiben, bevor sie gr\xFCn wird."
     m_Metadata:
       m_Items: []
   - m_Id: 277075984044032
@@ -54,6 +54,27 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 992086125629440
     m_Localized: Ich hab's!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4310297390796800
+    m_Localized: Noooo!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4309695554310144
+    m_Localized: "Ach nein! Ein betrunkenen Fahrer!\nLeider existieren so diese Art
+      von Fahrer und sie sind sehr gef\xE4hrlich."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4310048668569600
+    m_Localized: "Ach nein! Als die Ampel f\xFCr Fu\xDFg\xE4nger gr\xFCn war, hat
+      er \xFCberquert und wurde deswegen von dem betrunkenen Fahrer \xFCberfahren,
+      es ist schrecklich!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4310277274914816
+    m_Localized: "Ich werde das Level f\xFCr dich neu starten, damit du die Ampeleinstellungen
+      \xE4ndern, den Fu\xDFg\xE4nger stoppen und so sein Leben retten kannst.\r\nLass
+      uns gehen!"
     m_Metadata:
       m_Items: []
   references:

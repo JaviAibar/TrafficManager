@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8507938776192310625
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8507938776192310627}
+  - component: {fileID: 8507938776192310626}
+  m_Layer: 0
+  m_Name: Level Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8507938776192310627
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8507938776192310625}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 11.479563, y: 7.6477613, z: -0.43900967}
+  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8507938776192310626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8507938776192310625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fa217fd79b281841aed81a3ef996bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeToLoop: 12
+  timeToSolve: 6
+  timeLeftToSolve: 0
+  timeToResetLevelAfterCollision: 2
+  timer: 0
+  solvedPanel: {fileID: 0}
+  iconImage: {fileID: 0}
+  timeIndicator: {fileID: 0}
+  minimumSpeedSprite: {fileID: 21300000, guid: 65d3f8c2afcea66428a8ef4d465d2aae, type: 3}
+  forbiddenSprite: {fileID: 21300000, guid: 55f2b441a301fcb49889206ce7b320ba, type: 3}
+  nextLevel: Tutorial 2
+  particleSystems:
+  - {fileID: 0}
+  - {fileID: 0}
+  clock: {fileID: 0}

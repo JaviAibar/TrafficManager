@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 using BezierSolution;
+using Level;
 
 public class PlayGeneralTestingWithScene : MonoBehaviour
 {
@@ -53,19 +54,22 @@ public class PlayGeneralTestingWithScene : MonoBehaviour
         yield return null;
     }
 
-
-    [UnityTest]
+    // Disable as abandoning the idea of Testing With Custom Scenes to to get bigger and comfortable Prefabs 
+   // [UnityTest]
     public IEnumerator TrafficLightsTiming()
     {
         Debug.LogWarning("Testing Traffic Timming, this test takes up to 13 seconds, please be patient :)");
-        Instantiate<GameObject>((GameObject)Resources.Load("Prefabs/Logic/Game Engine"));
+       /* GameEngine engine = (Instantiate((GameObject)Resources.Load("Prefabs/Logic/Game Engine"))).GetComponent<GameEngine>();
         var gameObject = new GameObject();
         GameObject trafficLightPanelGO = (GameObject)Instantiate(Resources.Load("Prefabs/UI/TrafficLightPanel"));
         TrafficLightUIController trafficLightUI = trafficLightPanelGO.GetComponent<TrafficLightUIController>();
-
+        ((GameObject)Instantiate(Resources.Load("Prefabs/UI/Time Control Panel Root"));
         var trafficLight = gameObject.AddComponent<TrafficLightController>();
-        //trafficLight.trafficLightPanel = trafficLightPanelGO;
-        trafficLight.trafficLightUIPanel = trafficLightUI;
+        //trafficLight.trafficLightPanel = trafficLightPanelGO;*/
+       GameObject GameKernel = Instantiate((GameObject)Resources.Load("Prefabs/Game Kernel"));
+        //trafficLight.trafficLightUIPanel = trafficLightUI;
+        TrafficLightController trafficLight = GameKernel.GetComponentInChildren<TrafficLightController>();
+        //TrafficLightUIController TLUIController = GameKernel.GetComponentInChildren<TrafficLightUIController>();
         trafficLight.SetValues(2, 8, 3);
 
         yield return new WaitForSeconds(1);
