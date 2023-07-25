@@ -120,10 +120,10 @@ public class SpeedController
     /// Changes speed of user almost instantly
     /// </summary>
     /// <param name="newSpeed"></param>
-    public void ChangeSpeedImmediately(float newSpeed)
+    public bool? ChangeSpeedImmediately(float newSpeed)
     {
         Print($"[{name}] forced to change its speed quickly to {newSpeed}", VerboseEnum.Speed);
-        ChangeSpeed(newSpeed, 100);
+        return ChangeSpeed(newSpeed, 100);
     }
 
     public void LoopStarted()

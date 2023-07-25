@@ -36,12 +36,14 @@ public class SoundFxManager : MonoBehaviour
 
     public void PlaySolvedSound(int id)
     {
-        if (id >= 0 && id < solvedSounds.Length && _lastSolvedPlay != id)
+        if (IsTimeToPlay(id))
         {
             _lastSolvedPlay = id;
             Play(solvedSounds[id]);
         }
     }
+
+    private bool IsTimeToPlay(int id) => id >= 0 && id < solvedSounds.Length && _lastSolvedPlay != id;
 
     public void PlayFailSound()
     {
