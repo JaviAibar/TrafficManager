@@ -1,0 +1,104 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Menus table_es-ES
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: es-ES
+  m_SharedData: {fileID: 11400000, guid: cc9e44007f69e404db3f27d8139626cd, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 41802190848
+    m_Localized: Nueva partida
+    m_Metadata:
+      m_Items: []
+  - m_Id: 319926489088
+    m_Localized: Ajustes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 440135241728
+    m_Localized: Salir
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96629346193408
+    m_Localized: Niveles
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3277255020826624
+    m_Localized: Siguiente nivel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3310779434192896
+    m_Localized: "\xA1Nivel completado!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3311131252412416
+    m_Localized: "\xBFEst\xE1s preparado para el siguiente nivel?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4151766528217088
+    m_Localized: Aceptar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4151985202450432
+    m_Localized: Cancelar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4418809869553664
+    m_Localized: Tutorial
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4419185918267392
+    m_Localized: Primer nivel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4419537971367936
+    m_Localized: "\xBFEs tu primera vez jugando a TrafficManager? Tal vez ser\xEDa
+      buena idea comenzar por el tutorial. \xA1Es super corto pero explicativo!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16413960657620992
+    m_Localized: Volumen general
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16414606836289536
+    m_Localized: "M\xFAsica"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16414483964153856
+    m_Localized: Efectos de sonido
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16415657039679488
+    m_Localized: Calidad
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16489153547653120
+    m_Localized: Continuar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16489608650608640
+    m_Localized: Juego en pausa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16497816052092928
+    m_Localized: Resoluciones
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29765229201637376
+    m_Localized: Idiomas
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []
