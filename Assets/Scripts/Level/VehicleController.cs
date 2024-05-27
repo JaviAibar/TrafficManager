@@ -21,23 +21,14 @@ namespace Level
         public AudioClip motorClip;
         public AudioClip emergencyClip;
         public AudioMixerGroup fxMixer;
-        private int CAR;
+        private int CAR_LAYER;
 
         protected override void Awake()
         {
             base.Awake();
-            audio = gameObject.AddComponent<AudioSource>();
-            audio.playOnAwake = false;
-            audio.loop = true;
-            audio.pitch = Random.Range(0.8f, 1.2f);
-            audio.volume = 0;
-            audio.outputAudioMixerGroup = fxMixer;
-            if (inAnEmergency)
-                audio.clip = emergencyClip;
-            else
-                audio.clip = motorClip;
+            InitAudio();
             carDetector = GetComponents<BoxCollider2D>().First(e => e.isTrigger);
-            CAR = LayerMask.NameToLayer("Car");
+            CAR_LAYER = LayerMask.NameToLayer("Car");
             anim = GetComponent<Animator>();
         }
 
@@ -53,19 +44,6 @@ namespace Level
             //   EventManager.OnRoadUserMoving -= RoadUserMoving;
         }
 
-        /* private void RoadUserMoving(RoadUser responsible)
-         {
-             Print($"Vehicle moving again is {responsible}", VerboseEnum.GameTrace);
-             if (vehicleAhead && vehicleAhead.GetInstanceID() == responsible.GetInstanceID())
-             {
-                 Print($"The vehicle ahead of {name} is moving again, then {name} can also start moving",
-                     VerboseEnum.SolutionConditions);
-                 speedController.ChangeSpeed(vehicleAhead.BaseSpeed, vehicleAhead.Acceleration);
-                 vehicleAhead = null;
-                 // CheckMovingConditions();
-             }
-         }
- */
         protected override void Start()
         {
             base.Start();
@@ -83,7 +61,7 @@ namespace Level
         {
             base.LoopStarted();
             audio.volume = 0;
-            carDetector.enabled = false;
+            carDetector.enabled = false; // Temp disabled to avoid unintentional accidents
         }
 
         public override void CheckMovingConditions()
@@ -97,112 +75,104 @@ namespace Level
                 return;
             }
 
-            string moreInfo = (trafficArea
-                ? $"After the method the vehicle will be {(MustStop() ? "Stopped" : MustRun() ? "Running" : MustReduce() ? "Reducing" : "at Walking speed")}"
-                  + $"\nExplanation:\nIs an stop area ({trafficArea.StopArea}) affecting us (same dir)({trafficArea.SameDirection(UserDir)}) in red ({trafficLight.IsRed})(then must stop)? -> {MustStop()}.\n"
-                  + $"Is yellow ({trafficLight.IsYellow}) and middle ({trafficArea.IsCenter}) OR before ({trafficArea.SameDirection(UserDir)}) a cross OR IsRed ({trafficLight.IsRed} and Center ({trafficArea.IsCenter})? -> {MustRun()}.\n"
-                  + $"Is red? {trafficLight.IsRed} and is NOT a stop area {!trafficArea.StopArea} and affecting us (same dir) {trafficArea.SameDirection(UserDir)}\n"
-                  + $"Otherwise? {!MustStop() && !MustRun() && !MustReduce()}"
-                : "");
-            Print($"[{name}] [CheckMovingConditions] MovingConditions? {MovingConditions()}: "
-                  + $"(hasStartedMoving?: {hasStartedMoving} respectsRules?: {respectsTheRules} inAnEmergency?: {inAnEmergency} {(trafficArea ? $"has ({trafficArea.name})" : "doesn't have ")}a traffic area)\n"
-                  + moreInfo, VerboseEnum.Speed);
+            PrintInfoCheckMovingConditions();
             if (!MovingConditions()) return; // If moving conditions not fulfilled
             if (MustStop())
-            {
-                // bool worthCallMoving = SwitchStopped(0);
-                if (CurrentSpeed > 0) AudioFadeOut();
+                Stop();
 
-                speedController.ChangeSpeedImmediately(0);
-                /*if (worthCallMoving) */
-                Moving(false);
-            }
-            // Yellow and before or middle cross, then boost
-            // or Red but in middle cross, then boost
             else if (MustRun())
-            {
-                if (CurrentSpeed == 0) AudioFadeIn();
-                //bool worthCallMoving = SwitchStopped(runningSpeed);
-                speedController.ChangeSpeed(runningSpeed);
-                /*if (worthCallMoving)*/
-                Moving(true);
-            }
+                Run();
+
             else if (MustReduce())
-            {
                 Reduce();
-            }
+
             else
-            {
-                if (CurrentSpeed == 0) AudioFadeIn();
-
-                //bool worthCallMoving = SwitchStopped(normalSpeed);
-                speedController.ChangeSpeed(normalSpeed);
-                /*if (worthCallMoving) */
-                Moving(true);
-            }
+                NormalMove();
         }
 
-        protected override void OnTriggerEnter2D(Collider2D collision)
+        protected override void OnTriggerEnter2D(Collider2D collider)
         {
-            base.OnTriggerEnter2D(collision);
-            // print($"[{collision.name}]");
-            if (collision.isTrigger || collision.gameObject.layer != /*LayerMask.NameToLayer("Car")*/ CAR) return;
-            Print($"[{name}] Detected other car ahead: {collision.name}", VerboseEnum.Physics);
-            VehicleController vehicle = collision.GetComponent<VehicleController>();
-            if (vehicle == null) Debug.LogWarning($"{collision.name} has LayerMask Car but has no VehicleController");
-            if (Vector3ToDirection(UserDir) != Vector3ToDirection(vehicle.UserDir)) return;
-            //bezier.speed = 0;
-            //Moving(false);
-            speedController.ChangeSpeedImmediately(0);
-            /* Acceleration = vehicle.Acceleration;
-                ChangeSpeed(vehicle.Speed);*/
-            Print($"{name} blocked due to {collision.name}", VerboseEnum.Speed);
-            vehicleAhead = vehicle;
-            hadVehicleAhead = true;
-            //Debug.Break();
+            base.OnTriggerEnter2D(collider);
+            if (!IsAccident(collider) || !IsCar(collider)) return;
+
+            VehicleController vehicle = collider.GetComponent<VehicleController>();
+            if (vehicle == null)
+                Debug.LogWarning($"{collider.name} has LayerMask Car but has no VehicleController");
+
+            if (!CompareDirections(RoadUserDir, vehicle.RoadUserDir)) return;
+
+            Accident(vehicle);
         }
 
-        protected override void OnTriggerExit2D(Collider2D other)
+        protected override void OnTriggerExit2D(Collider2D collider)
         {
-            base.OnTriggerExit2D(other);
-            if (!vehicleAhead) return;
-            if (other.gameObject.layer != CAR || other.GetComponent<VehicleController>() != vehicleAhead) return;
-            speedController.ChangeSpeed(vehicleAhead.CurrentSpeed, vehicleAhead.Acceleration);
-            vehicleAhead = null;
+            base.OnTriggerExit2D(collider);
+            if (ColliderOnExitNotRelevant(collider)) return;
+            CopySpeedOf(vehicleAhead);
             //Debug.Break();
             //print($"Como OTHER era {other.name} hemos puesto vehicleAhead a null? {vehicleAhead} y comprobamos condiciones de movimiento");
             // CheckMovingConditions();
         }
 
-        public bool MustStop() => trafficArea.StopArea && trafficLight.IsRed && trafficArea.SameDirection(UserDir);
+        #region Condition checks
+        public bool MustStop() => trafficArea.StopArea && trafficLight.IsRed && trafficArea.SameDirection(RoadUserDir);
 
         public bool MustRun() =>
-            (trafficLight.IsYellow && (trafficArea.IsCenter || trafficArea.SameDirection(UserDir))) ||
+            (trafficLight.IsYellow && (trafficArea.IsCenter || trafficArea.SameDirection(RoadUserDir))) ||
             (trafficLight.IsRed && trafficArea.IsCenter);
 
-        public bool MustReduce() => trafficLight.IsRed && !trafficArea.StopArea && trafficArea.SameDirection(UserDir);
+        public bool MustReduce() => trafficLight.IsRed && !trafficArea.StopArea && trafficArea.SameDirection(RoadUserDir);
 
         public bool MovingConditions() =>
             trafficArea && respectsTheRules && !inAnEmergency && hasStartedMoving && !vehicleAhead;
-
         public bool MovingAgainAfterVehicleAheadConditions => hasStartedMoving && hadVehicleAhead;
 
+        #endregion
+
+        #region Movement methods
         public void Reduce()
         {
             speedController.ChangeSpeed(5f);
         }
 
-        public void AudioFadeIn()
+        public void Run()
+        {
+            if (CurrentSpeed == 0) AudioFadeIn();
+            speedController.ChangeSpeed(runningSpeed);
+            Moving(true);
+        }
+
+        public void Stop()
+        {
+            if (CurrentSpeed > 0) AudioFadeOut();
+            speedController.ChangeSpeedImmediately(0);
+            Moving(false);
+        }
+        public void NormalMove()
+        {
+            if (CurrentSpeed == 0) AudioFadeIn();
+            speedController.ChangeSpeed(normalSpeed);
+            Moving(true);
+        }
+
+        public void CopySpeedOf(VehicleController otherVehicle)
+        {
+            speedController.ChangeSpeed(vehicleAhead.CurrentSpeed, vehicleAhead.Acceleration);
+            if (otherVehicle == vehicleAhead)
+                vehicleAhead = null;
+        }
+        #endregion
+
+        #region Audio controls
+        private void AudioFadeIn()
         {
             StartCoroutine(AudioFade(0.4f));
         }
 
-
-        public void AudioFadeOut()
+        private void AudioFadeOut()
         {
             StartCoroutine(AudioFade(0));
         }
-
 
         private IEnumerator AudioFade(float targetVolume)
         {
@@ -218,5 +188,62 @@ namespace Level
                 yield return null;
             }
         }
+
+        private void InitAudio()
+        {
+            audio = gameObject.AddComponent<AudioSource>();
+            audio.playOnAwake = false;
+            audio.loop = true;
+            audio.pitch = Random.Range(0.8f, 1.2f);
+            audio.volume = 0;
+            audio.outputAudioMixerGroup = fxMixer;
+            if (inAnEmergency)
+                audio.clip = emergencyClip;
+            else
+                audio.clip = motorClip;
+        }
+        #endregion
+
+        public void Accident(VehicleController vehicle)
+        {
+            speedController.ChangeSpeedImmediately(0);
+            Print($"{name} blocked due to {vehicle.name}", VerboseEnum.Speed);
+            vehicleAhead = vehicle;
+            hadVehicleAhead = true;
+        }
+
+        private bool ColliderOnExitNotRelevant(Collider2D collider) => !vehicleAhead || !IsCar(collider) || !SameVehicleAhead(collider);
+        public bool IsAccident(Collider2D collider) => !collider.isTrigger;
+        public bool SameVehicleAhead(Collider2D other) => other.GetComponent<VehicleController>() != vehicleAhead;
+        public bool IsCar(Collider2D collider) => collider.gameObject.layer == CAR_LAYER;
+
+        private void PrintInfoCheckMovingConditions()
+        {
+            string moreInfo = (trafficArea
+                ? $"After the method the vehicle will be {(MustStop() ? "Stopped" : MustRun() ? "Running" : MustReduce() ? "Reducing" : "at Walking speed")}"
+                  + $"\nExplanation:\nIs an stop area ({trafficArea.StopArea}) affecting us (same dir)({trafficArea.SameDirection(RoadUserDir)}) in red ({trafficLight.IsRed})(then must stop)? -> {MustStop()}.\n"
+                  + $"Is yellow ({trafficLight.IsYellow}) and middle ({trafficArea.IsCenter}) OR before ({trafficArea.SameDirection(RoadUserDir)}) a cross OR IsRed ({trafficLight.IsRed} and Center ({trafficArea.IsCenter})? -> {MustRun()}.\n"
+                  + $"Is red? {trafficLight.IsRed} and is NOT a stop area {!trafficArea.StopArea} and affecting us (same dir) {trafficArea.SameDirection(RoadUserDir)}\n"
+                  + $"Otherwise? {!MustStop() && !MustRun() && !MustReduce()}"
+                : "");
+            Print($"[{name}] [CheckMovingConditions] MovingConditions? {MovingConditions()}: "
+                  + $"(hasStartedMoving?: {hasStartedMoving} respectsRules?: {respectsTheRules} inAnEmergency?: {inAnEmergency} {(trafficArea ? $"has ({trafficArea.name})" : "doesn't have ")}a traffic area)\n"
+                  + moreInfo, VerboseEnum.Speed);
+        }
+
+
+
+        /* private void RoadUserMoving(RoadUser responsible)
+         {
+             Print($"Vehicle moving again is {responsible}", VerboseEnum.GameTrace);
+             if (vehicleAhead && vehicleAhead.GetInstanceID() == responsible.GetInstanceID())
+             {
+                 Print($"The vehicle ahead of {name} is moving again, then {name} can also start moving",
+                     VerboseEnum.SolutionConditions);
+                 speedController.ChangeSpeed(vehicleAhead.BaseSpeed, vehicleAhead.Acceleration);
+                 vehicleAhead = null;
+                 // CheckMovingConditions();
+             }
+         } */
     }
 }

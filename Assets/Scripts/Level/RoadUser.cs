@@ -30,6 +30,7 @@ namespace Level
         protected Vector3 endOfCollision;
         private float otherMass;
         private bool looping;
+        private int ROAD_LAYER;
         [SerializeField] protected SpeedController speedController;
 
         public float normalSpeed = 10;
@@ -69,7 +70,7 @@ namespace Level
         public bool HasStartedMoving => hasStartedMoving;
 
         /// <summary>
-        /// Is not looping, time offset is over and didn't started already
+        /// Is not looping, time offset is over and didn't started yet
         /// </summary>
         public bool CanStartMoving => timer >= timeOffset && !hasStartedMoving && !looping;
 
@@ -81,7 +82,7 @@ namespace Level
         /// </summary>
         public bool TimeToRepeat => timer >= timeToLoop && timer <= timeToLoop + 0.5f;
 
-        public Vector3 UserDir => transform.up;
+        public Vector3 RoadUserDir => transform.up;
         public bool Looping => looping;
         public float Acceleration => speedController.Acceleration;
 
@@ -107,7 +108,9 @@ namespace Level
         /// <summary>
         /// If Game is not stopped, road user is not looping and should be accelerating
         /// </summary>
-        public bool CanAccelerate => Accelerating && !Looping && instance.IsPlayed;
+        public bool MustAccelerate => Accelerating && !Looping && instance.IsRunning;
+
+        private bool IsOnRoad => trafficArea && trafficLight;
 
         #endregion
 
@@ -131,36 +134,31 @@ namespace Level
 
         #region Debug
 
-        [ContextMenu("Mi prueba")]
-        public void MiPrueba()
+        [ContextMenu("Change speed to Normal Speed")]
+        public void DEBUGChangeSpeedToNormalSpeed()
         {
             ChangeSpeed(normalSpeed);
         }
 
-        [ContextMenu("Printeame")]
-        public void PrintMe()
+        [ContextMenu("Check bezier.speed")]
+        public void DEBUGCheckBezierSpeed()
         {
             print($"bezier.speed:{bezier.speed}");
         }
 
         #endregion
 
-/*
-#if UNITY_EDITOR
-        private void OnValidate() => TimeToLoop = timeToLoop;
-#endif
-*/
 
         void AddOnPathCompleteListener()
         {
-            print("aña list");
+            print("Add  OnPathCompleteListener");
             bezier?.onPathCompleted.RemoveListener(LoopStarted);
             if (timeToLoop <= 0) bezier?.onPathCompleted.AddListener(LoopStarted);
         }
 
         void RemoveOnOnPathCompleteListener()
         {
-            print("borrando list");
+            print("Remove OnPathCompleteListener");
             bezier?.onPathCompleted.RemoveListener(LoopStarted);
         }
 
@@ -170,12 +168,13 @@ namespace Level
             bezier = (BezierWalkerWithSpeedVariant)gameObject.AddComponent(typeof(BezierWalkerWithSpeedVariant));
             // bezier.spline = Spline ?? FindObjectOfType<BezierSpline>();
             bezier.spline = Spline ? Spline : GetComponent<BezierSpline>();
+            ROAD_LAYER = LayerMask.NameToLayer("Road");
             rb = GetComponentInParent<Rigidbody2D>();
             speedController = new SpeedController(name, bezier);
             if (!bezier)
-                throw new Exception($"Root of {name} needs a Bezier Walker With Speed component");
+                throw new NullReferenceException($"Root of {name} needs a Bezier Walker With Speed component");
             if (!spline)
-                throw new Exception($"Root of {name}'s Bezier needs a reference to a BezierSpline component");
+                throw new NullReferenceException($"Root of {name}'s Bezier needs a reference to a BezierSpline component");
         }
 
         protected virtual void Start()
@@ -189,29 +188,49 @@ namespace Level
             if (timeToLoop > 0 && TimeToRepeat)
                 LoopStarted();
             if (colliding)
-                MoveCollision();
+                MoveByCollision();
             if (CanStartMoving) // Start moving after timeOffset
                 StartMoving();
-            if (CanAccelerate)
+            if (MustAccelerate)
                 speedController.Accelerate();
         }
 
-        private void MoveCollision()
+        public virtual void LoopStarted()
         {
-            Transform transform1;
-            (transform1 = transform).position =
-                Vector3.Lerp(transform.position, endOfCollision, 5 * Time.fixedDeltaTime);
-            colliding = Vector3.Distance(transform1.position, endOfCollision) >= 2f;
+            if (bezier.NormalizedT != 0) PathFinished();
+            Print(
+                $"[{name}] began its looping coroutine (lopping true, collider false, statedMoving false, bezier true,"+
+                "normalizedT 0, baseSpeed 0 bezier.speed 1)", VerboseEnum.GameTrace);
+            looping = true; // Flag to lock other actions while looping
+            speedController.LoopStarted();
+            EnableColliderAndStartedMoving(false);
+            RecoverFromCollision();
+            timer = 0;
+            looping = false;
+            Print($"[{name}] finished looping coroutine (timer 0, looping false)", VerboseEnum.GameTrace);
+        }
+        protected virtual void StartMoving()
+        {
+            Print($"[{name}] waited its offset time ({timeOffset} seconds)", VerboseEnum.Speed);
+            // Accelerating is only true when speedController is given a speed;
+            // Normally shouldn't be true, as it (StartMoving) should be called only once, whenever level loops
+            // and is responsible of begin moving. It can be, though, for debug or testing purposes
+            if (!Accelerating) 
+            {
+                EnableColliderAndStartedMoving(true);
+                ChangeSpeed(normalSpeed);
+            }
+            else Print($"[{name}] was accelerating before CanStartMoving was true", VerboseEnum.Speed);
         }
 
         protected virtual void OnCollisionEnter2D(Collision2D collision)
         {
             Print($"Accident between {name} and {collision.transform.name}", VerboseEnum.Physics);
             EventManager.RaiseOnRoadUserCollision(collision.transform.GetComponent<RoadUser>(), this);
-            //  rb.constraints = RigidbodyConstraints2D.None;
             //print($"I'm {name} and crashed with dir  {Vector2.Angle(collision.contacts[0].normal, transform.up)} with a power of {power}");
 
             // I don't use RigidBody because it offsets the collider and the position
+            //rb.constraints = RigidbodyConstraints2D.None;
             //rb.AddForce(collision.contacts[0].normal * power);
             collisionDirection = collision.contacts[0].normal;
             otherMass = collision.rigidbody.mass;
@@ -220,40 +239,41 @@ namespace Level
             colliding = true;
         }
 
-        protected virtual void OnTriggerEnter2D(Collider2D other)
+        protected virtual void OnTriggerEnter2D(Collider2D otherCollider)
         {
-            if (other.gameObject.layer == LayerMask.NameToLayer("Road"))
+            if (otherCollider.gameObject.layer == ROAD_LAYER)
             {
-                trafficArea = other.GetComponent<TrafficArea>();
+                trafficArea = otherCollider.GetComponent<TrafficArea>();
                 trafficLight = trafficArea.TrafficLight;
                 CheckMovingConditions();
             }
             else
                 Print(
-                    $"[{name}] is not entering OnTriggerEnter because {other.name} is not tagged as Road",
+                    $"[{name}] is not entering OnTriggerEnter because {otherCollider.name} is not tagged as Road",
                     VerboseEnum.Physics);
         }
 
+
         protected virtual void OnTriggerExit2D(Collider2D other)
         {
-            var position = transform.position;
-            RaycastHit2D raycast =
-                Physics2D.Linecast(position, position + transform.up * 0.02f, 1 << 9);
-
-            Print(
-                $"{transform.name} is {(raycast ? "still" : "no longer")} colliding {(raycast ? $"with {raycast.collider.name}" : "")}",
-                VerboseEnum.Physics);
-
-            if (raycast) return;
+            if (StillOnRoad()) return;
             trafficLight = null;
             trafficArea = null;
+        }
+
+        private void MoveByCollision()
+        {
+            Transform transform1;
+            (transform1 = transform).position =
+                Vector3.Lerp(transform.position, endOfCollision, 5 * Time.fixedDeltaTime);
+            colliding = Vector3.Distance(transform1.position, endOfCollision) >= 2f;
         }
 
         public void TrafficLightChanged(TrafficLightController.TrafficLightColour colour)
         {
             Print($"[{name}] Traffic light changed to {colour} has{(trafficArea ? "" : "n't")} " +
                   $"trafficArea and has{(trafficLight ? "" : "n't")} trafficLight", VerboseEnum.TrafficLightChanges);
-            if (trafficArea && trafficLight)
+            if (IsOnRoad)
                 CheckMovingConditions();
         }
 
@@ -265,40 +285,6 @@ namespace Level
                 EventManager.RaiseOnRoadUserStopped(this);
         }
 
-        public virtual void LoopStarted()
-        {
-            if (bezier.NormalizedT != 0) PathFinished();
-            Print(
-                $"[{name}] began its looping coroutine (lopping true, collider false, statedMoving false, bezier true, normalizedT 0, baseSpeed 0 bezier.speed 1)",
-                VerboseEnum.GameTrace);
-            looping = true; // Flag to lock other actions while looping
-            speedController.LoopStarted();
-            EnableColliderAndStartedMoving(false);
-            RecoverFromCollision();
-            // yield return speedController.LocateOnStartLine();
-            // baseSpeed = 0;
-            timer = 0;
-            looping = false;
-            Print($"[{name}] finished looping coroutine (timer 0, looping false)", VerboseEnum.GameTrace);
-        }
-        /* public virtual IEnumerator LoopStartedCoroutine()
-         {
-             /*
-              * Disabling collider and moving to a different position were intended to fix a visual bug:
-              * When there's an accident with a pedestrian, it changes its sprite to ranOver and apparently
-              * animator works sooner than Bezier, therefore there are some frames in which the pedestrian recovers in place.
-              * 
-              * This solution though working, created accidents at Start, because if more than one RoadUsers have TimeOffset
-              * different of zero, then all of them have an accident, opted then not to fix this little bug
-              * to avoid correcting a bigger one.
-              * 
-              * transform.position = InitPosition;
-              * collider.enabled = false;
-              */
-
-
-        //  }
-
         protected void PathFinished()
         {
             collider.enabled = false;
@@ -307,18 +293,7 @@ namespace Level
             Print($"[{name}] reached finish line (collider disabled)", VerboseEnum.GameTrace);
             ChangeSpeedImmediately(0);
         }
-
-        protected virtual void StartMoving()
-        {
-            Print($"[{name}] waited its offset time ({timeOffset} seconds)", VerboseEnum.Speed);
-            if (!Accelerating)
-            {
-                EnableColliderAndStartedMoving(true);
-                ChangeSpeed(normalSpeed);
-            }
-            else Print($"[{name}] was accelerating before CanStartMoving was true", VerboseEnum.Speed);
-        }
-
+        
         /// <summary>
         /// Changes speed to value given with acceleration specified (recommended between 0.01 and 2)
         /// </summary>
@@ -335,11 +310,11 @@ namespace Level
         /// Changes speed to value given with acceleration specified (recommended between 0.01 and 2)
         /// </summary>
         /// <param name="value"></param>
-        /// <param name="acceleration"></param>
         public void ChangeSpeedImmediately(float value)
         {
             //  bool worthCallMoving = SwitchStopped(value);
-            bool? moving = speedController.ChangeSpeed(value, 100);
+
+            bool? moving = speedController.ChangeSpeedImmediately(value);
             //if (worthCallMoving && moving != null) Moving(moving.Value);
         }
 
@@ -366,6 +341,43 @@ namespace Level
             bezier.enabled = true;
         }
 
+        private bool StillOnRoad()
+        {
+            var position = transform.position;
+            RaycastHit2D raycast =
+                Physics2D.Linecast(position, position + transform.up * 0.02f, 1 << 9);
+
+            Print(
+                $"{transform.name} is {(raycast ? "still" : "no longer")} colliding" + 
+                $"{(raycast ? $"with {raycast.collider.name}" : "")}", VerboseEnum.Physics);
+            return raycast;
+        }
+
         public abstract void CheckMovingConditions();
+
+
+        /* public virtual IEnumerator LoopStartedCoroutine()
+         {
+             /*
+              * Disabling collider and moving to a different position were intended to fix a visual bug:
+              * When there's an accident with a pedestrian, it changes its sprite to ranOver and apparently
+              * animator works sooner than Bezier, therefore there are some frames in which the pedestrian recovers in place.
+              * 
+              * This solution though working, created accidents at Start, because if more than one RoadUsers have TimeOffset
+              * different of zero, then all of them have an accident, opted then not to fix this little bug
+              * to avoid correcting a bigger one.
+              * 
+              * transform.position = InitPosition;
+              * collider.enabled = false;
+              */
+
+
+        //  }
+
+        /*
+        #if UNITY_EDITOR
+                private void OnValidate() => TimeToLoop = timeToLoop;
+        #endif
+        */
     }
 }

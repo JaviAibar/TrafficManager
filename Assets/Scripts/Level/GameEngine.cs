@@ -47,7 +47,7 @@ namespace Level
         }
 
         public bool IsPaused => Speed == GameSpeed.Paused;
-        public bool IsPlayed => !IsPaused;
+        public bool IsRunning => !IsPaused;
         public bool IsNormalSpeed => Speed == GameSpeed.Normal;
         public bool IsFastSpeed => Speed == GameSpeed.Fast;
         public bool IsFastestSpeed => Speed == GameSpeed.SuperFast;
@@ -185,6 +185,12 @@ namespace Level
             Vector3 pos = Input.mousePosition;
             pos.z = canvas.transform.position.z;
             mouse.transform.position = Camera.main.ScreenToWorldPoint(pos);
+        }
+
+
+        public static bool CompareDirections(Vector3 dir1, Vector3 dir2)
+        {
+            return Vector3ToDirection(dir1) == Vector3ToDirection(dir2);
         }
     }
 }
