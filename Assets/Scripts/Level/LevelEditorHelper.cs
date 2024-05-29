@@ -1,3 +1,4 @@
+using Level;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -6,8 +7,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
-using static TrafficLightController;
+using static Level.TrafficLightController;
 
+// TODO TEST
 [ExecuteInEditMode]
 public class LevelEditorHelper : EditorWindow
 {
@@ -133,11 +135,11 @@ public class LevelEditorHelper : EditorWindow
             for (int i = 0; i < trafficLights.Length; i++)
             {
                 TrafficLightInfo selectedTrafficLightInfo = selectedFrameInfo.lights.Find(x => x.instanceID == trafficLights[i].GetInstanceID());
-                trafficLights[i].GetComponent<Image>().sprite = GameEngine.instance.trafficLightSprites[(int)selectedTrafficLightInfo.colour];
+                trafficLights[i].GetComponent<Image>().sprite = GameEngine.instance.TrafficLightSprites[(int)selectedTrafficLightInfo.colour];
                 trafficLights[i].GetComponentInChildren<TMPro.TMP_Text>().text = selectedTrafficLightInfo.text;
             }
             level.timeIndicator.text = selectedFrameInfo.solveIndicator.timeLeft;
-            level.shineImage.color = selectedFrameInfo.solveIndicator.colour;
+            //level.shineImage.color = selectedFrameInfo.solveIndicator.colour;
             level.iconImage.color = selectedFrameInfo.solveIndicator.colour;
             EditorGUILayout.LabelField("Time elapsed in seconds: " + selectedFrameInfo.time);
 
@@ -234,8 +236,8 @@ public class LevelEditorHelper : EditorWindow
             {
                 TrafficLightInfo tli = new TrafficLightInfo();
                 tli.instanceID = t.GetInstanceID();
-                tli.colour = t.GetState();
-                tli.text = t.GetTimerText();
+                tli.colour = t.State;
+                tli.text = t.TimerText;
                 frameInfo.lights.Add(tli);
             }
 
