@@ -47,7 +47,7 @@ public class QuickSettingsEditor : EditorWindow
 //        g.Awake();
 //        trafficLight.hideFlags = HideFlags.DontSave;
         verbose = (GameEngine.VerboseEnum)EditorGUILayout.EnumFlagsField("Verbose", verbose);
-        g.verbose = verbose;
+        g.Verbose = verbose;
         red = EditorGUILayout.IntSlider("Red", red, 1, 10);
         yellow = EditorGUILayout.IntSlider("Yellow", yellow, 1, 10);
         green = EditorGUILayout.IntSlider("Green", green, 1, 10);

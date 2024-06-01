@@ -39,7 +39,7 @@ namespace Level
         public TMP_Text levelTitle;
         public bool ConditionsToSolve => stoppedUsers.Count != 0 && !blockedResolvabilityUntilRestart && !unsolvable;
 
-        public bool GameRunning => timeToSolve > 0 && GameEngine.instance.IsRunning;
+        public bool GameRunning => timeToSolve > 0 && GameEngine.Instance.IsRunning;
 
         private void OnEnable()
         {
@@ -90,7 +90,7 @@ namespace Level
             SetSolvedIndicator(false);
             blockedResolvabilityUntilRestart = true;
             Print("Accident between " + affected1.name + " and " + affected2.name, VerboseEnum.Physics);
-            timer = timeLeftToLoop - timeToResetLevelAfterCollision * (int)instance.Speed; // Set some seconds, to understand the situation
+            timer = timeLeftToLoop - timeToResetLevelAfterCollision * (int)Instance.Speed; // Set some seconds, to understand the situation
             GameObject.Find("Jukebox")?.GetComponent<AudioSource>().Stop(); // TODO: When Music Controll is complete, change this
             if (affected1 is PedestrianController pedestrian)
                 pedestrian.BeRunOver();
@@ -106,7 +106,7 @@ namespace Level
             // TODO: Test
             if (!GameRunning) return;
 
-            float timeIncrement = Time.fixedDeltaTime * (int)GameEngine.instance.Speed;
+            float timeIncrement = Time.fixedDeltaTime * (int)GameEngine.Instance.Speed;
             timer += timeIncrement;
             timeLeftToLoop = timeToLoop;
             // Commented because if timeToLoop <= 0 then shouldn't reach this point because above we have: if (!GameRunning) return;
@@ -149,7 +149,7 @@ namespace Level
             solvedPanel.SetActive(true);
             ActivateParticleSystems();
             SaveLevelAsCompleted();
-            GameEngine.instance.ChangeSpeed(GameSpeed.Paused);
+            GameEngine.Instance.ChangeSpeed(GameSpeed.Paused);
         }
 
         private void SaveLevelAsCompleted()
@@ -218,7 +218,7 @@ namespace Level
         public IEnumerator ActivateClock()
         {
             clock.SetActive(true);
-            yield return new WaitForSeconds(timeToResetLevelAfterCollision * (int) instance.Speed);
+            yield return new WaitForSeconds(timeToResetLevelAfterCollision * (int) Instance.Speed);
             clock.SetActive(false);
         }
 

@@ -223,7 +223,7 @@ public class PlayGeneralTesting : MonoBehaviour
     {
         var speed = 20;
         yield return PrepareScene(false, RoadUserType.Pedestrian);
-        gameEngine.verbose = GameEngine.VerboseEnum.Speed | GameEngine.VerboseEnum.GameTrace;
+        gameEngine.Verbose = GameEngine.VerboseEnum.Speed | GameEngine.VerboseEnum.GameTrace;
 
         yield return CalculateTimesSpeedRoadUser(GameEngine.GameSpeed.Normal, speed);
         yield return CalculateTimesSpeedRoadUser(GameEngine.GameSpeed.Fast, speed);
@@ -240,7 +240,7 @@ public class PlayGeneralTesting : MonoBehaviour
         float[] speedsToTest = { 10, 3, 30, 50, 80 };
         //float normalizedTCompletedLoop = 0.95f;
         yield return PrepareScene(trafficAreasInteraction: false, RoadUserType.Pedestrian);
-        gameEngine.verbose = GameEngine.VerboseEnum.Speed | GameEngine.VerboseEnum.GameTrace;
+        gameEngine.Verbose = GameEngine.VerboseEnum.Speed | GameEngine.VerboseEnum.GameTrace;
         foreach (float s in speedsToTest)
         {
             yield return CalculateTimesSpeedRoadUser(GameEngine.GameSpeed.Normal, s);
@@ -260,7 +260,7 @@ public class PlayGeneralTesting : MonoBehaviour
         float[] speedsToTest = new float[] { 1, 10, 5, 30, 0, 50 };
         yield return PrepareScene(false, RoadUserType.Vehicle);
 
-        gameEngine.verbose = GameEngine.VerboseEnum.GameTrace | GameEngine.VerboseEnum.Speed;
+        gameEngine.Verbose = GameEngine.VerboseEnum.GameTrace | GameEngine.VerboseEnum.Speed;
 
         gameEngine.Speed = GameEngine.GameSpeed.Normal;
         //yield return new WaitForEndOfFrame(); // Wait for all the corresponding Awake and Start
@@ -283,7 +283,7 @@ public class PlayGeneralTesting : MonoBehaviour
         float[] speedsToTest = new float[] { 1, 10, 5, 30, 0, 50 };
         yield return PrepareScene(false, RoadUserType.Pedestrian);
 
-        gameEngine.verbose = GameEngine.VerboseEnum.GameTrace | GameEngine.VerboseEnum.Speed;
+        gameEngine.Verbose = GameEngine.VerboseEnum.GameTrace | GameEngine.VerboseEnum.Speed;
 
         gameEngine.Speed = GameEngine.GameSpeed.Normal;
         //yield return new WaitForEndOfFrame(); // Wait for all the corresponding Awake and Start

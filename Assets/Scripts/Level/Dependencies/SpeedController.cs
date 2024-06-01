@@ -32,7 +32,7 @@ public class SpeedController
     public bool CanAccelerate => speedChanged && !TargetSpeedReached;
     public float Acceleration => acceleration;
     private float TargetSpeed => BaseSpeed * GameSpeedInt;
-    public int GameSpeedInt => (int) instance.Speed;
+    public int GameSpeedInt => (int) Instance.Speed;
     public float BaseSpeed => baseSpeed;
     public bool IsOnStartingLine => bezier.NormalizedT <= 0f;
     public float CurrentSpeed

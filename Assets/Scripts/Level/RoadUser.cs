@@ -42,7 +42,7 @@ namespace Level
 
         #region Accessors
 
-        public int GameSpeedInt => (int)instance.Speed;
+        public int GameSpeedInt => (int)Instance.Speed;
 
         public float TimeToLoop
         {
@@ -108,7 +108,7 @@ namespace Level
         /// <summary>
         /// If Game is not stopped, road user is not looping and should be accelerating
         /// </summary>
-        public bool MustAccelerate => Accelerating && !Looping && instance.IsRunning;
+        public bool MustAccelerate => Accelerating && !Looping && Instance.IsRunning;
 
         private bool IsOnRoad => trafficArea && trafficLight;
 

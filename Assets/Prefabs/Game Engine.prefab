@@ -25,13 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7309767866999777366}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -3.2198758, y: 3.1490152, z: -22.194838}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7309767866999777364
 MonoBehaviour:
@@ -45,18 +45,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 722e5c7fa7e461f47b67e483a3a892b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  x: 0
-  y: 0
-  verbose: 1
+  menuOpen: 0
+  verbose: 0
   trafficLightSprites:
   - {fileID: -700203502, guid: 455e90b71d360f6458e8cdf87bd09307, type: 3}
   - {fileID: -824630475, guid: 455e90b71d360f6458e8cdf87bd09307, type: 3}
   - {fileID: -410688167, guid: 455e90b71d360f6458e8cdf87bd09307, type: 3}
   - {fileID: -1549166957, guid: 455e90b71d360f6458e8cdf87bd09307, type: 3}
-  pauseImage: {fileID: 0}
-  playImage: {fileID: 0}
-  fastImage: {fileID: 0}
-  fastestImage: {fileID: 0}
+  lightIndicator:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  mouse: {fileID: 0}
+  canvas: {fileID: 0}
+  timeControlImagesContainer: {fileID: 0}
+  cheaterPanel: {fileID: 0}
 --- !u!114 &768502328241151384
 MonoBehaviour:
   m_ObjectHideFlags: 0

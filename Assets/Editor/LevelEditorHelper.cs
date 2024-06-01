@@ -140,7 +140,7 @@ public class LevelEditorHelper : EditorWindow
             for (int i = 0; i < trafficLights.Length; i++)
             {
                 TrafficLightInfo selectedTrafficLightInfo = selectedFrameInfo.lights.Find(x => x.instanceID == trafficLights[i].GetInstanceID());
-                trafficLights[i].GetComponent<Image>().sprite = GameEngine.instance.TrafficLightSprites[(int)selectedTrafficLightInfo.colour];
+                trafficLights[i].GetComponent<Image>().sprite = GameEngine.Instance.TrafficLightSprites[(int)selectedTrafficLightInfo.colour];
                 trafficLights[i].GetComponentInChildren<TMPro.TMP_Text>().text = selectedTrafficLightInfo.text;
             }
             level.timeIndicator.text = selectedFrameInfo.solveIndicator.timeLeft;

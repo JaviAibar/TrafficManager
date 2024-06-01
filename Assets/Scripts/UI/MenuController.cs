@@ -41,7 +41,7 @@ public class MenuController : MonoBehaviour
             if (pauseMenu)
             {
                 pauseMenu.SetActive(true);
-                Level.GameEngine.instance.ChangeSpeed(GameSpeed.Paused);
+                Level.GameEngine.Instance.ChangeSpeed(GameSpeed.Paused);
             }
         }
     }
