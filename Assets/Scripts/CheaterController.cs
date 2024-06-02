@@ -1,11 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using Level;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
+using System;
 
 public class CheaterController : MonoBehaviour
 {
@@ -15,11 +13,17 @@ public class CheaterController : MonoBehaviour
     private SoundFxManager soundManager;
     private LevelManager level;
     private MenuController menu;
+    private Dictionary<string, Action> commandDictionary;
+
 
     private void Awake()
     {
         level = FindObjectOfType<LevelManager>();
-        menu = FindObjectOfType<MenuController>() ?? new GameObject().AddComponent<MenuController>();
+        menu = FindObjectOfType<MenuController>();
+        if (menu == null)
+        {
+            menu = new GameObject().AddComponent<MenuController>();
+        }
         soundManager = FindObjectOfType<SoundFxManager>();
     }
 
@@ -27,6 +31,16 @@ public class CheaterController : MonoBehaviour
     {
         inputField.Select();
         inputField.ActivateInputField();
+
+        commandDictionary = new Dictionary<string, Action>
+        {
+            { "solve", () => { SolveLevel(); GoNextLevel(); } },
+            { "next", GoNextLevel },
+            { "unsolve", () => { UnsolveLevel(); ReloadLevel(); } },
+            { "reload", ReloadLevel },
+            { "main_menu", LoadMainMenu },
+            { "mute", MuteSound }
+        };
     }
 
     void Update()
@@ -37,42 +51,56 @@ public class CheaterController : MonoBehaviour
         }
         else if (Input.GetKeyUp(KeyCode.Return))
         {
-            /* if (inputField.text.Trim() == "next")
-             {
-                 level.GoNextLevel();
-             }*/
+            string trimmedInput = inputField.text.Trim();
 
-            switch (inputField.text.Trim())
+            if (commandDictionary.TryGetValue(trimmedInput, out Action action))
             {
-                case "solve":
-                    PlayerPrefs.SetInt(SceneManager.GetActiveScene().name, 1);
-                    goto case "next";
-                case "next":
-                    level.GoNextLevel();
-                    break;
-                case "unsolve":
-                    PlayerPrefs.SetInt(SceneManager.GetActiveScene().name, 0);
-                    goto case "reload";
-                case "reload":
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-                    break;
-                case "main_menu":
-                    menu.LoadMainMenuScene();
-                    break;
-                case "mute":
-                    soundManager.SwitchMuteAllSounds();
-                    Destroy(gameObject);
-                    break;
-                default:
-                    /*ScrollView scroll = console.GetComponentInParent<ScrollView>();
-                    scroll.gameObject.SetActive(true);*/
-                    consoleGameObject.gameObject.SetActive(true);
-                    console.text =
-                        $"next - Loads next level\nreload - Reloads current level\nmain_menu - Loads the main menu\nsolve - Sets levels as solved and loads next one\nmute - mutes or unmutes general volume\nhelp - Shows this message";
-                    inputField.Select();
-                    inputField.ActivateInputField();
-                    break;
+                action.Invoke();
+            }
+            else
+            {
+                ShowHelpMessage();
             }
         }
+    }
+
+    private void SolveLevel()
+    {
+        PlayerPrefs.SetInt(SceneManager.GetActiveScene().name, 1);
+    }
+
+    private void GoNextLevel()
+    {
+        level.GoNextLevel();
+    }
+
+    private void UnsolveLevel()
+    {
+        PlayerPrefs.SetInt(SceneManager.GetActiveScene().name, 0);
+    }
+
+    private void ReloadLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    private void LoadMainMenu()
+    {
+        menu.LoadMainMenuScene();
+    }
+
+    private void MuteSound()
+    {
+        soundManager.SwitchMuteAllSounds();
+        Destroy(gameObject);
+    }
+
+    private void ShowHelpMessage()
+    {
+        consoleGameObject.gameObject.SetActive(true);
+        console.text =
+            $"next - Loads next level\nreload - Reloads current level\nmain_menu - Loads the main menu\nsolve - Sets levels as solved and loads next one\nmute - mutes or unmutes general volume\nhelp - Shows this message";
+        inputField.Select();
+        inputField.ActivateInputField();
     }
 }
