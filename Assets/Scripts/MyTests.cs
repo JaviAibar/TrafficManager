@@ -1,14 +1,12 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MyTests : MonoBehaviour
 {
-    public float a;
-    public float b;
-    public float t;
+    [SerializeField] private float a;
+    [SerializeField] private float b;
+    [SerializeField] private float t;
+
     [ContextMenu("Size")]
     public void Size()
     {

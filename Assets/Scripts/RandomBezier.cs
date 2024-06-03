@@ -6,9 +6,9 @@ using Level;
 
 public class RandomBezier : MonoBehaviour
 {
-    public GameObject bezierContainer;
-    BezierSpline[] splines;
-    public RoadUser roadUser;
+    [SerializeField] private GameObject bezierContainer;
+    private BezierSpline[] splines;
+    [SerializeField] private RoadUser roadUser;
     private void Awake()
     {
         splines = FindObjectsOfType<BezierSpline>();
@@ -21,7 +21,6 @@ public class RandomBezier : MonoBehaviour
             rend.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
             roadUser.normalSpeed = roadUser.normalSpeed + GetRandomSpeedVariability();
             roadUser.bezier.speed = roadUser.normalSpeed;
-          //  roadUser.TimeToLoop = -1;
         }
 
     }
