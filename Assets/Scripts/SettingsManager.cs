@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,20 +12,20 @@ using UnityEngine.UI;
 
 public class SettingsManager : MonoBehaviour
 {
-    public AudioMixer audioMixer;
+    [SerializeField] private AudioMixer audioMixer;
 
-    public Slider masterVolumeSlider;
-    public Slider musicVolumeSlider;
-    public Slider soundFXVolumeSlider;
-    public TMP_Dropdown qualityDropdown;
-    public TMP_Dropdown resolutionsDropdown;
+    [SerializeField] private Slider masterVolumeSlider;
+    [SerializeField] private Slider musicVolumeSlider;
+    [SerializeField] private Slider soundFXVolumeSlider;
+    [SerializeField] private TMP_Dropdown qualityDropdown;
+    [SerializeField] private TMP_Dropdown resolutionsDropdown;
     private AudioSource audioTester;
-    public AudioMixerGroup musicMixer;
-    public AudioMixerGroup masterMixer;
-    public AudioMixerGroup fxMixer;
-    public AudioClip musicTest;
-    public AudioClip fxTest;
-    public TMP_Dropdown languageDropdown;
+    [SerializeField] private AudioMixerGroup musicMixer;
+    [SerializeField] private AudioMixerGroup masterMixer;
+    [SerializeField] private AudioMixerGroup fxMixer;
+    [SerializeField] private AudioClip musicTest;
+    [SerializeField] private AudioClip fxTest;
+    [SerializeField] private TMP_Dropdown languageDropdown;
     // TODO: Divide this class into 2: 1. Control UI, 2. Control Memo
     private void Awake()
     {
@@ -64,22 +65,22 @@ public class SettingsManager : MonoBehaviour
 
     private void RetrieveMasterVolumeFromMemo()
     {
-        float masterVolume =  PlayerPrefs.GetFloat("MasterVolume", -20);
-        print($"valor de master desde memo {masterVolume}");
+        float masterVolume =  PlayerPrefs.GetFloat(Constants.MasterVolume, -20);
+        print($"Master value from memo {masterVolume}");
         masterVolumeSlider.SetValueWithoutNotify(masterVolume);
-        audioMixer.SetFloat("MasterVolume", masterVolume);
+        audioMixer.SetFloat(Constants.MasterVolume, masterVolume);
     }
     private void RetrieveMusicVolumeFromMemo()
     {
-        float musicVolume = PlayerPrefs.GetFloat("MusicVolume", 0);
+        float musicVolume = PlayerPrefs.GetFloat(Constants.MusicVolume, 0);
         musicVolumeSlider.SetValueWithoutNotify(musicVolume);
-        audioMixer.SetFloat("MusicVolume", musicVolume);
+        audioMixer.SetFloat(Constants.MusicVolume, musicVolume);
     }
     private void RetrieveSoundFxVolumeFromMemo()
     {
-        float soundFXVolume = PlayerPrefs.GetFloat("SoundFxVolume", 0);
+        float soundFXVolume = PlayerPrefs.GetFloat(Constants.SoundFxVolume, 0);
         soundFXVolumeSlider.SetValueWithoutNotify(soundFXVolume);
-        audioMixer.SetFloat("SoundFxVolume", soundFXVolume);
+        audioMixer.SetFloat(Constants.SoundFxVolume, soundFXVolume);
     }
 
     public IEnumerator WaitForLanguageDropdown()
@@ -120,18 +121,18 @@ public class SettingsManager : MonoBehaviour
     }
     public void SetToDefault()
     {
-        PlayerPrefs.DeleteKey("MasterVolume");
-        PlayerPrefs.DeleteKey("MusicVolume");
-        PlayerPrefs.DeleteKey("SoundFxVolume");
+        PlayerPrefs.DeleteKey(Constants.MasterVolume);
+        PlayerPrefs.DeleteKey(Constants.MusicVolume);
+        PlayerPrefs.DeleteKey(Constants.SoundFxVolume);
 
         InitSoundSettings();
     }
     private void MasterVolumeChanged(float vol)
     {
-        print($"Vol general cambiado a {vol}");
+        print($"General vol changed to a {vol}");
         audioTester.clip = fxTest;
         audioTester.outputAudioMixerGroup = masterMixer;
-        audioMixer.SetFloat("MasterVolume", vol);
+        audioMixer.SetFloat(Constants.MasterVolume, vol);
         TryPlaying();
     }
 
@@ -139,20 +140,20 @@ public class SettingsManager : MonoBehaviour
     {
         audioTester.clip = musicTest;
         audioTester.outputAudioMixerGroup = musicMixer;
-        audioMixer.SetFloat("MusicVolume", vol);
+        audioMixer.SetFloat(Constants.MusicVolume, vol);
         TryPlaying();
     }
     private void FxVolumeChanged(float vol)
     {
         audioTester.clip = fxTest;
         audioTester.outputAudioMixerGroup = fxMixer;
-        audioMixer.SetFloat("SoundFXVolume", vol);
+        audioMixer.SetFloat(Constants.SoundFxVolume, vol);
         TryPlaying();
     }
     static void LocaleSelected(int index)
     {
         LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
-        PlayerPrefs.SetInt("Language", index);
+        PlayerPrefs.SetInt(Constants.Language, index);
     }
 
     private void TryPlaying()
@@ -184,20 +185,20 @@ public class SettingsManager : MonoBehaviour
     public void AcceptChanges()
     {
         float volumeValue;
-        audioMixer.GetFloat("MasterVolume", out volumeValue);
-        PlayerPrefs.SetFloat("MasterVolume", volumeValue);
+        audioMixer.GetFloat(Constants.MasterVolume, out volumeValue);
+        PlayerPrefs.SetFloat(Constants.MasterVolume, volumeValue);
 
-        audioMixer.GetFloat("MusicVolume", out volumeValue);
-        PlayerPrefs.SetFloat("MusicVolume", volumeValue);
+        audioMixer.GetFloat(Constants.MusicVolume, out volumeValue);
+        PlayerPrefs.SetFloat(Constants.MusicVolume, volumeValue);
 
-        audioMixer.GetFloat("SoundFxVolume", out volumeValue);
-        PlayerPrefs.SetFloat("SoundFxVolume", volumeValue);
+        audioMixer.GetFloat(Constants.SoundFxVolume, out volumeValue);
+        PlayerPrefs.SetFloat(Constants.SoundFxVolume, volumeValue);
         CloseMenu();
     }
 
     public void CloseMenu()
     {
-        SceneManager.UnloadSceneAsync("Settings Menu");
+        SceneManager.UnloadSceneAsync(Constants.SettingsMenu);
     }
 
 
