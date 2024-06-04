@@ -184,8 +184,7 @@ public class SettingsManager : MonoBehaviour
 
     public void AcceptChanges()
     {
-        float volumeValue;
-        audioMixer.GetFloat(Constants.MasterVolume, out volumeValue);
+        audioMixer.GetFloat(Constants.MasterVolume, out float volumeValue);
         PlayerPrefs.SetFloat(Constants.MasterVolume, volumeValue);
 
         audioMixer.GetFloat(Constants.MusicVolume, out volumeValue);

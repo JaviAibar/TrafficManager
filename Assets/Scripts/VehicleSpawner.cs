@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class VehicleSpawner : MonoBehaviour
 {
-    public GameObject[] vehicles;
+
+    [SerializeField] private GameObject[] vehicles;
     [Range(0,1)]
-    public float probability = 0.025f;
-    public float size = 0.24f;
+    [SerializeField] private float probability = 0.025f;
+    [SerializeField] private float size = 0.24f;
     private readonly Vector3 PositionOutOfSight = new Vector3(1000, 1000, 0);
 
     private void Update()
