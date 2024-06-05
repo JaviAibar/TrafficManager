@@ -11,35 +11,41 @@ namespace Level
 {
     public class LevelManager : MonoBehaviour
     {
+        // DEBUG: In process of refactor
         public float timeToLoop;        // The time in which the level is looped (in principle, contant)
-        private float timeLeftToLoop;
         public float timeToSolve = 6;   // The amount of time that must be taken to consider the level solved (in principle, contant)
-        private float timeLeftToSolve;   // The amount of time still needed to consider the level solved
-        public float timeToResetLevelAfterCollision = 2f;
+        [SerializeField] private float timeToResetLevelAfterCollision = 2f;
+        [SerializeField] private float timer;
 
-        public float timer;
-        public GameObject solvedPanel;
-        private SoundFxManager soundFx;
-
-        public Image iconImage;
+        [SerializeField] private GameObject solvedPanel;
+        // DEBUG: In process of refactor
         public TMP_Text timeIndicator;
         // Color ambar = new Color(1, 0.7461f, 0);
-        private List<RoadUser> stoppedUsers;
-        public Sprite minimumSpeedSprite;
-        public Sprite forbiddenSprite;
+        [SerializeField] private Sprite minimumSpeedSprite;
+        [SerializeField] private Sprite forbiddenSprite;
+        [SerializeField] private List<ParticleSystem> particleSystems;
 
+        // DEBUG: In process of refactor
+        public Image iconImage;
+        [SerializeField] private GameObject clock;
+        [SerializeField] private TMP_Text levelTitle;
+        
         [SerializeField] private string nextLevel;
-        public string NextLevel => nextLevel;
+        [SerializeField] private bool unsolvable;
 
-
-        public List<ParticleSystem> particleSystems;
+        private float timeLeftToLoop;
+        private float timeLeftToSolve;   // The amount of time still needed to consider the level solved
+        private SoundFxManager soundFx;
+        private List<RoadUser> stoppedUsers;
         private bool blockedResolvabilityUntilRestart = false;
-        public GameObject clock;
-        public bool unsolvable;
-        public TMP_Text levelTitle;
-        public bool ConditionsToSolve => stoppedUsers.Count != 0 && !blockedResolvabilityUntilRestart && !unsolvable;
 
+        public string NextLevel => nextLevel;
+        public bool ConditionsToSolve => stoppedUsers.Count != 0 && !blockedResolvabilityUntilRestart && !unsolvable;
         public bool GameRunning => timeToSolve > 0 && GameEngine.Instance.IsRunning;
+        public float TimeToLoop => timeToLoop;        // The time in which the level is looped (in principle, contant)
+        public float TimeToSolve => timeToSolve;   // The amount of time that must be taken to consider the level solved (in principle, contant)
+        public float TimeToResetLevelAfterCollision => timeToResetLevelAfterCollision;
+        public float Timer => timer;
 
         private void OnEnable()
         {
@@ -109,8 +115,6 @@ namespace Level
             float timeIncrement = Time.fixedDeltaTime * (int)GameEngine.Instance.Speed;
             timer += timeIncrement;
             timeLeftToLoop = timeToLoop;
-            // Commented because if timeToLoop <= 0 then shouldn't reach this point because above we have: if (!GameRunning) return;
-            //if (timeToLoop <= 0)
 
             // This was a try to autoset timeloop to the maximum trafficLight cycle, but wasn't really a good idea
             // I keep it because could be reviewed to look for a solution, maybe configuring how many cycles should a level be
@@ -162,11 +166,10 @@ namespace Level
         public void LevelInit()
         {
             blockedResolvabilityUntilRestart = false;
-            //  ResetTimeLeftToSolve();
+
             ResetTimeLeftToSolve();
             SetSolvedIndicator(true);
 
-            // SetSolvedIndicator(true);
             EventManager.RaiseOnLoopStarted();
         }
 

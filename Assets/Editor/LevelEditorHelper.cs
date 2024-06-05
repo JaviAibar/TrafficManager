@@ -114,7 +114,7 @@ public class LevelEditorHelper : EditorWindow
 
         roadUsers = FindObjectsOfType<RoadUser>();
         trafficLights = FindObjectsOfType<TrafficLightController>();
-        EditorGUILayout.LabelField("Level time " + level.timeToLoop);
+        EditorGUILayout.LabelField("Level time " + level.TimeToLoop);
         stopAtLoop = EditorGUILayout.Toggle("Stop at the loop start", stopAtLoop); 
 
 
@@ -246,7 +246,7 @@ public class LevelEditorHelper : EditorWindow
 
             frames.Add(frameInfo);
 
-            if (stopAtLoop && Time.time >= level.timeToLoop) EditorApplication.ExitPlaymode();
+            if (stopAtLoop && Time.time >= level.TimeToLoop) EditorApplication.ExitPlaymode();
         }
     }
     /*private void WriteFile()
