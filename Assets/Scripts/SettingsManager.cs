@@ -117,7 +117,7 @@ public class SettingsManager : MonoBehaviour
         List<Resolution> resolutions = Screen.resolutions.ToList();//.Where(e => e.refreshRate == 60).ToList();
         //print(resolutions.Count);
         //resolutions.Select(e => $"{e.width} x {e.height} # {e.refreshRate}").ToList().ForEach(e => print(e));
-        resolutionsDropdown.AddOptions(resolutions.Select(e => $"{e.width} x {e.height} @ {e.refreshRate}Hz").ToList());
+        resolutionsDropdown.AddOptions(resolutions.Select(e => $"{e.width} x {e.height} @ {e.refreshRateRatio.value}Hz").ToList());
     }
     public void SetToDefault()
     {

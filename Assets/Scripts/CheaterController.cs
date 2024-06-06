@@ -97,7 +97,7 @@ public class CheaterController : MonoBehaviour
 
     private void ShowHelpMessage()
     {
-        consoleGameObject.gameObject.SetActive(true);
+        consoleGameObject.SetActive(true);
         console.text =
             $"next - Loads next level\nreload - Reloads current level\nmain_menu - Loads the main menu\nsolve - Sets levels as solved and loads next one\nmute - mutes or unmutes general volume\nhelp - Shows this message";
         inputField.Select();
