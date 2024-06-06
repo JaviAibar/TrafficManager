@@ -2,25 +2,27 @@ using System;
 using System.Collections;
 using System.Linq;
 using BezierSolution;
+using UnityEditor;
 using UnityEngine;
 using static Level.GameEngine;
 
 namespace Level
 {
     [RequireComponent(typeof(Rigidbody2D))]
-//[RequireComponent(typeof(BezierWalkerWithSpeed))]
+    //[RequireComponent(typeof(BezierWalkerWithSpeed))]
     [System.Serializable]
     public abstract class RoadUser : MonoBehaviour
     {
         #region Variables
 
-        [Min(0)] public float timeOffset = 0;
-        [Min(0)] [SerializeField] private float timeToLoop = 10;
-        public float timer = 0;
+        [Min(0)][SerializeField] private float timeOffset = 0;
+        [Min(0)][SerializeField] private float timeToLoop = 10;
+        [SerializeField] protected float timer = 0;
         [HideInInspector] public BezierWalkerWithSpeed bezier;
+        [SerializeField] protected SpeedController speedController;
         [SerializeField] private BezierSpline spline;
+        [SerializeField] private bool respectsTheRules = true;
         protected Rigidbody2D rb;
-        public bool respectsTheRules = true;
         protected TrafficLightController trafficLight;
         protected TrafficArea trafficArea;
         protected bool hasStartedMoving;
@@ -31,12 +33,11 @@ namespace Level
         private float otherMass;
         private bool looping;
         private int ROAD_LAYER;
-        [SerializeField] protected SpeedController speedController;
 
-        public float normalSpeed = 10;
+        [SerializeField] private float normalSpeed = 10;
 
         // Used eg. when the vehicles are crossing in yellow or when a pedestrian is stuck in green at a crossroad
-        public float runningSpeed = 15;
+        [SerializeField] private float runningSpeed = 15;
 
         #endregion
 
@@ -111,6 +112,19 @@ namespace Level
         public bool MustAccelerate => Accelerating && !Looping && Instance.IsRunning;
 
         private bool IsOnRoad => trafficArea && trafficLight;
+        public bool RespectsTheRules => respectsTheRules;
+
+        public float NormalSpeed
+        {
+            get => normalSpeed;
+            set => normalSpeed = value;
+        }
+
+        // Used eg. when the vehicles are crossing in yellow or when a pedestrian is stuck in green at a crossroad
+        public float RunningSpeed {
+            get => runningSpeed;
+            set => runningSpeed = value;
+    }
 
         #endregion
 

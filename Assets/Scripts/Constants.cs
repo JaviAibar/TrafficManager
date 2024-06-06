@@ -16,5 +16,7 @@ namespace Assets.Scripts
 
         public static readonly string Language = "Language";
 
+        public static readonly string IsWalking = "isWalking";
+
     }
 }

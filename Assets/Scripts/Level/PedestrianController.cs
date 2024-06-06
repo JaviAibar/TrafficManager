@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using System;
 using UnityEngine;
 using static Level.GameEngine;
@@ -8,14 +9,14 @@ namespace Level
     public class PedestrianController : RoadUser
     {
         private Animator anim;
-        private SpriteRenderer renderer;
-        public Sprite ranOverSprite;
+        private SpriteRenderer spriteRenderer;
+        [SerializeField] private Sprite ranOverSprite;
 
         protected override void Awake()
         {
             anim = GetComponent<Animator>();
             base.Awake(); // This is not at first line in Awake because on restart, it caused visual glitch
-            renderer = GetComponent<SpriteRenderer>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
         }
         public override void LoopStarted()
         {
@@ -46,23 +47,23 @@ namespace Level
         private void NormalMove()
         {
             //bool worthCallMoving = SwitchStopped(normalSpeed);
-            ChangeSpeed(normalSpeed);
+            ChangeSpeed(NormalSpeed);
             /*if (worthCallMoving)*/
             Moving(true);
 
             anim.speed = 1f;
-            anim.SetBool("isWalking", true);
+            anim.SetBool(Constants.IsWalking, true);
         }
 
         private void Run()
         {
             //bool worthCallMoving = SwitchStopped(runningSpeed);
-            ChangeSpeed(runningSpeed);
+            ChangeSpeed(RunningSpeed);
             /*if (worthCallMoving)*/
             Moving(true);
 
             anim.speed = 1.7f;
-            anim.SetBool("isWalking", true);
+            anim.SetBool(Constants.IsWalking, true);
         }
 
         private void Stop()
@@ -71,7 +72,7 @@ namespace Level
             ChangeSpeedImmediately(0);
             /*if (worthCallMoving)*/
             Moving(false);
-            anim.SetBool("isWalking", false);
+            anim.SetBool(Constants.IsWalking, false);
         }
         #endregion
 
@@ -81,7 +82,7 @@ namespace Level
             trafficArea.StopArea && trafficArea.SameDirection(transform.up) && (trafficLight.IsGreen || trafficLight.IsYellow);
 
         public bool MustRun() => trafficLight.IsGreen && trafficArea.IsCenter;
-        public bool MovingConditions() => trafficArea && respectsTheRules && hasStartedMoving;
+        public bool MovingConditions() => trafficArea && RespectsTheRules && hasStartedMoving;
         #endregion
 
         public override void GameSpeedChanged(GameSpeed state)
@@ -93,7 +94,7 @@ namespace Level
         internal void BeRunOver()
         {
             anim.enabled = false;
-            renderer.sprite = ranOverSprite;
+            spriteRenderer.sprite = ranOverSprite;
         }
 
         private void PrintInfoCheckMovingConditions()
@@ -105,7 +106,7 @@ namespace Level
                   + $"Otherwise? {!MustStop() && !MustRun()}"
                 : "");
             Print($"[{name}] [CheckMovingConditions] MovingConditions? {MovingConditions()}: "
-                  + $"(hasStartedMoving?: {hasStartedMoving} respectsRules?: {respectsTheRules}  {(trafficArea ? $"has ({trafficArea.name})" : "doesn't have ")}a traffic area)\n"
+                  + $"(hasStartedMoving?: {hasStartedMoving} respectsRules?: {RespectsTheRules}  {(trafficArea ? $"has ({trafficArea.name})" : "doesn't have ")}a traffic area)\n"
                   + moreInfo, VerboseEnum.Speed);
         }
     }

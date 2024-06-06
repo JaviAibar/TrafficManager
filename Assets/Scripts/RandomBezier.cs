@@ -19,8 +19,8 @@ public class RandomBezier : MonoBehaviour
             SpriteRenderer rend = roadUser.GetComponent<SpriteRenderer>();
             rend.sortingOrder = GetSortingOrderFromSpline();
             rend.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
-            roadUser.normalSpeed = roadUser.normalSpeed + GetRandomSpeedVariability();
-            roadUser.bezier.speed = roadUser.normalSpeed;
+            roadUser.NormalSpeed = roadUser.NormalSpeed + GetRandomSpeedVariability();
+            roadUser.bezier.speed = roadUser.NormalSpeed;
         }
 
     }

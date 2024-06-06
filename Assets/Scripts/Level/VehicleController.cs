@@ -69,7 +69,7 @@ namespace Level
             if (MovingAgainAfterVehicleAheadConditions)
             {
                 Print("Moving again after stopped due to vehicle ahead", VerboseEnum.Speed);
-                speedController.ChangeSpeed(normalSpeed);
+                speedController.ChangeSpeed(NormalSpeed);
                 Moving(true);
                 hadVehicleAhead = false;
                 return;
@@ -124,7 +124,7 @@ namespace Level
         public bool MustReduce() => trafficLight.IsRed && !trafficArea.StopArea && trafficArea.SameDirection(RoadUserDir);
 
         public bool MovingConditions() =>
-            trafficArea && respectsTheRules && !inAnEmergency && hasStartedMoving && !vehicleAhead;
+            trafficArea && RespectsTheRules && !inAnEmergency && hasStartedMoving && !vehicleAhead;
         public bool MovingAgainAfterVehicleAheadConditions => hasStartedMoving && hadVehicleAhead;
 
         #endregion
@@ -138,7 +138,7 @@ namespace Level
         public void Run()
         {
             if (CurrentSpeed == 0) AudioFadeIn();
-            speedController.ChangeSpeed(runningSpeed);
+            speedController.ChangeSpeed(RunningSpeed);
             Moving(true);
         }
 
@@ -151,7 +151,7 @@ namespace Level
         public void NormalMove()
         {
             if (CurrentSpeed == 0) AudioFadeIn();
-            speedController.ChangeSpeed(normalSpeed);
+            speedController.ChangeSpeed(NormalSpeed);
             Moving(true);
         }
 
@@ -227,7 +227,7 @@ namespace Level
                   + $"Otherwise? {!MustStop() && !MustRun() && !MustReduce()}"
                 : "");
             Print($"[{name}] [CheckMovingConditions] MovingConditions? {MovingConditions()}: "
-                  + $"(hasStartedMoving?: {hasStartedMoving} respectsRules?: {respectsTheRules} inAnEmergency?: {inAnEmergency} {(trafficArea ? $"has ({trafficArea.name})" : "doesn't have ")}a traffic area)\n"
+                  + $"(hasStartedMoving?: {hasStartedMoving} respectsRules?: {RespectsTheRules} inAnEmergency?: {inAnEmergency} {(trafficArea ? $"has ({trafficArea.name})" : "doesn't have ")}a traffic area)\n"
                   + moreInfo, VerboseEnum.Speed);
         }
 
