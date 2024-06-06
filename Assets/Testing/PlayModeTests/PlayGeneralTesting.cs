@@ -403,8 +403,8 @@ public class PlayGeneralTesting : MonoBehaviour
     public void SetUpLevelManager()
     {
         levelManager = gameKernel.GetComponentInChildren<LevelManager>();
-        levelManager.timeToSolve = tooLongTime; // Make level not solvable
-        levelManager.timeToLoop = tooLongTime; // Make level not loopable
+        levelManager.TimeToSolve = tooLongTime; // Make level not solvable
+        levelManager.TimeToLoop = tooLongTime; // Make level not loopable
     }
 
     public void CheckExpectedScenes(int indexHistory, int scenesSaved, string sceneName)

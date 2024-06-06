@@ -123,9 +123,9 @@ public class PlayGeneralTestingWithScene : MonoBehaviour
         //      gameObject2.AddComponent<Rigidbody2D>();
         // var pedestrian = GameObject.Find("PedestrianRoot").GetComponent<PedestrianController>();
 
-        Assert.IsTrue(pedestrian.respectsTheRules);
+        Assert.IsTrue(pedestrian.RespectsTheRules);
 
-        Assert.AreEqual(pedestrian.normalSpeed, pedestrianBezier.speed);
+        Assert.AreEqual(pedestrian.NormalSpeed, pedestrianBezier.speed);
         yield return new WaitForSeconds(1);
         Assert.AreEqual(expected: 0f, pedestrianBezier.speed);
 

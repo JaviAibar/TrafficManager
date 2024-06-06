@@ -11,22 +11,19 @@ namespace Level
 {
     public class LevelManager : MonoBehaviour
     {
-        // DEBUG: In process of refactor
-        public float timeToLoop;        // The time in which the level is looped (in principle, contant)
-        public float timeToSolve = 6;   // The amount of time that must be taken to consider the level solved (in principle, contant)
+        [SerializeField] private float timeToLoop;        // The time in which the level is looped (in principle, contant)
+        [SerializeField] private float timeToSolve = 6;   // The amount of time that must be taken to consider the level solved (in principle, contant)
         [SerializeField] private float timeToResetLevelAfterCollision = 2f;
         [SerializeField] private float timer;
 
         [SerializeField] private GameObject solvedPanel;
-        // DEBUG: In process of refactor
-        public TMP_Text timeIndicator;
+        [SerializeField] private TMP_Text timeIndicator;
         // Color ambar = new Color(1, 0.7461f, 0);
         [SerializeField] private Sprite minimumSpeedSprite;
         [SerializeField] private Sprite forbiddenSprite;
         [SerializeField] private List<ParticleSystem> particleSystems;
 
-        // DEBUG: In process of refactor
-        public Image iconImage;
+        [SerializeField] private Image iconImage;
         [SerializeField] private GameObject clock;
         [SerializeField] private TMP_Text levelTitle;
         
@@ -42,10 +39,31 @@ namespace Level
         public string NextLevel => nextLevel;
         public bool ConditionsToSolve => stoppedUsers.Count != 0 && !blockedResolvabilityUntilRestart && !unsolvable;
         public bool GameRunning => timeToSolve > 0 && GameEngine.Instance.IsRunning;
-        public float TimeToLoop => timeToLoop;        // The time in which the level is looped (in principle, contant)
-        public float TimeToSolve => timeToSolve;   // The amount of time that must be taken to consider the level solved (in principle, contant)
+        // The time in which the level is looped (in principle, contant)
+        public float TimeToLoop
+        {
+            get => timeToLoop;
+            set => timeToLoop = value;
+        }
+        // The amount of time that must be taken to consider the level solved (in principle, contant)
+        public float TimeToSolve
+        {
+            get => timeToSolve;
+            set => timeToSolve = value;
+        }
         public float TimeToResetLevelAfterCollision => timeToResetLevelAfterCollision;
         public float Timer => timer;
+
+        public TMP_Text TimeIndicator
+        {
+            get => timeIndicator;
+            set => timeIndicator = value;
+        }
+
+        public Image IconImage {
+            get => iconImage; 
+            set => iconImage = value;
+        }
 
         private void OnEnable()
         {

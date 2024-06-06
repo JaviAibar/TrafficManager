@@ -143,8 +143,8 @@ public class LevelEditorHelper : EditorWindow
                 trafficLights[i].GetComponent<Image>().sprite = GameEngine.Instance.TrafficLightSprites[(int)selectedTrafficLightInfo.colour];
                 trafficLights[i].GetComponentInChildren<TMPro.TMP_Text>().text = selectedTrafficLightInfo.text;
             }
-            level.timeIndicator.text = selectedFrameInfo.solveIndicator.timeLeft;
-            level.iconImage.sprite = selectedFrameInfo.solveIndicator.solvedSprite;
+            level.TimeIndicator.text = selectedFrameInfo.solveIndicator.timeLeft;
+            level.IconImage.sprite = selectedFrameInfo.solveIndicator.solvedSprite;
             EditorGUILayout.LabelField("Time elapsed in seconds: " + selectedFrameInfo.time);
 
         }
@@ -241,8 +241,8 @@ public class LevelEditorHelper : EditorWindow
 
             timeElapsed += Time.deltaTime;
             frameInfo.time = timeElapsed;
-            frameInfo.solveIndicator.solvedSprite = level.iconImage.sprite;
-            frameInfo.solveIndicator.timeLeft = level.timeIndicator.text;
+            frameInfo.solveIndicator.solvedSprite = level.IconImage.sprite;
+            frameInfo.solveIndicator.timeLeft = level.TimeIndicator.text;
 
             frames.Add(frameInfo);
 

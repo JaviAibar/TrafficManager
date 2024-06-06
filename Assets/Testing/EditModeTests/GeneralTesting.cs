@@ -252,8 +252,8 @@ public class GeneralTesting : MonoBehaviour
         vehicle.enabled = true; // Set enable because it disables automatically due to the aforementioned Exception
         vehicle.TimeToLoop = tooLongTime;
         levelManager = gameKernel.GetComponentInChildren<LevelManager>();
-        levelManager.timeToSolve = tooLongTime; // Make level not solvable
-        levelManager.timeToLoop = tooLongTime;  // Make level not loopable
+        levelManager.TimeToSolve = tooLongTime; // Make level not solvable
+        levelManager.TimeToLoop = tooLongTime;  // Make level not loopable
 
     }
 
