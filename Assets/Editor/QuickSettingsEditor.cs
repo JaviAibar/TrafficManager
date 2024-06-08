@@ -66,7 +66,7 @@ public class QuickSettingsEditor : EditorWindow
             trafficLight.TimeRed = red;
             trafficLight.TimeYellow = yellow;
             trafficLight.TimeGreen = green;
-            trafficLight.timeOffset = trafficLightOffset;
+            trafficLight.TimeOffset = trafficLightOffset;
         }
         
         

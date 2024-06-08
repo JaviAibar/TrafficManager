@@ -7,23 +7,31 @@ namespace Level
     [System.Serializable]
     public class TrafficLightController : MonoBehaviour
     {
-        [HideInInspector] public GameEngine gameEngine;
+        [HideInInspector] public Image image; // Kept public for the sake of Testing
 
-        public TrafficLightUIController trafficLightUIPanel;
+        [SerializeField] private TrafficLightUIController trafficLightUIPanel;
+        [SerializeField] private float timeOffset = 0;
+        [SerializeField] private float timer;
+
+        private TMPro.TMP_Text timerText;
+        private GameEngine gameEngine;
         /// <summary>
         ///[0] red, [1] yellow, [2] green
         /// </summary>
+        private TrafficLightColour state;
+
         public int[] timeAmounts = new int[3];
         public int TimeRed { get => timeAmounts[0]; set => timeAmounts[0] = value;}
         public int TimeYellow { get => timeAmounts[1]; set => timeAmounts[1] = value;}
         public int TimeGreen { get => timeAmounts[2]; set => timeAmounts[2] = value; }
-        private TMPro.TMP_Text timerText;
-        [HideInInspector] public Image image; // Kept public for the sake of Testing
-        [SerializeField] private float timer;
         public bool IsTimerWhole => (timer - (int)timer) <= 0.1f;
         public float TimeInPlay => timer;
         public string TimerText { get => timerText.text; set => timerText.text = value; }
-        private TrafficLightColour state;
+        public TrafficLightUIController TrafficLightUIPanel
+        {
+            get => trafficLightUIPanel;
+            set => trafficLightUIPanel = value;
+        }
         public TrafficLightColour State
         {
             get => state;
@@ -37,10 +45,12 @@ namespace Level
         public bool IsRed => State == TrafficLightColour.Red;
         public bool IsYellow => State == TrafficLightColour.Yellow;
         public bool IsGreen => State == TrafficLightColour.Green;
-
         public int TotalAmountTime => timeAmounts.Sum();
-
-        public float timeOffset = 0;
+        public float TimeOffset
+        {
+            get => timeOffset;
+            set => timeOffset = value;
+        }
         [System.Serializable]
         public  enum TrafficLightColour : ushort
         {

@@ -116,7 +116,7 @@ public class PlayGeneralTestingWithScene : MonoBehaviour
 
         // var trafficLight = GameObject.Find("TrafficLight").GetComponent<TrafficLightController>();
 
-        trafficLight.timeOffset = 1;
+        trafficLight.TimeOffset = 1;
         trafficLight.SetValues(0, 8, 1);
         // These are only so to fulfill the Pedestrian requisites but not used in the test
         //      gameObject2.AddComponent<BoxCollider2D>();

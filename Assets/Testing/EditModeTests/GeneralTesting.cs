@@ -51,7 +51,7 @@ public class GeneralTesting : MonoBehaviour
         TrafficLightUIController trafficLightUI = trafficLightPanelGO.GetComponent<TrafficLightUIController>();
         var trafficLight = gameObject.AddComponent<TrafficLightController>();
         //trafficLight.trafficLightPanel = trafficLightPanelGO;
-        trafficLight.trafficLightUIPanel = trafficLightUI;
+        trafficLight.TrafficLightUIPanel = trafficLightUI;
         trafficLight.SetValues(2, 8, 3);
         trafficLightUI.SetValues(2, 8, 3);
         //trafficLightUI.SetSender(trafficLight);
@@ -71,7 +71,7 @@ public class GeneralTesting : MonoBehaviour
         TrafficLightUIController trafficLightUI = trafficLightPanelGO.GetComponent<TrafficLightUIController>();
         var trafficLight = gameObject.AddComponent<TrafficLightController>();
         //trafficLight.trafficLightPanel = trafficLightPanelGO;
-        trafficLight.trafficLightUIPanel = trafficLightUI;
+        trafficLight.TrafficLightUIPanel = trafficLightUI;
         trafficLight.SetValues(2, 8, 3);
         trafficLightUI.SetValues(2, 8, 3);
         trafficLightUI.Sender = trafficLight;
@@ -127,7 +127,7 @@ public class GeneralTesting : MonoBehaviour
         TrafficLightUIController trafficLightUI = trafficLightPanelGO.GetComponent<TrafficLightUIController>();
         var trafficLight = gameObject.AddComponent<TrafficLightController>();
         //trafficLight.trafficLightPanel = trafficLightPanelGO;
-        trafficLight.trafficLightUIPanel = trafficLightUI;
+        trafficLight.TrafficLightUIPanel = trafficLightUI;
         trafficLight.SetValues(2, 8, 3);
         trafficLightUI.SetValues(5, 1, 9);
         trafficLightUI.Sender = trafficLight;
