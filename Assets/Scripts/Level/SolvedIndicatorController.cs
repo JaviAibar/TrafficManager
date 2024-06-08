@@ -5,9 +5,10 @@ namespace Level
 {
     public class SolvedIndicatorController : MonoBehaviour
     {
-        public Image iconImage;
-        public Image shineImage;
-        public TMPro.TMP_Text timeIndicator;
+
+        [SerializeField] private Image iconImage;
+        [SerializeField] private Image shineImage;
+        [SerializeField] private TMPro.TMP_Text timeIndicator;
 
     }
 }
