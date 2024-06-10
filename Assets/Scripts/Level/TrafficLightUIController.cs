@@ -6,13 +6,14 @@ namespace Level
 {
     public class TrafficLightUIController : MonoBehaviour
     {
-        public TMP_InputField redInputField;
-        public TMP_InputField greenInputField;
-        public TMP_InputField yellowInputField;
 
-        public Slider redSlider;
-        public Slider greenSlider;
-        public Slider yellowSlider;
+        [SerializeField] private TMP_InputField redInputField;
+        [SerializeField] private TMP_InputField greenInputField;
+        [SerializeField] private TMP_InputField yellowInputField;
+
+        [SerializeField] private Slider redSlider;
+        [SerializeField] private Slider greenSlider;
+        [SerializeField] private Slider yellowSlider;
 
         public int Red { get => (int)redSlider.value; set { redSlider.value = value; redInputField.text = value.ToString(); } }
         public int Yellow { get => (int)yellowSlider.value; set { yellowSlider.value = value; yellowInputField.text = value.ToString(); } }

@@ -7,7 +7,10 @@ namespace Level
         /**
      * This piece of code is exclusively to have the reference of the traffic light in its corresponding traffic area
      */
-        public TrafficLightController trafficLight;
+        [SerializeField] private TrafficLightController trafficLight;
+
+        public TrafficLightController TrafficLight => trafficLight;
+
         private void Start()
         {
             if (!trafficLight)

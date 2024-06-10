@@ -17,7 +17,7 @@ namespace Level
         public bool StopArea => stopArea;
         public bool IsCenter => direction == GameEngine.Direction.Center;
 
-        void Start() => trafficLight = GetComponentInParent<TrafficLightReference>().trafficLight;
+        void Start() => trafficLight = GetComponentInParent<TrafficLightReference>().TrafficLight;
 
         public bool SameDirection(Vector3 dir) => GameEngine.Vector3ToDirection(dir) == direction;
     }
