@@ -94,7 +94,7 @@ namespace Level
 
         public void SetValues(int redParam, int yellowParam, int greenParam)
         {
-            if (timeAmounts == null) timeAmounts = new int[] { 1, 1, 1 };
+            timeAmounts ??= new int[] { 1, 1, 1 };
             TimeRed = redParam;
             TimeYellow = yellowParam;
             TimeGreen = greenParam;

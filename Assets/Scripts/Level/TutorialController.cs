@@ -10,26 +10,20 @@ namespace Level
 {
     public class TutorialController : MonoBehaviour
     {
-        public List<Moment> moments;
-        private IEnumerator<Moment> momentEnumerator;
-        //public Moment currentMoment;
-        public Transform mask;
-        public Vector3 originalMaskScale = new Vector3(17.5f, 16.5f, 0);
-        public float additionalScalePercentage = 0.15f;
-        public GameObject curtain;
-        //private Vector3 initialPosition;
-        public bool moving;
-        public float speed = 5;
-        public float timer = 0;
-        //public int messageIndex = 0;
-        public GameObject tutorialWindow;
-        public TMP_Text tutorialText;
-        //private bool[] messages;
-        private GameEngine gameEngine;
-        public float timeThreshold = 0.5f;
-        public float curtainThreshold = 2f;
-        public float debugFixedDelta;
+        [SerializeField] private List<Moment> moments;
+        [SerializeField] private Transform mask;
+        [SerializeField] private Vector3 originalMaskScale = new(17.5f, 16.5f, 0);
+        [SerializeField] private float additionalScalePercentage = 0.15f;
+        [SerializeField] private GameObject curtain;
+        [SerializeField] private float speed = 5;
+        [SerializeField] private float timer = 0;
+        [SerializeField] private GameObject tutorialWindow;
+        [SerializeField] private TMP_Text tutorialText;
+        [SerializeField] private float timeThreshold = 0.5f;
+        [SerializeField] private float curtainThreshold = 2f;
 
+        private IEnumerator<Moment> momentEnumerator;
+        private GameEngine gameEngine;
 
         private void Awake() => gameEngine = FindObjectOfType<GameEngine>();
 
@@ -47,11 +41,10 @@ namespace Level
         private void Update()
         {
             int speed = (int)gameEngine.Speed;
-            debugFixedDelta = Time.fixedDeltaTime;
             timer += Time.fixedDeltaTime * speed;
             Moment moment = momentEnumerator.Current;
             float nextTimestamp = momentEnumerator.Current.time;
-            //print(moment);
+
             if (moment.asap || IsTheMoment(nextTimestamp))
             {
                 switch (moment.eventType)
@@ -101,27 +94,12 @@ namespace Level
         public IEnumerator MoveCurtain(Transform target)
         {
             curtain.SetActive(true);
-            //  initialPosition = mask.position;
-            //moving = true;
 
-            /*if (moving)
-            MoveCurtain(moment.target);*/
-            // Transform target = moments.Current.target;
             Vector3 gameObjectSize = GameObjectSize(target);
             float maxValue = Mathf.Max(gameObjectSize.x, gameObjectSize.y);
             gameObjectSize = new Vector3(maxValue, maxValue, 0);
-            mask.transform.localScale = /* originalMaskScale +*/ gameObjectSize + gameObjectSize * additionalScalePercentage;
-            //print(target.GetComponent<Renderer>().bounds.center);
-            //print(target.GetComponent<Image>().)
-            // print("MOVIENDO");
-            //RectTransform rect = (RectTransform) target; //.GetComponent<RectTransform>();
-            //Vector3 center = new Vector3(rect.rect.width * rect.pivot.x, rect.rect.height * rect.pivot.y, 0);
-            // print("Min "+rect.offsetMin);
-            // print("Max "+rect.offsetMax);
+            mask.transform.localScale = gameObjectSize + gameObjectSize * additionalScalePercentage;
 
-            //Vector3 endPos = rect.position;
-            // print(endPos);
-            //moving = Vector3.Distance(mask.position, target.position) >= curtainThreshold;
             ChangeSpeed(GameSpeed.Paused); // ChangeSpeed does move the IEnumerator to next
             Vector3 originalPos = mask.position;
             float t = 0;
@@ -132,21 +110,6 @@ namespace Level
                 yield return null;
             }
         }
-
-        /* public void MoveCurtain(Transform target)
-    {
-        //  print($"TargetTransform ");
-        //  print(target);
-        // print("mask: " + mask.position);
-        //  print("target: " + target.position);
-        //  print("init: " + initialPosition);
-
-        //   print("Lerp: " + Vector3.Lerp(mask.position, target.position, speed * Time.deltaTime));
-
-        //sprint(Vector3.Distance(mask.position, target.position));
-
-
-    }*/
 
         private Vector3 GameObjectSize(Transform transform)
         {

@@ -11,7 +11,6 @@ namespace Level
         [SerializeField] private GameEngine.Direction direction;
 
         private TrafficLightController trafficLight;
-        private BoxCollider2D boxCollider;
 
         public TrafficLightController TrafficLight => trafficLight;
         public bool StopArea => stopArea;

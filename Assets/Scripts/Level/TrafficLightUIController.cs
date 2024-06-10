@@ -25,24 +25,24 @@ namespace Level
 
         private void OnEnable()
         {
-            redInputField.onValueChanged.AddListener(redInputFieldChange);
-            greenInputField.onValueChanged.AddListener(greenInputFieldChange);
-            yellowInputField.onValueChanged.AddListener(yellowInputFieldChange);
+            redInputField.onValueChanged.AddListener(RedInputFieldChange);
+            greenInputField.onValueChanged.AddListener(GreenInputFieldChange);
+            yellowInputField.onValueChanged.AddListener(YellowInputFieldChange);
 
-            redSlider.onValueChanged.AddListener(redSliderChange);
-            greenSlider.onValueChanged.AddListener(greenSliderChange);
-            yellowSlider.onValueChanged.AddListener(yellowSliderChange);
+            redSlider.onValueChanged.AddListener(RedSliderChange);
+            greenSlider.onValueChanged.AddListener(GreenSliderChange);
+            yellowSlider.onValueChanged.AddListener(YellowSliderChange);
         }
 
         private void OnDisable()
         {
-            redInputField.onValueChanged.RemoveListener(redInputFieldChange);
-            greenInputField.onValueChanged.RemoveListener(greenInputFieldChange);
-            yellowInputField.onValueChanged.RemoveListener(yellowInputFieldChange);
+            redInputField.onValueChanged.RemoveListener(RedInputFieldChange);
+            greenInputField.onValueChanged.RemoveListener(GreenInputFieldChange);
+            yellowInputField.onValueChanged.RemoveListener(YellowInputFieldChange);
 
-            redSlider.onValueChanged.RemoveListener(redSliderChange);
-            greenSlider.onValueChanged.RemoveListener(greenSliderChange);
-            yellowSlider.onValueChanged.RemoveListener(yellowSliderChange);
+            redSlider.onValueChanged.RemoveListener(RedSliderChange);
+            greenSlider.onValueChanged.RemoveListener(GreenSliderChange);
+            yellowSlider.onValueChanged.RemoveListener(YellowSliderChange);
         }
 
         public void SetValues(int red, int yellow, int green)
@@ -51,37 +51,34 @@ namespace Level
             Yellow = yellow;
             Green = green;
         }
-        void redSliderChange(float value)
+        void RedSliderChange(float value)
         {
             redInputField.text = value.ToString();
         }
 
-        void greenSliderChange(float value)
+        void GreenSliderChange(float value)
         {
             greenInputField.text = value.ToString();
         }
-        void yellowSliderChange(float value)
+        void YellowSliderChange(float value)
         {
             yellowInputField.text = value.ToString();
         }
-        void redInputFieldChange(string value)
+        void RedInputFieldChange(string value)
         {
-            float valueFloat;
-            float.TryParse(value, out valueFloat);
+            float.TryParse(value, out float valueFloat);
             redSlider.value = valueFloat;
         }
 
-        void greenInputFieldChange(string value)
+        void GreenInputFieldChange(string value)
         {
-            float valueFloat;
-            float.TryParse(value, out valueFloat);
+            float.TryParse(value, out float valueFloat);
             greenSlider.value = valueFloat;
 
         }
-        void yellowInputFieldChange(string value)
+        void YellowInputFieldChange(string value)
         {
-            float valueFloat;
-            float.TryParse(value, out valueFloat);
+            float.TryParse(value, out float valueFloat);
             yellowSlider.value = valueFloat;
         }
 
@@ -94,19 +91,3 @@ namespace Level
         }
     }
 }
-
-
-   /* private void SetInputFields(int red, int green, int yellow)
-    {
-        redInputField.text= red.ToString();
-        greenInputField.text = green.ToString();
-        yellowInputField.text = yellow.ToString();
-    }
-
-    private void SetSliders(int red, int green, int yellow)
-    {
-        redSlider.value = red;
-        greenSlider.value = green;
-        yellowSlider.value = yellow;
-    }
-   */
