@@ -12,7 +12,6 @@ namespace Level
     {
         [SerializeField] private List<Moment> moments;
         [SerializeField] private Transform mask;
-        [SerializeField] private Vector3 originalMaskScale = new(17.5f, 16.5f, 0);
         [SerializeField] private float additionalScalePercentage = 0.15f;
         [SerializeField] private GameObject curtain;
         [SerializeField] private float speed = 5;
@@ -41,7 +40,7 @@ namespace Level
         private void Update()
         {
             int speed = (int)gameEngine.Speed;
-            timer += Time.fixedDeltaTime * speed;
+            timer += Time.deltaTime * speed;
             Moment moment = momentEnumerator.Current;
             float nextTimestamp = momentEnumerator.Current.time;
 
@@ -113,13 +112,33 @@ namespace Level
 
         private Vector3 GameObjectSize(Transform transform)
         {
-            Renderer rend = transform.GetComponent<Renderer>() ?? transform.GetComponentInChildren<Renderer>();
+            if (!transform.TryGetComponent<Renderer>(out var rend))
+            {
+                rend = transform.GetComponentInChildren<Renderer>();
+            }
             if (rend)
                 return rend.bounds.size;
-            Image im = transform.GetComponent<Image>() ?? transform.GetComponentInChildren<Image>();
-            RectTransform rect = im?.GetComponent<RectTransform>();
-            Canvas canvas = rect?.GetComponentInParent<Canvas>();
-            CanvasScaler canvasScaler = canvas?.GetComponent<CanvasScaler>();
+            if (!transform.TryGetComponent<Image>(out var im))
+            {
+                im = transform.GetComponentInChildren<Image>();
+            }
+            RectTransform rect = null;
+            if (im != null)
+            {
+                rect = im.GetComponent<RectTransform>();
+            }
+
+            Canvas canvas = null;
+            if (rect != null)
+            {
+                canvas = rect.GetComponentInParent<Canvas>();
+            }
+
+            CanvasScaler canvasScaler = null;
+            if (canvas != null)
+            {
+                canvasScaler = canvas.GetComponent<CanvasScaler>();
+            }
             if (rect && canvas && canvasScaler)
                 //return (RectTransformUtility.PixelAdjustRect(rect, canvas).size * (2.54f / Screen.dpi)) / canvasScaler.referencePixelsPerUnit;
                 return rect.rect.size / (canvasScaler.referencePixelsPerUnit / 10);
@@ -167,7 +186,7 @@ namespace Level
             public Transform target;    // Only used when eventType = MoveToTarget, otherwise, ignored
             public int messageIndex;    // Only used when eventType = ShowMessage, otherwise ignored
             public GameSpeed newSpeed; // Only used when eventType = ChangeSpeed, otherwise ignored
-            public override string ToString()
+            public override readonly string ToString()
             {
                 string msg = eventType + " " + (asap ? "as soon as posible" : time);
                 switch (eventType)

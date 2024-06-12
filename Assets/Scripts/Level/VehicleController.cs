@@ -11,16 +11,18 @@ namespace Level
     [System.Serializable]
     public class VehicleController : RoadUser
     {
-        public bool inAnEmergency;
+        [SerializeField] private bool inAnEmergency;
+        [SerializeField] private AudioClip motorClip;
+        [SerializeField] private AudioClip emergencyClip;
+        [SerializeField] private AudioMixerGroup fxMixer;
+     
         protected Animator anim;
         protected BoxCollider2D carDetector;
         protected VehicleController vehicleAhead;
         protected bool hadVehicleAhead = false;
+        
         private static readonly int EMERGENCY = Animator.StringToHash("Emergency");
-        private AudioSource audio;
-        public AudioClip motorClip;
-        public AudioClip emergencyClip;
-        public AudioMixerGroup fxMixer;
+        private AudioSource audioSource;
         private int CAR_LAYER;
 
         protected override void Awake()
@@ -30,18 +32,6 @@ namespace Level
             carDetector = GetComponents<BoxCollider2D>().First(e => e.isTrigger);
             CAR_LAYER = LayerMask.NameToLayer("Car");
             anim = GetComponent<Animator>();
-        }
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            // EventManager.OnRoadUserMoving += RoadUserMoving;
-        }
-
-        protected override void OnDisable()
-        {
-            base.OnDisable();
-            //   EventManager.OnRoadUserMoving -= RoadUserMoving;
         }
 
         protected override void Start()
@@ -60,7 +50,7 @@ namespace Level
         public override void LoopStarted()
         {
             base.LoopStarted();
-            audio.volume = 0;
+            audioSource.volume = 0;
             carDetector.enabled = false; // Temp disabled to avoid unintentional accidents
         }
 
@@ -109,9 +99,6 @@ namespace Level
             base.OnTriggerExit2D(collider);
             if (ColliderOnExitNotRelevant(collider)) return;
             CopySpeedOf(vehicleAhead);
-            //Debug.Break();
-            //print($"Como OTHER era {other.name} hemos puesto vehicleAhead a null? {vehicleAhead} y comprobamos condiciones de movimiento");
-            // CheckMovingConditions();
         }
 
         #region Condition checks
@@ -176,14 +163,12 @@ namespace Level
 
         private IEnumerator AudioFade(float targetVolume)
         {
-            audio.Play();
+            audioSource.Play();
             float lerpSmooth = 0;
-            float initialVolume = audio.volume;
-          //  print($"[{name}] Queremos cambiar vol de {initialVolume} a {targetVolume}");
+            float initialVolume = audioSource.volume;
             while (lerpSmooth < 1)
             {
-              //  print($"lerpSmooth: {lerpSmooth}");
-                audio.volume = Mathf.Lerp(initialVolume, targetVolume, lerpSmooth);
+                audioSource.volume = Mathf.Lerp(initialVolume, targetVolume, lerpSmooth);
                 lerpSmooth += Time.deltaTime;
                 yield return null;
             }
@@ -191,16 +176,16 @@ namespace Level
 
         private void InitAudio()
         {
-            audio = gameObject.AddComponent<AudioSource>();
-            audio.playOnAwake = false;
-            audio.loop = true;
-            audio.pitch = Random.Range(0.8f, 1.2f);
-            audio.volume = 0;
-            audio.outputAudioMixerGroup = fxMixer;
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+            audioSource.loop = true;
+            audioSource.pitch = Random.Range(0.8f, 1.2f);
+            audioSource.volume = 0;
+            audioSource.outputAudioMixerGroup = fxMixer;
             if (inAnEmergency)
-                audio.clip = emergencyClip;
+                audioSource.clip = emergencyClip;
             else
-                audio.clip = motorClip;
+                audioSource.clip = motorClip;
         }
         #endregion
 
@@ -230,20 +215,5 @@ namespace Level
                   + $"(hasStartedMoving?: {hasStartedMoving} respectsRules?: {RespectsTheRules} inAnEmergency?: {inAnEmergency} {(trafficArea ? $"has ({trafficArea.name})" : "doesn't have ")}a traffic area)\n"
                   + moreInfo, VerboseEnum.Speed);
         }
-
-
-
-        /* private void RoadUserMoving(RoadUser responsible)
-         {
-             Print($"Vehicle moving again is {responsible}", VerboseEnum.GameTrace);
-             if (vehicleAhead && vehicleAhead.GetInstanceID() == responsible.GetInstanceID())
-             {
-                 Print($"The vehicle ahead of {name} is moving again, then {name} can also start moving",
-                     VerboseEnum.SolutionConditions);
-                 speedController.ChangeSpeed(vehicleAhead.BaseSpeed, vehicleAhead.Acceleration);
-                 vehicleAhead = null;
-                 // CheckMovingConditions();
-             }
-         } */
     }
 }
