@@ -6,57 +6,61 @@ using System.Linq;
 
 public class Draggable : MonoBehaviour, IPointerDownHandler
 {
+    [SerializeField] private Canvas canvas;
+
     private bool dragging;
     private Vector3 positionOffset;
-    public Canvas canvas;
+    private Camera mainCamera;
+
+    private void Start()
+    {
+        mainCamera = Camera.main;
+        canvas = FindCanvasWithDraggable();
+    }
+
     void Update()
     {
-        if (dragging && Input.GetMouseButton(0))
-        {
-            print("Dragging to " + GetPosMouseAccordingToCanvas() + new Vector3(positionOffset.x, positionOffset.y, positionOffset.z));
-            transform.position = GetPosMouseAccordingToCanvas() + new Vector3(positionOffset.x, positionOffset.y, positionOffset.z);
-        }
+        if (dragging && Input.GetMouseButton(0) && GetPosMouseAccordingToCanvas(out Vector3 mousePosition))
+            transform.position = mousePosition + new Vector3(positionOffset.x, positionOffset.y, positionOffset.z);
 
         if (Input.GetMouseButtonUp(0))
-        {
             dragging = false;
+    }
+
+    public bool GetPosMouseAccordingToCanvas(out Vector3 pos)
+    {
+        if (canvas && canvas.renderMode == RenderMode.ScreenSpaceOverlay)
+        {
+            pos = Input.mousePosition;
+            return true;
         }
-    }
 
-    public Vector3 GetPosMouseAccordingToCanvas()
-    {
-        //Canvas canvas = /*transform.GetComponentInParent<Canvas>();*/ transform.parent.GetComponent<Canvas>();
-        Canvas[] canvases = FindObjectsOfType<Canvas>();
-        canvas = canvases.FirstOrDefault(e => e.GetComponentInChildren<Draggable>().gameObject.name == name);
-        print($"Real mouse  {Input.mousePosition}");
-        if (canvas && canvas.renderMode == RenderMode.ScreenSpaceOverlay)
-            return Input.mousePosition;
+        canvas = FindCanvasWithDraggable();
+        if (canvas == null)
+        {
+            pos = Vector3.zero;
+            return false;
+        }
+
         Vector3 mousePos = Input.mousePosition;
-        mousePos.z = /*Camera.main.*/canvas.transform.position.z;
-        return Camera.main.ScreenToWorldPoint(mousePos);
+        mousePos.z = canvas.transform.position.z;
+        pos = mainCamera.ScreenToWorldPoint(mousePos);
+        return true;
     }
 
-   /* public Vector3 GetPosAccordingToCanvas()
+    private Canvas FindCanvasWithDraggable()
     {
-        Canvas canvas = transform.GetComponentInParent<Canvas>();
-        print($"Real pos  {transform.position}");
-        if (canvas && canvas.renderMode == RenderMode.ScreenSpaceOverlay)
-            return transform.position;
-        return Camera.main.ScreenToWorldPoint(transform.position);
-    }*/
+        Canvas[] canvases = FindObjectsOfType<Canvas>();
+        return canvases.FirstOrDefault(e => e.GetComponentInChildren<Draggable>().gameObject.name == name);
+    }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         // Offset to calculate correctly the position where the mouse clicked
-        positionOffset = /*GetPosAccordingToCanvas()*/ transform.position - GetPosMouseAccordingToCanvas();
-        dragging = true;
-    }
+        if (GetPosMouseAccordingToCanvas(out Vector3 mousePosition))
+            positionOffset = transform.position - mousePosition;
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-      //  Gizmos.DrawSphere(GetPosMouseAccordingToCanvas(), 2);
-        Vector2 size = ((RectTransform)transform).sizeDelta;
-        //Gizmos.DrawCube(canvas.transform.position, new Vector3(size.x, size.y, 1));
+
+        dragging = true;
     }
 }
