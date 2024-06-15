@@ -13,14 +13,17 @@ using UnityEngine.Localization.Settings;
 
 public class MenuController : MonoBehaviour
 {
-    public GameObject levelButtonPrefab;
-    public GameObject levelsGrid;
-    public GameObject pauseMenu;
+
+    [SerializeField] private GameObject levelButtonPrefab;
+
+    [SerializeField] private GameObject levelsGrid;
+    [SerializeField] private GameObject pauseMenu;
 
     /// <summary>
     /// [0] unsolved level, [1] solved level
     /// </summary>
-    public Sprite[] solvedSprites = new Sprite[2];
+
+    [SerializeField] private Sprite[] solvedSprites = new Sprite[2];
 
     private void OnEnable()
     {
@@ -48,25 +51,18 @@ public class MenuController : MonoBehaviour
 
     private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode loadMode)
     {
-        print($"Scene {scene.name} loaded");
-        //SavePrevScene();
         if (scene.name == "Levels Scene")
-        {
             LoadLevelsList();
-        }
-
     }
 
     public void NewGame()
     {
-        LoadSceneAndSave("Level001");
+        LoadScene("Level001");
     }
-
-    
 
     public void LoadGame(int level)
     {
-        LoadSceneAndSave("Level" + level.ToString("D3"));
+        LoadScene("Level" + level.ToString("D3"));
     }
 
     public void LoadSettings()
@@ -81,17 +77,17 @@ public class MenuController : MonoBehaviour
 
     public void LoadTutorial()
     {
-        LoadSceneAndSave("Tutorial 1");
+        LoadScene("Tutorial 1");
     }
 
     public void LoadMainMenuScene()
     {
-        LoadSceneAndSave("Main Menu");
+        LoadScene("Main Menu");
     }
 
     public void LoadLevelsScene()
     {
-        LoadSceneAndSave("Levels Scene");
+        LoadScene("Levels Scene");
     }
 
     public void LoadLevel(int level)
@@ -101,51 +97,33 @@ public class MenuController : MonoBehaviour
 
     public void LoadLevel(string level)
     {
-        LoadSceneAndSave(level);
+        LoadScene(level);
     }
 
-   /* public void LoadPreviousScene()
-    {
-        HistoryTracker.Instance.LoadPreviousScene();
-    }*/
-
-    /*public void LoadNextScene()
-    {
-        HistoryTracker.Instance.LoadNextScene();
-    }*/
-
-    public void LoadSceneAndSave(string name)
+    public void LoadScene(string name)
     {
         SceneManager.LoadScene(name);
-        //HistoryTracker.Instance.SavePrevScene();
     }
 
     private void LoadLevelsList()
     {
         int sceneCount = SceneManager.sceneCountInBuildSettings;
-        List<string> scenes = new List<string>();
-        Transform levelsTransform = GameObject.Find("Levels").transform;
+        Transform levelsGameObject = GameObject.Find("Levels").transform;
+
         for (int i = 0; i < sceneCount; i++)
         {
             string sceneName = Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(i));
-            scenes.Add(sceneName);
-        }
-        print($"Scenes pre filter: {scenes.Count}");
-        // Filtering
-        scenes = scenes.FindAll(e => e.Contains("Level"));
-        scenes.Remove("Levels Scene");
-        print($"Scenes post filter: {scenes.Count}");
+            if (sceneName.Contains("Level") && sceneName != "Levels Scene")
+            {
+                GameObject levelButton = Instantiate(levelButtonPrefab, levelsGameObject);
+                levelButton.name = sceneName;
+                levelButton.GetComponentInChildren<TMP_Text>().text = int.Parse(sceneName.Substring(5)).ToString();
 
-        foreach (string sceneName in scenes)
-        {
-            GameObject levelButton = Instantiate(levelButtonPrefab, levelsTransform);
-            levelButton.name = sceneName;
-            levelButton.GetComponentInChildren<TMP_Text>().text = int.Parse(sceneName.Substring(5)).ToString();
-            Image checkedImage = levelButton.transform.GetComponent<Image>();
-            checkedImage.sprite = solvedSprites[PlayerPrefs.GetInt(sceneName, 0)];
+                levelButton.transform.GetComponent<Image>().sprite = solvedSprites[PlayerPrefs.GetInt(sceneName, 0)];
 
-            levelButton.GetComponent<Button>().onClick.AddListener(
-                delegate { SceneManager.LoadScene(levelButton.name); });
+                levelButton.GetComponent<Button>().onClick.AddListener(
+                    delegate { SceneManager.LoadScene(levelButton.name); });
+            }
         }
     }
 
