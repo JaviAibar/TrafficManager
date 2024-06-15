@@ -56,106 +56,7 @@ public class PlayGeneralTesting : MonoBehaviour
 
     #endregion
 
-    [UnityTest]
-    public IEnumerator ScenesHistoryTesting()
-    {
-        // expected values
-        string mainMenuSceneName = "Main Menu";
-        string levelsSceneName = "Levels Scene";
-        string level1SceneName = "Level001";
-        string tutorialSceneName = "Tutorial 1";
-
-        MenuController menu = Instantiate(Resources.Load("Prefabs/UI/Menu controller") as MenuController);
-        yield return WaitForStart();
-
-        // Initial values
-        Assert.AreEqual(-1, HistoryTracker.instance.GetHistoryIndex());
-        Assert.AreEqual(0, HistoryTracker.instance.GetSavedScenes());
-
-        // Loading Main Menu (default scene)
-        // Current state index = 0 | [0] Main menu (meaning after scene loaded)
-        menu.LoadMainMenuScene();
-        yield return new WaitForSeconds(1);
-        CheckExpectedScenes(0, 1, mainMenuSceneName);
-
-        // Loading Levels scene
-        // Saving Main Menu at index 0
-        // Current state index = 1 | [0] Main menu, [1] Levels
-        menu.LoadLevelsScene();
-        yield return new WaitForSeconds(1);
-        CheckExpectedScenes(1, 2, levelsSceneName);
-
-        // Loading Tutorial
-        // Current state index = 2 | [0] Main menu, [1] Levels, [2] Tutorial
-        menu.LoadTutorial();
-        yield return new WaitForSeconds(1);
-        CheckExpectedScenes(2, 3, tutorialSceneName);
-
-        // Loading Level001
-        // Current state index = 3 | [0] Main menu, [1] Levels, [2] Tutorial, [3] Level001
-        menu.LoadLevel(1);
-        yield return new WaitForSeconds(1);
-        CheckExpectedScenes(3, 4, level1SceneName);
-
-        // Go to previous scene (Tutorial)
-        // Current state index = 2 | [0] Main menu, [1] Levels, [2] Tutorial, [3] Level001
-        HistoryTracker.instance.LoadPreviousScene();
-        yield return new WaitForSeconds(1);
-        CheckExpectedScenes(2, 4, tutorialSceneName);
-
-        // Go to previous scene (Levels)
-        // Current state index = 1 | [0] Main menu, [1] Levels, [2] Tutorial, [3] Level001
-        HistoryTracker.instance.LoadPreviousScene();
-        yield return new WaitForSeconds(1);
-        CheckExpectedScenes(1, 4, levelsSceneName);
-
-
-        // Go to previous scene (Levels)
-        // Current state index = 0 | [0] Main menu, [1] Levels, [2] Tutorial, [3] Level001
-        HistoryTracker.instance.LoadPreviousScene();
-        yield return new WaitForSeconds(1);
-        CheckExpectedScenes(0, 4, mainMenuSceneName);
-
-        // Go to next scene (Levels)
-        // Current state index = 1 | [0] Main menu, [1] Levels, [2] Tutorial, [3] Level001
-        HistoryTracker.instance.LoadNextScene();
-        yield return new WaitForSeconds(1);
-        CheckExpectedScenes(1, 4, levelsSceneName);
-
-        // Load Main menu Scene (Main menu)
-        // Current state index = 2 | [0] Main menu, [1] Levels, [2] Main menu (should replace history with the Main menu in position 2)
-        menu.LoadMainMenuScene();
-        yield return new WaitForSeconds(1);
-        CheckExpectedScenes(2, 3, levelsSceneName);
-    }
-
-    [UnityTest]
-    public IEnumerator MINIScenesHistoryTesting()
-    {
-        // expected values
-        string mainMenuSceneName = "Main Menu";
-        /* string levelsSceneName = "Levels Scene";
-         string level1SceneName = "Level001";
-         string tutorialSceneName = "Tutorial Scene";*/
-        MenuController menu = Instantiate(Resources.Load("Prefabs/UI/Menu controller")) as MenuController;
-        yield return new WaitForSeconds(1);
-        // Initial values
-        Assert.AreEqual(-1, HistoryTracker.instance.GetHistoryIndex());
-        Assert.AreEqual(0, HistoryTracker.instance.GetSavedScenes());
-
-
-        menu.LoadMainMenuScene();
-        yield return new WaitForSeconds(1);
-        CheckExpectedScenes(0, 1, mainMenuSceneName);
-
-        menu.LoadLevel(1);
-        yield return new WaitForSeconds(1);
-
-
-        menu.LoadLevel(1);
-        yield return new WaitForSeconds(1);
-        throw new NotImplementedException();
-    }
+   
 
     [UnityTest]
     public IEnumerator TrafficLightsTiming()
@@ -407,12 +308,6 @@ public class PlayGeneralTesting : MonoBehaviour
         levelManager.TimeToLoop = tooLongTime; // Make level not loopable
     }
 
-    public void CheckExpectedScenes(int indexHistory, int scenesSaved, string sceneName)
-    {
-        Assert.AreEqual(indexHistory, HistoryTracker.instance.GetHistoryIndex());
-        Assert.AreEqual(scenesSaved, HistoryTracker.instance.GetSavedScenes());
-        Assert.AreEqual(sceneName, SceneManager.GetActiveScene().name);
-    }
 
     private IEnumerator WaitAndCheckTrafficLight(float timeToWait, string expectedName)
     {

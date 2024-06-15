@@ -104,20 +104,20 @@ public class MenuController : MonoBehaviour
         LoadSceneAndSave(level);
     }
 
-    public void LoadPreviousScene()
+   /* public void LoadPreviousScene()
     {
-        HistoryTracker.instance.LoadPreviousScene();
-    }
+        HistoryTracker.Instance.LoadPreviousScene();
+    }*/
 
-    public void LoadNextScene()
+    /*public void LoadNextScene()
     {
-        HistoryTracker.instance.LoadNextScene();
-    }
+        HistoryTracker.Instance.LoadNextScene();
+    }*/
 
     public void LoadSceneAndSave(string name)
     {
         SceneManager.LoadScene(name);
-        HistoryTracker.instance.SavePrevScene();
+        //HistoryTracker.Instance.SavePrevScene();
     }
 
     private void LoadLevelsList()
