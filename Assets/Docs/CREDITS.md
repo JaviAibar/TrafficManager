@@ -6,53 +6,33 @@ THANK YOU!
 
 ## Third party content in this project
 
-Vehicles by [TMD_Studios](tmdstudios.wordpress.com)
-Photo by [Lance Asper](https://unsplash.com/@lance_asper?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/es/s/fotos/street-topdown?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
-Photo by [Sid Verma](https://unsplash.com/@sidverma?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/es/s/fotos/street-topdown?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
-Photo by [Steven Lewis](https://unsplash.com/@airguitarbandit?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/es/s/fotos/street-topdown?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
-Photo by [Denys Nevozhai](https://unsplash.com/@dnevozhai?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/es/s/fotos/street-topdown?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
-Photo by [Derek Liang](https://unsplash.com/@derekrliang?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/es/s/fotos/street-topdown?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
-Photo by [Jaanus Jagomägi](https://unsplash.com/@jaanus?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/es/s/fotos/street-topdown?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
-Photo by [Ozark Drones](https://unsplash.com/@ozarkdrones?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/es/s/fotos/street-topdown?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
-Photo by [Knoell Marketing](https://unsplash.com/@knoellmarketing?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/es/s/fotos/street-topdown?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
-Photo by [Yifan Gu](https://unsplash.com/@yifangu?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/es/s/fotos/street-topdown?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
-Photo by [Brydon McCluskey](https://unsplash.com/@brydoncreative?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/es/s/fotos/topdown-car?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText")
-Photo by [Pawel Tadejko](https://unsplash.com/@ptadejko?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/topdown?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
-Photo by [Dalton Touchberry](https://unsplash.com/@daltontouch?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash]("https://unsplash.com/s/photos/topdown-shoes?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText")
-Photo by [Daria Nepriakhina 🇺🇦](https://unsplash.com/@epicantus?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash]("https://unsplash.com/s/photos/topdown-shoes?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText")
-Photo by [Şeyma Sgz](https://unsplash.com/@seymasgz?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash]("https://unsplash.com/s/photos/traffic-sign?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText")
-Photo by [Andrea Cau](https://unsplash.com/@andreacau?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/city?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
-Photo by [Raimond Klavins](https://unsplash.com/@raimondklavins?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash]("https://unsplash.com/s/photos/traffic-sign?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText")
-Photo by [Sigmund](https://unsplash.com/@sigmund?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/es/s/fotos/crossroad?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
-Photo by [Behzad Ghaffarian](https://unsplash.com/@behz?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/traffic-light?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText")
-Photo by [Sung Jin Cho](https://unsplash.com/@mbuff?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
-Photo by [Dongsh](https://unsplash.com/@dongsh?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
-Concrete background texture by from [Rob Tuytel](https://www.artstation.com/tuytel) on [PolyHaven](https://polyhaven.com/a/concrete_floor_01)
-Head of police by [Craftpix_net](https://twitter.com/craftpix_net?utm_campaign=Website&utm_source=opengameart.org&utm_medium=public) on [OpenGameArt](https://opengameart.org/content/police-2d-sprite)
-Vehicle audio by [SonoRec](https://freesound.org/people/SonoRec/) on [FreeSound](https://freesound.org/people/SonoRec/sounds/262249/)
-Photo by [insung yoon](https://unsplash.com/@insungyoon?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/clock?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
-Foto de [Eduardo Soares](https://unsplash.com/@eduschadesoares?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)on [Unsplash]("https://unsplash.com/es/s/fotos/traffic-cone?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText")
-Symbol of [Under construction sign]("https://uxwing.com/under-construction-symbol-icon/") on [Uxwing](https://uxwing.com/)
-Foto de [Markus Spiske](https://unsplash.com/@markusspiske?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash]("https://unsplash.com/es/s/fotos/road-work?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText")
-Foto de [Jon Tyson](https://unsplash.com/@jontyson?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash]("https://unsplash.com/es/s/fotos/road-work?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText")
-Foto de [tam wai](https://unsplash.com/@samtillo?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash]("https://unsplash.com/es/s/fotos/road-line?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText")
-Foto de [Raúl Nájera](https://unsplash.com/@reinf?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/es/s/fotos/road-work?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText")
-Audio by [deleted_user_3544904](https://freesound.org/people/deleted_user_3544904/) on [freesound](https://freesound.org/people/deleted_user_3544904/sounds/380435/)
-Audio by [marvman](https://freesound.org/people/marvman/) on [freesound](https://freesound.org/people/marvman/sounds/36424/)
-Audio by [gladkiy](https://freesound.org/people/gladkiy/) on [freesound](https://freesound.org/people/gladkiy/sounds/332386/)
-Audio by [Lau7](https://freesound.org/people/Lau7/) on [freesound](https://freesound.org/people/Lau7/sounds/156209/)
-Audio by [sdfalk](https://freesound.org/people/sdfalk/) on [freesound](https://freesound.org/people/sdfalk/sounds/50409/)
-Audio by [Kurd1228135](https://freesound.org/people/Kurd1228135/) on [freesound](https://freesound.org/people/Kurd1228135/sounds/502190/)
-Audio by [mhad](https://freesound.org/people/mhad/) on [freesound](https://freesound.org/people/mhad/sounds/390788/)
-Audio by [kyles](https://freesound.org/people/kyles/) on [freesound](https://freesound.org/people/kyles/sounds/451703/)
-Audio by [Garuda1982](https://freesound.org/people/Garuda1982) on [freesound](https://freesound.org/people/Garuda1982/sounds/541240/)
-Audio by [Jagadamba](https://freesound.org/people/Jagadamba/sounds/257029/) on [freesound](https://freesound.org/people/Jagadamba)
-Audio by [DominikBraun](https://freesound.org/people/DominikBraun) on [freesound](https://freesound.org/people/DominikBraun/sounds/459880/)
-Audio by [EveryT](https://freesound.org/people/EveryT) on [freesound](https://freesound.org/people/EveryT/sounds/627182/)
-Audio by [guitarguy1985](https://freesound.org/people/guitarguy1985) on [freesound](https://freesound.org/people/guitarguy1985/sounds/70939/)
-Audio by [snapssound](https://freesound.org/people/snapssound) on [freesound](https://freesound.org/people/snapssound/sounds/535897/)
-Audio by [snapssound](https://freesound.org/people/snapssound) on [freesound](https://freesound.org/people/snapssound/sounds/535896/)
-Audio by [maciejadach](https://freesound.org/people/maciejadach) on [freesound](https://freesound.org/people/maciejadach/sounds/571326/)
-Audio by [EricsSoundschmiede](https://freesound.org/people/EricsSoundschmiede) on [freesound](https://freesound.org/people/EricsSoundschmiede/sounds/447767/)
-Audio by [goose278](https://freesound.org/people/goose278) on [freesound](https://freesound.org/people/goose278/sounds/165166/)
-Audio by [mrrap4food](https://freesound.org/people/mrrap4food) on [freesound](https://freesound.org/people/mrrap4food/sounds/619050/)
+### Background images
+
+- Photo by [Denys Nevozhai](https://unsplash.com/@dnevozhai?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/es/s/fotos/street-topdown?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) - End Scene Background
+- Photo by [Ozark Drones](https://unsplash.com/@ozarkdrones?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/es/s/fotos/street-topdown?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) - Tutorial and level Background
+- Photo by [Andrea Cau](https://unsplash.com/@andreacau?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/city?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) - Levels Background
+- Concrete background texture by from [Rob Tuytel](https://www.artstation.com/tuytel) on [PolyHaven](https://polyhaven.com/a/concrete_floor_01) - Used in main menu
+
+### Game elements
+
+- Photo by [Brydon McCluskey](https://unsplash.com/@brydoncreative?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/es/s/fotos/topdown-car?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText") - Cars and Pedestrian
+- Photo by [Pawel Tadejko](https://unsplash.com/@ptadejko?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/topdown?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) - Pedestrian
+- Photo by [Dalton Touchberry](https://unsplash.com/@daltontouch?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash]("https://unsplash.com/s/photos/topdown-shoes?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText") - Pedestrian shoes
+
+### UI elements
+
+- Photo by [Behzad Ghaffarian](https://unsplash.com/es/@behz?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash]("https://unsplash.com/es/fotos/pipa-azul-1FkuY2PReLc") - Pedestrian's Traffic Light
+- Symbol of [Under construction sign]("https://uxwing.com/under-construction-symbol-icon/") on [Uxwing](https://uxwing.com/) - Used in Settings' scene
+- Head of police by [Craftpix_net](https://twitter.com/craftpix_net?utm_campaign=Website&utm_source=opengameart.org&utm_medium=public) on [OpenGameArt](https://opengameart.org/content/police-2d-sprite) - Used in tutorial UI
+- Photo by [insung yoon](https://unsplash.com/@insungyoon?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/clock?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) - Clock reverting time effect
+- Photo by [Eduardo Soares](https://unsplash.com/@eduschadesoares?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)on [Unsplash]("https://unsplash.com/es/s/fotos/traffic-cone?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText") - Traffic cone used in Settings' scene
+- Photo by [Raúl Nájera](https://unsplash.com/@reinf?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/es/s/fotos/road-work?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText") - Generic sign
+- Photo by [Jon Tyson](https://unsplash.com/@jontyson?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash]("https://unsplash.com/es/s/fotos/road-work?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText") - Settings diamond sign
+- Photo by [Şeyma Sgz](https://unsplash.com/@seymasgz?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash]("https://unsplash.com/s/photos/traffic-sign?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText") - Quit sign and empty traffic sign
+- Photo by [Markus Spiske](https://unsplash.com/@markusspiske?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash]("https://unsplash.com/es/s/fotos/road-work?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText") - Traffic Beacon used in Settings' menu
+
+### Audios
+
+- Music by [benpm](https://freesound.org/people/benpm) on [freesound](https://freesound.org/people/benpm/sounds/203099/) - Cars sound
+- Audio by [guitarguy1985](https://freesound.org/people/guitarguy1985) on [freesound](https://freesound.org/people/guitarguy1985/sounds/70939/) - Police sound effect
+- Audio by [deleted_user_3544904](https://freesound.org/people/deleted_user_3544904/) on [freesound](https://freesound.org/people/deleted_user_3544904/sounds/380435/) - Cars sound
