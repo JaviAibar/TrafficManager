@@ -37,7 +37,7 @@ namespace Level
         private bool blockedResolvabilityUntilRestart = false;
 
         public string NextLevel => nextLevel;
-        public bool ConditionsToSolve => stoppedUsers.Count != 0 && !blockedResolvabilityUntilRestart && !unsolvable;
+        public bool ConditionsToSolve => stoppedUsers.Count == 0 && !blockedResolvabilityUntilRestart && !unsolvable;
         public bool GameRunning => timeToSolve > 0 && GameEngine.Instance.IsRunning;
         // The time in which the level is looped (in principle, contant)
         public float TimeToLoop
@@ -194,7 +194,7 @@ namespace Level
         public void ResetTimeLeftToSolve()
         {
             timeLeftToSolve = timeToSolve;
-            timeIndicator.text = ((int)timeLeftToSolve).ToString();
+            //timeIndicator.text = ((int)timeLeftToSolve).ToString();
             timer = 0;
         }
 
@@ -209,6 +209,7 @@ namespace Level
             {
                 iconImage.sprite = minimumSpeedSprite;
                 ResetTimeLeftToSolve();
+                timeIndicator.text = ((int)timeLeftToSolve).ToString();
             }
             //iconImage.color = colour;
             //shineImage.color = colour;
