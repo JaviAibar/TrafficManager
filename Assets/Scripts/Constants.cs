@@ -12,6 +12,10 @@ namespace Assets.Scripts
         public static readonly string MusicVolume = "MusicVolume";
         public static readonly string SoundFxVolume = "SoundFxVolume";
 
+        public static readonly string MasterGroup = "Master";
+        public static readonly string MusicGroup = "MusicGroup";
+        public static readonly string SoundFxGroup = "SoundFxGroup";
+
         public static readonly string SettingsMenu = "Settings Menu";
 
         public static readonly string Language = "Language";

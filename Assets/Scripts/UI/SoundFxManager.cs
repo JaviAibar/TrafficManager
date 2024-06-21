@@ -1,35 +1,54 @@
-using System;
+using Assets.Scripts;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
 public class SoundFxManager : MonoBehaviour
 {
-    public GameObject audioSourcePrefab;
-    public AudioClip clickSound;
-    public AudioClip closeSound;
-    public AudioClip[] solvedSounds;
-    public AudioClip failSound;
-    public AudioClip tickTackSound;
 
-    private List<AudioClip> _playingClips;
+    [SerializeField] private GameObject audioSourcePrefab;
 
-    public AudioMixerGroup musicMixer;
-    public AudioMixerGroup fxMixer;
-    public AudioMixerGroup masterMixer;
-    public AudioMixer audioMixer;
-    private float previousVol = -80;
+    [SerializeField] private AudioClip clickSound;
+    [SerializeField] private AudioClip closeSound;
+
+    [SerializeField] private AudioClip[] solvedSounds;
+    [SerializeField] private AudioClip failSound;
+    [SerializeField] private AudioClip tickTackSound;
+
+    private AudioMixer _audioMixer;
+
+    private AudioMixerGroup _musicMixer;
+    private AudioMixerGroup _fxMixer;
+    private AudioMixerGroup _masterMixer;
+
+    private readonly float _silentVol = -80;
+    private float _currentVol;
+    private float _previousVol;
+    private int _lastSolvedSoundPlayed = -1;
+
+    public AudioMixer AudioMixer => _audioMixer;
+    public float CurrentVolume
+    {
+        get
+        {
+            _audioMixer.GetFloat(Constants.MasterVolume, out _currentVol);
+            return _currentVol;
+        }
+    }
 
     private void Awake()
     {
-        _playingClips = new List<AudioClip>();
-        audioMixer.SetFloat("MasterVolume", PlayerPrefs.GetFloat("MasterVolume", 0));
-        audioMixer.SetFloat("SoundFxVolume", PlayerPrefs.GetFloat("SoundFxVolume", 0));
-        audioMixer.SetFloat("MusicVolume", PlayerPrefs.GetFloat("MusicVolume", 0));
+        _audioMixer = (AudioMixer)Resources.Load("SoundManager");
+
+        _musicMixer = _audioMixer.FindMatchingGroups(Constants.MusicGroup)[0];
+        _fxMixer = _audioMixer.FindMatchingGroups(Constants.SoundFxGroup)[0];
+        _masterMixer = _audioMixer.FindMatchingGroups(Constants.MasterGroup)[0];
+
+        _audioMixer.SetFloat(Constants.MasterVolume, PlayerPrefs.GetFloat(Constants.MasterVolume, 0));
+        _audioMixer.SetFloat(Constants.SoundFxVolume, PlayerPrefs.GetFloat(Constants.SoundFxVolume, 0));
+        _audioMixer.SetFloat(Constants.MusicVolume, PlayerPrefs.GetFloat(Constants.MusicVolume, 0));
     }
 
-    private int _lastSolvedPlay = -1;
     public void PlayClickSound() => Play(clickSound);
 
     public void PlayCloseSound() => Play(closeSound);
@@ -38,16 +57,16 @@ public class SoundFxManager : MonoBehaviour
     {
         if (IsTimeToPlay(id))
         {
-            _lastSolvedPlay = id;
+            _lastSolvedSoundPlayed = id;
             Play(solvedSounds[id]);
         }
     }
 
-    private bool IsTimeToPlay(int id) => id >= 0 && id < solvedSounds.Length && _lastSolvedPlay != id;
+    private bool IsTimeToPlay(int id) => id >= 0 && id < solvedSounds.Length && _lastSolvedSoundPlayed != id;
 
     public void PlayFailSound()
     {
-        _lastSolvedPlay = -1;
+        _lastSolvedSoundPlayed = -1;
         Play(failSound);
     }
 
@@ -72,8 +91,13 @@ public class SoundFxManager : MonoBehaviour
 
     public void SwitchMuteAllSounds()
     {
-        float aux = previousVol;
-        audioMixer.GetFloat("MasterVolume", out previousVol);
-        audioMixer.SetFloat("MasterVolume", aux);
+        if (CurrentVolume == _silentVol)
+        {
+            _audioMixer.SetFloat(Constants.MasterVolume, _previousVol);
+            return;
+        }
+        _previousVol = _currentVol;
+
+        _audioMixer.SetFloat(Constants.MasterVolume, _silentVol);
     }
 }
