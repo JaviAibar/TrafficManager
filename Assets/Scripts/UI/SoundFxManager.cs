@@ -17,10 +17,6 @@ public class SoundFxManager : MonoBehaviour
 
     private AudioMixer _audioMixer;
 
-    private AudioMixerGroup _musicMixer;
-    private AudioMixerGroup _fxMixer;
-    private AudioMixerGroup _masterMixer;
-
     private readonly float _silentVol = -80;
     private float _currentVol;
     private float _previousVol;
@@ -39,10 +35,6 @@ public class SoundFxManager : MonoBehaviour
     private void Awake()
     {
         _audioMixer = (AudioMixer)Resources.Load("SoundManager");
-
-        _musicMixer = _audioMixer.FindMatchingGroups(Constants.MusicGroup)[0];
-        _fxMixer = _audioMixer.FindMatchingGroups(Constants.SoundFxGroup)[0];
-        _masterMixer = _audioMixer.FindMatchingGroups(Constants.MasterGroup)[0];
 
         _audioMixer.SetFloat(Constants.MasterVolume, PlayerPrefs.GetFloat(Constants.MasterVolume, 0));
         _audioMixer.SetFloat(Constants.SoundFxVolume, PlayerPrefs.GetFloat(Constants.SoundFxVolume, 0));
@@ -85,7 +77,6 @@ public class SoundFxManager : MonoBehaviour
         {
             yield return null;
         }
-
         Destroy(audioSourceInstance);
     }
 
