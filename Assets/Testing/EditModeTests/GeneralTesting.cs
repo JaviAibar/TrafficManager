@@ -15,8 +15,6 @@ public class GeneralTesting : MonoBehaviour
     [Test]
     public void SetValuesInTrafficLight()
     {
-        var gameObject = new GameObject();
-
         //var trafficLight = gameObject.AddComponent<TrafficLightController>();
 
         var trafficLightGO = (GameObject)Instantiate(Resources.Load("Prefabs/UI/TrafficLight"));
