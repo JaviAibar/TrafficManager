@@ -212,7 +212,7 @@ namespace Level
         public virtual void LoopStarted()
         {
             if (bezier.NormalizedT != 0) PathFinished();
-            Print(
+           Print(
                 $"[{name}] began its looping coroutine (lopping true, collider false, statedMoving false, bezier true,"+
                 "normalizedT 0, baseSpeed 0 bezier.speed 1)", VerboseEnum.GameTrace);
             looping = true; // Flag to lock other actions while looping

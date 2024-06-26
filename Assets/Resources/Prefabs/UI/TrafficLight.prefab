@@ -31,7 +31,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2768134455536975651}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -169,7 +168,6 @@ RectTransform:
   m_Children:
   - {fileID: 793743753916232599}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -226,12 +224,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01c1ca87b6e46fd4e88fc70e2ade22c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameEngine: {fileID: 0}
-  trafficLightUIPanel: {fileID: 0}
-  timeAmounts: 050000000500000005000000
   image: {fileID: 0}
-  timer: 0
+  trafficLightUIPanel: {fileID: 0}
   timeOffset: 0
+  timer: 0
+  timeAmounts: 010000000100000001000000
 --- !u!114 &2768134455536975650
 MonoBehaviour:
   m_ObjectHideFlags: 0

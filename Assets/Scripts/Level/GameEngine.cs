@@ -86,6 +86,7 @@ namespace Level
         {
             if (instance == null)
                 instance = this;
+
             timeControlImages = GetTimeControlImagesExceptContainer();
             ChangeSpeed(GameSpeed.Normal);
             canvas = FindObjectOfType<Canvas>();
