@@ -185,15 +185,15 @@ namespace Level
             ROAD_LAYER = LayerMask.NameToLayer("Road");
             rb = GetComponentInParent<Rigidbody2D>();
             speedController = new SpeedController(name, bezier);
-            if (!bezier)
-                throw new NullReferenceException($"Root of {name} needs a Bezier Walker With Speed component");
-            if (!spline)
-                throw new NullReferenceException($"Root of {name}'s Bezier needs a reference to a BezierSpline component");
         }
 
         protected virtual void Start()
         {
-            LoopStarted();
+            if (!bezier)
+                throw new NullReferenceException($"Root of {name} needs a Bezier Walker With Speed component");
+            if (!spline)
+                throw new NullReferenceException($"Root of {name}'s Bezier needs a reference to a BezierSpline component");
+            LoopStarted(); 
         }
 
         private void FixedUpdate()
