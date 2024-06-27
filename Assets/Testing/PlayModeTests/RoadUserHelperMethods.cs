@@ -1,12 +1,6 @@
 ﻿using BezierSolution;
 using Level;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Unity.Android.Gradle;
 using UnityEngine;
 
 public class RoadUserHelperMethods
@@ -65,18 +59,14 @@ public class RoadUserHelperMethods
     {
         while (1 - bezier.NormalizedT <= HelperUtilities.Epsilon)
         {
-            Debug.Log("Still in finish line");
             yield return null;
         }
-
-        // yield return WaitForStart();
     }
 
     public static IEnumerator WaitWhileCantStartMoving(RoadUser roadUser)
     {
         while (!roadUser.HasStartedMoving)
         {
-            Debug.Log($"Dindn sstarte yet");
             yield return null;
         }
     }
@@ -85,8 +75,6 @@ public class RoadUserHelperMethods
     {
         while (roadUser.Looping)
         {
-            Debug.Log("Still looping");
-
             yield return null;
         }
     }
