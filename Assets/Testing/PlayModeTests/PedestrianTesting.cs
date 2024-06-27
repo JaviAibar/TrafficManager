@@ -1,42 +1,21 @@
-﻿using BezierSolution;
-using Level;
+﻿using Level;
 using NUnit.Framework;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-public class PedestrianTesting : MonoBehaviour
+public class PedestrianTesting
 {
-    /*private float normalDuration = 0;
-    private float fastDuration = 0;
-    private float fastestDuration = 0;*/
-
     private PedestrianController CreateDefaultPedestrian(GameEngineFaker gameEngineFaker)
     {
         float TOO_LONG_TIME = 200;
-        // HelperUtilities.CreateDefaultPlayground(out gameEngine, out BezierSpline bezierSpline);
-        /*if (gameKernel != null) Destroy(gameKernel);*/
 
-
-        //   var roadUsersGO = GameObject.Find("RoadUsers");
-        // Avoid an exception in Vehicle caused because it expects to have BezierSpline on Awake (selected in Inspector)
         GameObject roadUsersGO = new();
-        /*      LogAssert.Expect(LogType.Exception,
-                @"Exception: Root of Pedestrian1(Clone)'s Bezier needs a reference to a BezierSpline component");*/
-        LogAssert.Expect(LogType.Exception,
-             @"NullReferenceException: Root of Pedestrian1(Clone)'s Bezier needs a reference to a BezierSpline component");
 
         var pedestrian1 = MonoBehaviour.Instantiate((GameObject)Resources.Load("Prefabs/RoadUsers/Pedestrian1"), roadUsersGO.transform);
         var pedestrian = pedestrian1.GetComponent<PedestrianController>();
         gameEngineFaker.SetBezier(pedestrian);
-        pedestrian.Spline = gameEngineFaker.BezierSpline;
-           // gameKernel.GetComponentsInChildren<BezierSpline>()[1]; // Asign the Spline 2 because we want it to go left
+        pedestrian.Spline = gameEngineFaker.SelectSpline(1); // Asign the Spline 1 because we want it to go left
         pedestrian.enabled = true; // Set enable because it gets automatically disabled due to the aforementioned Exception
         pedestrian.TimeToLoop = TOO_LONG_TIME;
 
@@ -48,11 +27,8 @@ public class PedestrianTesting : MonoBehaviour
     public IEnumerator _00_GameSpeedChangingTest_FastIsProportional([Values(40, 30, 20)] float speed)
     {
         GameEngineFaker gameEngineFaker = GameEngineFaker.CreateDefaultPlayground();
-       // yield return new WaitForSeconds(1);
-        //Debug.Log(gameEngineFaker.GameEngine);
         PedestrianController pedestrian = CreateDefaultPedestrian(gameEngineFaker);
-        //yield return PrepareScene(false, RoadUserType.Pedestrian);
-        //gameEngine.Verbose = GameEngine.VerboseEnum.Speed | GameEngine.VerboseEnum.GameTrace;
+
         TestingDurations durations = new();
 
         yield return RoadUserHelperMethods.CalculateTimesSpeedRoadUser_NormalSpeed(pedestrian, gameEngineFaker, speed, durations);
@@ -64,7 +40,7 @@ public class PedestrianTesting : MonoBehaviour
         {
             Debug.Log($"Expected {expected} but was {durations.fastDuration}");
         }
-        Destroy(pedestrian.gameObject);
+        MonoBehaviour.Destroy(pedestrian.gameObject);
         Assert.IsTrue(HelperUtilities.Approx(expected, durations.fastDuration));
     }
 
@@ -85,7 +61,7 @@ public class PedestrianTesting : MonoBehaviour
             Debug.Log($"Expected {expected} but was {durations.fastestDuration}"); 
         }
 
-        Destroy(pedestrian.gameObject);
+        MonoBehaviour.Destroy(pedestrian.gameObject);
         Assert.IsTrue(HelperUtilities.Approx(expected, durations.fastestDuration));
     }
 
