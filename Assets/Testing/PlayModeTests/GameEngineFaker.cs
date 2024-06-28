@@ -14,7 +14,7 @@ public class GameEngineFaker
     public GameEngine GameEngine { get; internal set; }
 
     public BezierWalkerWithSpeedVariant Bezier { get; internal set; }
-    public BezierSpline BezierSpline { get; internal set; }
+    public BezierSpline BezierSpline => SelectSpline(0);
     private GameEngineFaker() { }
     public static GameEngineFaker CreateDefaultPlayground()
     {
@@ -26,19 +26,11 @@ public class GameEngineFaker
     private void Init()
     {
         if (GameKernel != null)
-        {
-           // MonoBehaviour.Destroy(BezierSpline.gameObject);
-           // onoBehaviour.Destroy(Bezier.gameObject);
-           // MonoBehaviour.Destroy(GameEngine.gameObject);
             MonoBehaviour.Destroy(GameKernel);
-        }
-        Debug.Break();
 
         GameKernel = MonoBehaviour.Instantiate((GameObject)Resources.Load("Prefabs/Game Kernel"));
         SetLevelManagerUnsolvable();
         GameEngine = GameKernel.GetComponentInChildren<GameEngine>();
-        Debug.Log(GameEngine);
-        BezierSpline = GameKernel.GetComponentInChildren<BezierSolution.BezierSpline>();
     }
 
     public BezierWalkerWithSpeedVariant GetBezier()
@@ -57,6 +49,11 @@ public class GameEngineFaker
         var levelManager = GameKernel.GetComponentInChildren<LevelManager>();
         levelManager.TimeToSolve = TOO_LONG_TIME; // Make level not solvable
         levelManager.TimeToLoop = TOO_LONG_TIME; // Make level not loopable
+    }
+
+    public BezierSpline SelectSpline(int i = 0)
+    {
+        return GameKernel.GetComponentsInChildren<BezierSolution.BezierSpline>()[i];
     }
 }
 

@@ -84,8 +84,7 @@ namespace Level
 
         public void Awake()
         {
-            if (instance == null)
-                instance = this;
+            instance = this;
 
             timeControlImages = GetTimeControlImagesExceptContainer();
             ChangeSpeed(GameSpeed.Normal);
