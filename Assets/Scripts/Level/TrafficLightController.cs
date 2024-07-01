@@ -38,14 +38,19 @@ namespace Level
             set
             {
                 state = value;
+                if (value == TrafficLightColour.Red)
+                {
+
+                }
                 image.sprite = gameEngine.TrafficLightSprites[(int)value];
+
                 EventManager.RaiseOnTrafficLightChanged(value);
             }
         }
         public bool IsRed => State == TrafficLightColour.Red;
         public bool IsYellow => State == TrafficLightColour.Yellow;
         public bool IsGreen => State == TrafficLightColour.Green;
-        public int TotalAmountTime => timeAmounts.Sum();
+        public int SumAllTimes => timeAmounts.Sum();
         public float TimeOffset
         {
             get => timeOffset;
@@ -136,7 +141,6 @@ namespace Level
             }
 
         }
-
 
     }
 }
