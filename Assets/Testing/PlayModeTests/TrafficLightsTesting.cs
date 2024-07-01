@@ -98,7 +98,6 @@ public class TrafficLightsTesting
 
         trafficLight.State = TrafficLightColour.Green;
 
-
         Assert.AreEqual(TrafficLightColour.Green, trafficLight.State);
         yield return new WaitForSeconds(1);
         Assert.AreEqual(TrafficLightColour.Yellow, trafficLight.State);
