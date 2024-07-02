@@ -20,7 +20,7 @@ public class RandomBezier : MonoBehaviour
             rend.sortingOrder = GetSortingOrderFromSpline();
             rend.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
             roadUser.NormalSpeed = roadUser.NormalSpeed + GetRandomSpeedVariability();
-            roadUser.bezier.speed = roadUser.NormalSpeed;
+            roadUser.Bezier.speed = roadUser.NormalSpeed;
         }
 
     }
@@ -44,7 +44,7 @@ public class RandomBezier : MonoBehaviour
     private void Update()
     {
         
-        if (roadUser.bezier.NormalizedT >= 0.99)
+        if (roadUser.Bezier.NormalizedT >= 0.99)
         {
             Destroy(gameObject, 1f);
         }

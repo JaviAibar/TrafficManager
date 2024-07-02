@@ -245,7 +245,7 @@ public class GeneralTesting : MonoBehaviour
         blackCar = Instantiate((GameObject)Resources.Load("Prefabs/RoadUsers/Black Car"), roadUsersGO.transform);
 
         vehicle = blackCar?.GetComponent<VehicleController>();
-        vehicle.bezier = blackCar.AddComponent<BezierWalkerWithSpeedVariant>();
+        //vehicle.bezier = blackCar.AddComponent<BezierWalkerWithSpeedVariant>();
         vehicle.Spline = gameKernel.GetComponentsInChildren<BezierSpline>()[2]; // Asign the Spline 2 because we want it to go left
         vehicle.enabled = true; // Set enable because it disables automatically due to the aforementioned Exception
         vehicle.TimeToLoop = tooLongTime;

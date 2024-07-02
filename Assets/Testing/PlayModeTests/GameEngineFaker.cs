@@ -12,9 +12,20 @@ public class GameEngineFaker
     private static GameEngineFaker instance;
     public GameObject GameKernel { get; internal set; }
     public GameEngine GameEngine { get; internal set; }
-
-    public BezierWalkerWithSpeedVariant Bezier { get; internal set; }
     public BezierSpline BezierSpline => SelectSpline(0);
+    private GameObject roadUsersGO = null;
+
+    public GameObject RoadUsersGO
+    {
+        get
+        {
+            if (roadUsersGO != null) return roadUsersGO;
+            roadUsersGO = GameObject.Find("roadUsersGO");
+            if (roadUsersGO == null) roadUsersGO = new("roadUsersGO");
+            return roadUsersGO;
+        }
+    }
+
     private GameEngineFaker() { }
     public static GameEngineFaker CreateDefaultPlayground()
     {
@@ -31,16 +42,6 @@ public class GameEngineFaker
         GameKernel = MonoBehaviour.Instantiate((GameObject)Resources.Load("Prefabs/Game Kernel"));
         SetLevelManagerUnsolvable();
         GameEngine = GameKernel.GetComponentInChildren<GameEngine>();
-    }
-
-    public BezierWalkerWithSpeedVariant GetBezier()
-    {
-        return Bezier;
-    }
-
-    public void SetBezier(RoadUser roadUser)
-    {
-        Bezier = roadUser.GetComponent<BezierWalkerWithSpeedVariant>();
     }
 
     public void SetLevelManagerUnsolvable()

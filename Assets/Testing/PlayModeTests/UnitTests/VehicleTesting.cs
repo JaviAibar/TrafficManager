@@ -14,31 +14,11 @@ namespace UnitTests
 {
     public class VehicleTesting
     {
-        BezierWalkerWithSpeedVariant bezier;
-        private VehicleController CreateDefaultVehicle(GameEngineFaker gameEngineFaker)
-        {
-            float TOO_LONG_TIME = 200;
-
-            GameObject roadUsersGO = new();
-
-            var blackCar = MonoBehaviour.Instantiate((GameObject)Resources.Load("Prefabs/RoadUsers/Black Car"), roadUsersGO.transform);
-
-            var vehicle = blackCar.GetComponent<VehicleController>();
-            gameEngineFaker.SetBezier(vehicle);
-            vehicle.Spline = gameEngineFaker.SelectSpline(2); // Asign the Spline 2 because we want it to go left
-            vehicle.enabled = true; // Set enable because it disables automatically due to the aforementioned Exception
-            vehicle.TimeToLoop = TOO_LONG_TIME;
-            bezier = blackCar.GetComponent<BezierWalkerWithSpeedVariant>();
-
-            return vehicle;
-        }
-
-
         [UnityTest]
         public IEnumerator _00_GameSpeedChangingVehicleTest_FastIsProportional([Values(40, 30, 20)] float speed)
         {
             GameEngineFaker gameEngineFaker = GameEngineFaker.CreateDefaultPlayground();
-            VehicleController vehicle = CreateDefaultVehicle(gameEngineFaker);
+            VehicleController vehicle = RoadUserHelperMethods.CreateDefaultVehicle(gameEngineFaker);
             TestingDurations durations = new();
 
             yield return RoadUserHelperMethods.CalculateTimesSpeedRoadUser_NormalSpeed(vehicle, gameEngineFaker, speed, durations);
@@ -58,7 +38,7 @@ namespace UnitTests
         public IEnumerator _01_GameSpeedChangingVehicleTest_FastestIsProportional([Values(40, 30, 20)] float speed)
         {
             GameEngineFaker gameEngineFaker = GameEngineFaker.CreateDefaultPlayground();
-            VehicleController vehicle = CreateDefaultVehicle(gameEngineFaker);
+            VehicleController vehicle = RoadUserHelperMethods.CreateDefaultVehicle(gameEngineFaker);
             TestingDurations durations = new();
 
             yield return RoadUserHelperMethods.CalculateTimesSpeedRoadUser_NormalSpeed(vehicle, gameEngineFaker, speed, durations);

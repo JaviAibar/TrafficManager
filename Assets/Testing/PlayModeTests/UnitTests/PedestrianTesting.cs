@@ -8,28 +8,11 @@ namespace UnitTests
 {
     public class PedestrianTesting
     {
-        private PedestrianController CreateDefaultPedestrian(GameEngineFaker gameEngineFaker)
-        {
-            float TOO_LONG_TIME = 200;
-
-            GameObject roadUsersGO = new();
-
-            var pedestrian1 = MonoBehaviour.Instantiate((GameObject)Resources.Load("Prefabs/RoadUsers/Pedestrian1"), roadUsersGO.transform);
-            var pedestrian = pedestrian1.GetComponent<PedestrianController>();
-            gameEngineFaker.SetBezier(pedestrian);
-            pedestrian.Spline = gameEngineFaker.SelectSpline(1); // Asign the Spline 1 because we want it to go left
-            pedestrian.enabled = true; // Set enable because it gets automatically disabled due to the aforementioned Exception
-            pedestrian.TimeToLoop = TOO_LONG_TIME;
-
-            return pedestrian;
-        }
-
-
         [UnityTest]
         public IEnumerator _00_GameSpeedChangingTest_FastIsProportional([Values(40, 30, 20)] float speed)
         {
             GameEngineFaker gameEngineFaker = GameEngineFaker.CreateDefaultPlayground();
-            PedestrianController pedestrian = CreateDefaultPedestrian(gameEngineFaker);
+            PedestrianController pedestrian = RoadUserHelperMethods.CreateDefaultPedestrian(gameEngineFaker);
 
             TestingDurations durations = new();
 
@@ -50,7 +33,7 @@ namespace UnitTests
         public IEnumerator _00_GameSpeedChangingTest_FastestIsProportional([Values(100, 40, 30, 20)] float speed)
         {
             GameEngineFaker gameEngineFaker = GameEngineFaker.CreateDefaultPlayground();
-            PedestrianController pedestrian = CreateDefaultPedestrian(gameEngineFaker);
+            PedestrianController pedestrian = RoadUserHelperMethods.CreateDefaultPedestrian(gameEngineFaker);
 
             TestingDurations durations = new();
             yield return RoadUserHelperMethods.CalculateTimesSpeedRoadUser_NormalSpeed(pedestrian, gameEngineFaker, speed, durations);

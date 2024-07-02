@@ -9,7 +9,6 @@ using static Level.GameEngine;
 namespace Level
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    //[RequireComponent(typeof(BezierWalkerWithSpeed))]
     [System.Serializable]
     public abstract class RoadUser : MonoBehaviour
     {
@@ -18,7 +17,8 @@ namespace Level
         [Min(0)][SerializeField] private float timeOffset = 0;
         [Min(0)][SerializeField] private float timeToLoop = 10;
         [SerializeField] protected float timer = 0;
-        [HideInInspector] public BezierWalkerWithSpeed bezier;
+        //[HideInInspector] public BezierWalkerWithSpeed bezier;
+        [SerializeField] protected BezierWalkerWithSpeedVariant bezier;
         [SerializeField] protected SpeedController speedController;
         [SerializeField] private BezierSpline spline;
         [SerializeField] private bool respectsTheRules = true;
@@ -121,10 +121,12 @@ namespace Level
         }
 
         // Used eg. when the vehicles are crossing in yellow or when a pedestrian is stuck in green at a crossroad
-        public float RunningSpeed {
+        public float RunningSpeed
+        {
             get => runningSpeed;
             set => runningSpeed = value;
-    }
+        }
+        public BezierWalkerWithSpeedVariant Bezier => bezier;
 
         #endregion
 
@@ -180,7 +182,6 @@ namespace Level
         {
             collider = GetComponents<Collider2D>().First(e => !e.isTrigger); // Should only be one
             bezier = (BezierWalkerWithSpeedVariant)gameObject.AddComponent(typeof(BezierWalkerWithSpeedVariant));
-            // bezier.spline = Spline ?? FindObjectOfType<BezierSpline>();
             bezier.spline = Spline ? Spline : GetComponent<BezierSpline>();
             ROAD_LAYER = LayerMask.NameToLayer("Road");
             rb = GetComponentInParent<Rigidbody2D>();
@@ -190,10 +191,10 @@ namespace Level
         protected virtual void Start()
         {
             if (!bezier)
-                throw new NullReferenceException($"Root of {name} needs a Bezier Walker With Speed component");
+                throw new NullReferenceException($"Root of {name} needs a Bezier Walker With Speed Variant component");
             if (!spline)
                 throw new NullReferenceException($"Root of {name}'s Bezier needs a reference to a BezierSpline component");
-            LoopStarted(); 
+            LoopStarted();
         }
 
         private void FixedUpdate()
@@ -212,9 +213,9 @@ namespace Level
         public virtual void LoopStarted()
         {
             if (bezier.NormalizedT != 0) PathFinished();
-           Print(
-                $"[{name}] began its looping coroutine (lopping true, collider false, statedMoving false, bezier true,"+
-                "normalizedT 0, baseSpeed 0 bezier.speed 1)", VerboseEnum.GameTrace);
+            Print(
+                 $"[{name}] began its looping coroutine (lopping true, collider false, statedMoving false, bezier true," +
+                 "normalizedT 0, baseSpeed 0 bezier.speed 1)", VerboseEnum.GameTrace);
             looping = true; // Flag to lock other actions while looping
             speedController.LoopStarted();
             EnableColliderAndStartedMoving(false);
@@ -229,7 +230,7 @@ namespace Level
             // Accelerating is only true when speedController is given a speed;
             // Normally shouldn't be true, as it (StartMoving) should be called only once, whenever level loops
             // and is responsible of begin moving. It can be, though, for debug or testing purposes
-            if (!Accelerating) 
+            if (!Accelerating)
             {
                 EnableColliderAndStartedMoving(true);
                 ChangeSpeed(normalSpeed);
@@ -307,7 +308,7 @@ namespace Level
             Print($"[{name}] reached finish line (collider disabled)", VerboseEnum.GameTrace);
             ChangeSpeedImmediately(0);
         }
-        
+
         /// <summary>
         /// Changes speed to value given with acceleration specified (recommended between 0.01 and 2)
         /// </summary>
@@ -362,7 +363,7 @@ namespace Level
                 Physics2D.Linecast(position, position + transform.up * 0.02f, 1 << 9);
 
             Print(
-                $"{transform.name} is {(raycast ? "still" : "no longer")} colliding" + 
+                $"{transform.name} is {(raycast ? "still" : "no longer")} colliding" +
                 $"{(raycast ? $"with {raycast.collider.name}" : "")}", VerboseEnum.Physics);
             return raycast;
         }
