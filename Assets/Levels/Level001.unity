@@ -509,6 +509,11 @@ PrefabInstance:
     - target: {fileID: 7090705594422092164, guid: 61ee3f705c8046d43b21eff63c7f95a3,
         type: 3}
       propertyPath: timeOffset
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7090705594422092164, guid: 61ee3f705c8046d43b21eff63c7f95a3,
+        type: 3}
+      propertyPath: waitTimeBeforeStart
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -18,9 +18,9 @@ namespace Level
             base.Awake(); // This is not at first line in Awake because on restart, it caused visual glitch
             spriteRenderer = GetComponent<SpriteRenderer>();
         }
-        public override void LoopStarted()
+        public override void StartLoop()
         {
-            base.LoopStarted();
+            base.StartLoop();
             anim.enabled = true;
         }
 
@@ -82,7 +82,7 @@ namespace Level
             trafficArea.StopArea && trafficArea.SameDirection(transform.up) && (trafficLight.IsGreen || trafficLight.IsYellow);
 
         public bool MustRun() => trafficLight.IsGreen && trafficArea.IsCenter;
-        public bool MovingConditions() => trafficArea && RespectsTheRules && hasStartedMoving;
+        public bool MovingConditions() => trafficArea && RespectsTheRules && speedController.HasStartedMoving;
         #endregion
 
         public override void GameSpeedChanged(GameSpeed state)
@@ -106,7 +106,7 @@ namespace Level
                   + $"Otherwise? {!MustStop() && !MustRun()}"
                 : "");
             Print($"[{name}] [CheckMovingConditions] MovingConditions? {MovingConditions()}: "
-                  + $"(hasStartedMoving?: {hasStartedMoving} respectsRules?: {RespectsTheRules}  {(trafficArea ? $"has ({trafficArea.name})" : "doesn't have ")}a traffic area)\n"
+                  + $"(hasStartedMoving?: {speedController.HasStartedMoving} respectsRules?: {RespectsTheRules}  {(trafficArea ? $"has ({trafficArea.name})" : "doesn't have ")}a traffic area)\n"
                   + moreInfo, VerboseEnum.Speed);
         }
     }

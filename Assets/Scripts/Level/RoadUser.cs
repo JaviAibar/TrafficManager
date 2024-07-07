@@ -14,19 +14,19 @@ namespace Level
     {
         #region Variables
 
-        [Min(0)][SerializeField] private float timeOffset = 0;
+        [Min(0)][SerializeField] private float waitTimeBeforeStart = 0;
         [Min(0)][SerializeField] private float timeToLoop = 10;
-        [SerializeField] protected float timer = 0;
+        protected float timer = 0;
         //[HideInInspector] public BezierWalkerWithSpeed bezier;
         [SerializeField] protected BezierWalkerWithSpeedVariant bezier;
         [SerializeField] protected SpeedController speedController;
         [SerializeField] private BezierSpline spline;
+        [Tooltip("If unchecked, the road user will ignore traffic lights")]
         [SerializeField] private bool respectsTheRules = true;
         protected Rigidbody2D rb;
         protected TrafficLightController trafficLight;
         protected TrafficArea trafficArea;
-        protected bool hasStartedMoving;
-        protected new Collider2D collider;
+        protected Collider2D collider2d;
         protected bool colliding;
         protected Vector3 collisionDirection;
         protected Vector3 endOfCollision;
@@ -36,7 +36,10 @@ namespace Level
 
         [SerializeField] private float normalSpeed = 10;
 
-        // Used eg. when the vehicles are crossing in yellow or when a pedestrian is stuck in green at a crossroad
+        /// <summary>
+        /// Used when the vehicles are crossing in yellow or when a pedestrian is stuck in green at a crossroad
+        /// </summary>
+        [Tooltip("Used when the vehicles are crossing in yellow or when a pedestrian is stuck in green at a crossroad")]
         [SerializeField] private float runningSpeed = 15;
 
         #endregion
@@ -68,15 +71,14 @@ namespace Level
             }
         }
 
-        public bool HasStartedMoving => hasStartedMoving;
 
         /// <summary>
         /// Is not looping, time offset is over and didn't started yet
         /// </summary>
-        public bool CanStartMoving => timer >= timeOffset && !hasStartedMoving && !looping;
+        public bool CanStartMoving => timer >= waitTimeBeforeStart && !looping;
 
 
-        public bool CanMove => timer >= timeOffset && !looping;
+        public bool CanMove => timer >= waitTimeBeforeStart && !looping;
 
         /// <summary>
         /// If time set for the road user to loop is over
@@ -109,7 +111,7 @@ namespace Level
         /// <summary>
         /// If Game is not stopped, road user is not looping and should be accelerating
         /// </summary>
-        public bool MustAccelerate => Accelerating && !Looping && Instance.IsRunning;
+       // public bool MustAccelerate => speedController.MustAccelerate;/*Accelerating && !Looping && Instance.IsRunning;*/
 
         private bool IsOnRoad => trafficArea && trafficLight;
         public bool RespectsTheRules => respectsTheRules;
@@ -120,7 +122,9 @@ namespace Level
             set => normalSpeed = value;
         }
 
-        // Used eg. when the vehicles are crossing in yellow or when a pedestrian is stuck in green at a crossroad
+        /// <summary>
+        /// Used when the vehicles are crossing in yellow or when a pedestrian is stuck in green at a crossroad
+        /// </summary>
         public float RunningSpeed
         {
             get => runningSpeed;
@@ -128,13 +132,15 @@ namespace Level
         }
         public BezierWalkerWithSpeedVariant Bezier => bezier;
 
+        public bool HasStartedMoving => speedController.HasStartedMoving;
+
         #endregion
 
         protected virtual void OnEnable()
         {
             AddOnPathCompleteListener();
             EventManager.OnTrafficLightChanged += TrafficLightChanged;
-            EventManager.OnLoopStarted += LoopStarted;
+            EventManager.OnLoopStarted += StartLoop;
             EventManager.OnGameSpeedChanged += GameSpeedChanged;
             bezier.onPathCompleted.AddListener(PathFinished);
         }
@@ -143,7 +149,7 @@ namespace Level
         {
             RemoveOnOnPathCompleteListener();
             EventManager.OnTrafficLightChanged -= TrafficLightChanged;
-            EventManager.OnLoopStarted -= LoopStarted;
+            EventManager.OnLoopStarted -= StartLoop;
             EventManager.OnGameSpeedChanged -= GameSpeedChanged;
             bezier?.onPathCompleted.RemoveListener(PathFinished);
         }
@@ -168,24 +174,24 @@ namespace Level
         void AddOnPathCompleteListener()
         {
             print("Add  OnPathCompleteListener");
-            bezier?.onPathCompleted.RemoveListener(LoopStarted);
-            if (timeToLoop <= 0) bezier?.onPathCompleted.AddListener(LoopStarted);
+            bezier?.onPathCompleted.RemoveListener(StartLoop);
+            if (timeToLoop <= 0) bezier?.onPathCompleted.AddListener(StartLoop);
         }
 
         void RemoveOnOnPathCompleteListener()
         {
             print("Remove OnPathCompleteListener");
-            bezier?.onPathCompleted.RemoveListener(LoopStarted);
+            bezier?.onPathCompleted.RemoveListener(StartLoop);
         }
 
         protected virtual void Awake()
         {
-            collider = GetComponents<Collider2D>().First(e => !e.isTrigger); // Should only be one
+            collider2d = GetComponents<Collider2D>().First(e => !e.isTrigger); // Should only be one
             bezier = (BezierWalkerWithSpeedVariant)gameObject.AddComponent(typeof(BezierWalkerWithSpeedVariant));
             bezier.spline = Spline ? Spline : GetComponent<BezierSpline>();
             ROAD_LAYER = LayerMask.NameToLayer("Road");
             rb = GetComponentInParent<Rigidbody2D>();
-            speedController = new SpeedController(name, bezier);
+            speedController = gameObject.AddComponent<SpeedController>();
         }
 
         protected virtual void Start()
@@ -194,23 +200,23 @@ namespace Level
                 throw new NullReferenceException($"Root of {name} needs a Bezier Walker With Speed Variant component");
             if (!spline)
                 throw new NullReferenceException($"Root of {name}'s Bezier needs a reference to a BezierSpline component");
-            LoopStarted();
+            StartLoop();
         }
 
         private void FixedUpdate()
         {
             timer += Time.fixedDeltaTime * GameSpeedInt;
             if (timeToLoop > 0 && TimeToRepeat)
-                LoopStarted();
+                StartLoop();
             if (colliding)
                 MoveByCollision();
             if (CanStartMoving) // Start moving after timeOffset
                 StartMoving();
-            if (MustAccelerate)
-                speedController.Accelerate();
+           /* if (MustAccelerate)
+                speedController.Accelerate();*/
         }
 
-        public virtual void LoopStarted()
+        public virtual void StartLoop()
         {
             if (bezier.NormalizedT != 0) PathFinished();
             Print(
@@ -226,7 +232,7 @@ namespace Level
         }
         protected virtual void StartMoving()
         {
-            Print($"[{name}] waited its offset time ({timeOffset} seconds)", VerboseEnum.Speed);
+            Print($"[{name}] waited its offset time ({waitTimeBeforeStart} seconds)", VerboseEnum.Speed);
             // Accelerating is only true when speedController is given a speed;
             // Normally shouldn't be true, as it (StartMoving) should be called only once, whenever level loops
             // and is responsible of begin moving. It can be, though, for debug or testing purposes
@@ -302,7 +308,7 @@ namespace Level
 
         protected void PathFinished()
         {
-            collider.enabled = false;
+            collider2d.enabled = false;
             bezier.NormalizedT = 0;
             bezier.SetAtStart();
             Print($"[{name}] reached finish line (collider disabled)", VerboseEnum.GameTrace);
@@ -317,7 +323,7 @@ namespace Level
         public void ChangeSpeed(float value, float? acceleration = null)
         {
             //bool worthCallMoving = SwitchStopped(value);
-            bool? moving = speedController.ChangeSpeed(value, acceleration);
+            speedController.ChangeSpeed(value, acceleration);
             // if (worthCallMoving && moving != null) Moving(moving.Value);
         }
 
@@ -329,7 +335,7 @@ namespace Level
         {
             //  bool worthCallMoving = SwitchStopped(value);
 
-            bool? moving = speedController.ChangeSpeedImmediately(value);
+            speedController.ChangeSpeedImmediately(value);
             //if (worthCallMoving && moving != null) Moving(moving.Value);
         }
 
@@ -340,15 +346,15 @@ namespace Level
         /// <param name="state"></param>
         public virtual void GameSpeedChanged(GameSpeed state)
         {
-            speedController.GameSpeedChanged(state);
+           // speedController.GameSpeedChanged(state);
         }
 
         public bool SwitchStopped(float newSpeed) => newSpeed == 0 && IsMoving || IsStopped && newSpeed > 0;
 
         public void EnableColliderAndStartedMoving(bool value)
         {
-            hasStartedMoving = value;
-            collider.enabled = value;
+            speedController.HasStartedMoving = value;
+            collider2d.enabled = value;
         }
 
         public void RecoverFromCollision()

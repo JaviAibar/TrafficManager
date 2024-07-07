@@ -57,7 +57,7 @@ public class RoadUserHelperMethods
 
     private static IEnumerator MakeRoadUserStartMoving(RoadUser roadUser, float speed, GameEngineFaker gameEngineFaker, TestingDurations durations)
     {
-        roadUser.LoopStarted();
+        roadUser.StartLoop();
         yield return WaitWhileLooping(roadUser);
         yield return WaitWhileCantStartMoving(roadUser);
         SetRoadUserAtStart(roadUser.Bezier);

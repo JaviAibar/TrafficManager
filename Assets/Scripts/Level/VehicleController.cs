@@ -47,9 +47,9 @@ namespace Level
             carDetector.enabled = true;
         }
 
-        public override void LoopStarted()
+        public override void StartLoop()
         {
-            base.LoopStarted();
+            base.StartLoop();
             audioSource.volume = 0;
             carDetector.enabled = false; // Temp disabled to avoid unintentional accidents
         }
@@ -111,8 +111,8 @@ namespace Level
         public bool MustReduce() => trafficLight.IsRed && !trafficArea.StopArea && trafficArea.SameDirection(RoadUserDir);
 
         public bool MovingConditions() =>
-            trafficArea && RespectsTheRules && !inAnEmergency && hasStartedMoving && !vehicleAhead;
-        public bool MovingAgainAfterVehicleAheadConditions => hasStartedMoving && hadVehicleAhead;
+            trafficArea && RespectsTheRules && !inAnEmergency && speedController.HasStartedMoving && !vehicleAhead;
+        public bool MovingAgainAfterVehicleAheadConditions => speedController.HasStartedMoving && hadVehicleAhead;
 
         #endregion
 
@@ -212,7 +212,7 @@ namespace Level
                   + $"Otherwise? {!MustStop() && !MustRun() && !MustReduce()}"
                 : "");
             Print($"[{name}] [CheckMovingConditions] MovingConditions? {MovingConditions()}: "
-                  + $"(hasStartedMoving?: {hasStartedMoving} respectsRules?: {RespectsTheRules} inAnEmergency?: {inAnEmergency} {(trafficArea ? $"has ({trafficArea.name})" : "doesn't have ")}a traffic area)\n"
+                  + $"(hasStartedMoving?: {speedController.HasStartedMoving} respectsRules?: {RespectsTheRules} inAnEmergency?: {inAnEmergency} {(trafficArea ? $"has ({trafficArea.name})" : "doesn't have ")}a traffic area)\n"
                   + moreInfo, VerboseEnum.Speed);
         }
     }
