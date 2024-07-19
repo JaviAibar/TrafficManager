@@ -11,70 +11,197 @@ namespace UnitTests
         {
             GameEngineFaker gameEngineFaker = GameEngineFaker.CreateDefaultPlayground();
             var vehicle = RoadUserHelperMethods.CreateDefaultVehicle(gameEngineFaker);
-            SpeedController speedController = new(vehicle);
 
-            return speedController;
+            return vehicle.GetComponent<SpeedController>();
         }
 
+        // SECTION 0
         [Test]
-        public void _00_DefaultSpeedControl_IsAcceleratingAtStartTest()
+        public void _00_DefaultSpeedControl_IsNotAcceleratingAtStartTest()
         {
+
             var speedController = CreateDefaultSpeedController();
             Assert.IsFalse(speedController.IsAccelerating);
+
+            MonoBehaviour.Destroy(speedController.gameObject);
         }
 
         [Test]
-        public void _01_DefaultSpeedControl_IsAcceleratingAfterSpeedChangedTest()
+        public void _01_DefaultSpeedControl_CanNotAccelerateAtStartTest()
         {
             var speedController = CreateDefaultSpeedController();
+            // A default speed controller is set CanAccelerate to false because at start
+            // RoadUsers are in start process (Looping)
+            Assert.IsFalse(speedController.CanAccelerate);
+            MonoBehaviour.Destroy(speedController.gameObject);
+        }
+        [Test]
+        public void _02_DefaultSpeedControl_CurrentSpeed0Test()
+        {
+            var speedController = CreateDefaultSpeedController();
+            Assert.AreEqual(0f, speedController.CurrentSpeed);
+            MonoBehaviour.Destroy(speedController.gameObject);
+        }
+
+
+        [Test]
+        public void _03_HasStartMovingMakesCanAccelerateTest()
+        {
+            var speedController = CreateDefaultSpeedController();
+            speedController.HasStartedMoving = true;
+            Assert.IsTrue(speedController.CanAccelerate);
+            MonoBehaviour.Destroy(speedController.gameObject);
+        }
+
+
+        // SECTION 1
+        [Test]
+        public void _10_CanNotAccelerateAfterHalt()
+        {
+            var speedController = CreateDefaultSpeedController();
+            speedController.HasStartedMoving = true;
+            speedController.Halt();
+            Assert.IsFalse(speedController.CanAccelerate);
+            MonoBehaviour.Destroy(speedController.gameObject);
+        }
+
+        [Test]
+        public void _11_CanAccelerateAfterHaltAndResume()
+        {
+            var speedController = CreateDefaultSpeedController();
+            speedController.HasStartedMoving = true;
+            speedController.Halt();
+            speedController.Resume();
+            Assert.IsTrue(speedController.CanAccelerate);
+            MonoBehaviour.Destroy(speedController.gameObject);
+        }
+
+        // SECTION 2
+        [Test]
+        public void _20_ChangeSpeedEqualsBaseSpeedTest()
+        {
+            var speedController = CreateDefaultSpeedController();
+            speedController.HasStartedMoving = true;
             speedController.ChangeSpeed(0);
-            Assert.IsTrue(speedController.IsAccelerating);
+            Assert.AreEqual(0f, speedController.BaseSpeed);
+            MonoBehaviour.Destroy(speedController.gameObject);
         }
 
+
         [Test]
-        public void _02_DefaultSpeedControl_IsAcceleratingAfterSpeedChangedTest()
+        public void _22_IsAcceleratingAfterSpeedChangedTest()
         {
             var speedController = CreateDefaultSpeedController();
+            speedController.HasStartedMoving = true;
             speedController.ChangeSpeed(int.MaxValue);
             Assert.IsTrue(speedController.IsAccelerating);
+            MonoBehaviour.Destroy(speedController.gameObject);
         }
 
         [Test]
-        public void _03_DefaultSpeedControl_IsAcceleratingAfterSpeedImmediatelyChangedTest()
+        public void _23_ChangeSpeedEqualsBaseSpeedTest()
         {
             var speedController = CreateDefaultSpeedController();
-            speedController.ChangeSpeedImmediately(0);
-            Assert.IsTrue(speedController.IsAccelerating);
+            speedController.HasStartedMoving = true;
+            var ARBITRARY_SPEED = float.MaxValue;
+            speedController.ChangeSpeed(ARBITRARY_SPEED);
+            Assert.AreEqual(ARBITRARY_SPEED, speedController.BaseSpeed);
+            MonoBehaviour.Destroy(speedController.gameObject);
         }
 
         [Test]
-        public void _04_DefaultSpeedControl_IsAcceleratingAfterSpeedImmediatelyChangedTest()
+        public void _24_ChangeSpeedWithAcceleration()
         {
             var speedController = CreateDefaultSpeedController();
-            speedController.ChangeSpeedImmediately(int.MaxValue);
-            Assert.IsTrue(speedController.IsAccelerating);
-
+            speedController.HasStartedMoving = true;
+            var ARBITRARY_SPEED = float.MaxValue;
+            speedController.ChangeSpeed(ARBITRARY_SPEED, 0);
+            Assert.AreEqual(ARBITRARY_SPEED, speedController.BaseSpeed);
+            MonoBehaviour.Destroy(speedController.gameObject);
         }
-        [UnityTest]
-        public IEnumerator _10_DefaultSpeedControl_SetSpeedImmediately()
+
+        // SECTION 3
+
+        [Test]
+        public void _31_IsAcceleratingAfterSpeedImmediatelyChangedTest()
         {
             var speedController = CreateDefaultSpeedController();
-            var ARBITRARY_SPEED = int.MaxValue;
+            speedController.HasStartedMoving = true;
+            var ARBITRARY_SPEED = float.MaxValue;
             speedController.ChangeSpeedImmediately(ARBITRARY_SPEED);
-            speedController.Accelerate();
+            // Is it intended that IsAccelerating is always false after ChangeSpeedImmidiately() is executed
+            // because it is reached immediatelly, so no acceleration involved
+            Assert.IsFalse(speedController.IsAccelerating);
+            MonoBehaviour.Destroy(speedController.gameObject);
+        }
+
+        [Test]
+        public void _32_ChangeSpeedImmediateEqualsBaseSpeedTest()
+        {
+            var speedController = CreateDefaultSpeedController();
+            speedController.HasStartedMoving = true;
+            speedController.ChangeSpeedImmediately(0);
+            Assert.AreEqual(0f, speedController.BaseSpeed);
+            MonoBehaviour.Destroy(speedController.gameObject);
+        }
+
+        [Test]
+        public void _33_ChangeSpeedImmediateEqualsBaseSpeedTest()
+        {
+            var speedController = CreateDefaultSpeedController();
+            speedController.HasStartedMoving = true;
+            var ARBITRARY_SPEED = float.MaxValue;
+            speedController.ChangeSpeedImmediately(ARBITRARY_SPEED);
+            Assert.AreEqual(ARBITRARY_SPEED, speedController.BaseSpeed);
+            MonoBehaviour.Destroy(speedController.gameObject);
+        }
+
+
+        // SECTION 4
+
+        [UnityTest]
+        public IEnumerator _40_SetSpeedImmediatelyTest()
+        {
+            var speedController = CreateDefaultSpeedController();
+            speedController.HasStartedMoving = true;
+            var ARBITRARY_SPEED = float.MaxValue;
+            speedController.ChangeSpeedImmediately(ARBITRARY_SPEED);
             yield return new WaitForEndOfFrame();
             Assert.AreEqual(ARBITRARY_SPEED, speedController.CurrentSpeed);
+            MonoBehaviour.Destroy(speedController.gameObject);
         }
 
         [UnityTest]
-        public IEnumerator _20_DefaultSpeedControl_SetSpeed()
+        public IEnumerator _41_SetSpeedArbitraryWaitUntilReachedTest()
         {
             var speedController = CreateDefaultSpeedController();
-            var ARBITRARY_SPEED = int.MaxValue;
-            speedController.ChangeSpeedImmediately(ARBITRARY_SPEED);
-            speedController.Accelerate();
+            speedController.HasStartedMoving = true;
+            var ARBITRARY_SPEED = float.MaxValue;
+            speedController.ChangeSpeed(ARBITRARY_SPEED);
+            Assert.AreEqual(ARBITRARY_SPEED, speedController.BaseSpeed);
             yield return new WaitWhile(() => speedController.IsAccelerating);
+            Debug.Break();
+            Assert.IsFalse(speedController.IsAccelerating);
+            Assert.AreEqual(ARBITRARY_SPEED, speedController.BaseSpeed);
+            Assert.IsTrue(speedController.TargetSpeedReached);
             Assert.AreEqual(ARBITRARY_SPEED, speedController.CurrentSpeed);
+            MonoBehaviour.Destroy(speedController.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator _42_SetSpeedArbitraryTo0_IsAcceleratingTest()
+        {
+            var speedController = CreateDefaultSpeedController();
+            speedController.HasStartedMoving = true;
+            var ARBITRARY_SPEED = float.MaxValue;
+            speedController.ChangeSpeed(ARBITRARY_SPEED);
+            yield return new WaitForEndOfFrame();
+
+            Assert.AreNotEqual(0f, speedController.CurrentSpeed);
+
+            speedController.ChangeSpeed(0);
+            Assert.IsTrue(speedController.IsAccelerating);
+            MonoBehaviour.Destroy(speedController.gameObject);
         }
     }
 }
