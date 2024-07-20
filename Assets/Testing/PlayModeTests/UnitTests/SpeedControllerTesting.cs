@@ -180,7 +180,6 @@ namespace UnitTests
             speedController.ChangeSpeed(ARBITRARY_SPEED);
             Assert.AreEqual(ARBITRARY_SPEED, speedController.BaseSpeed);
             yield return new WaitWhile(() => speedController.IsAccelerating);
-            Debug.Break();
             Assert.IsFalse(speedController.IsAccelerating);
             Assert.AreEqual(ARBITRARY_SPEED, speedController.BaseSpeed);
             Assert.IsTrue(speedController.TargetSpeedReached);
