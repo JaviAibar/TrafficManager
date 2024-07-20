@@ -82,7 +82,7 @@ namespace Level
             trafficArea.StopArea && trafficArea.SameDirection(transform.up) && (trafficLight.IsGreen || trafficLight.IsYellow);
 
         public bool MustRun() => trafficLight.IsGreen && trafficArea.IsCenter;
-        public bool MovingConditions() => trafficArea && RespectsTheRules && speedController.HasStartedMoving;
+        public bool MovingConditions() => trafficArea && RespectsTheRules;
         #endregion
 
         public override void GameSpeedChanged(GameSpeed state)
@@ -106,7 +106,7 @@ namespace Level
                   + $"Otherwise? {!MustStop() && !MustRun()}"
                 : "");
             Print($"[{name}] [CheckMovingConditions] MovingConditions? {MovingConditions()}: "
-                  + $"(hasStartedMoving?: {speedController.HasStartedMoving} respectsRules?: {RespectsTheRules}  {(trafficArea ? $"has ({trafficArea.name})" : "doesn't have ")}a traffic area)\n"
+                  + $"(respectsRules?: {RespectsTheRules}  {(trafficArea ? $"has ({trafficArea.name})" : "doesn't have ")}a traffic area)\n"
                   + moreInfo, VerboseEnum.Speed);
         }
     }
