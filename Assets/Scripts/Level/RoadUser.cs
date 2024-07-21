@@ -114,7 +114,11 @@ namespace Level
        // public bool MustAccelerate => speedController.MustAccelerate;/*Accelerating && !Looping && Instance.IsRunning;*/
 
         private bool IsOnRoad => trafficArea && trafficLight;
-        public bool RespectsTheRules => respectsTheRules;
+        public bool RespectsTheRules
+        {
+            get => respectsTheRules;
+            set => respectsTheRules = value;
+        }
 
         public float NormalSpeed
         {
@@ -131,8 +135,6 @@ namespace Level
             set => runningSpeed = value;
         }
         public BezierWalkerWithSpeedVariant Bezier => bezier;
-
-        public bool HasStartedMoving => speedController.HasStartedMoving;
 
         #endregion
 
@@ -151,7 +153,8 @@ namespace Level
             EventManager.OnTrafficLightChanged -= TrafficLightChanged;
             EventManager.OnLoopStarted -= StartLoop;
             EventManager.OnGameSpeedChanged -= GameSpeedChanged;
-            bezier?.onPathCompleted.RemoveListener(PathFinished);
+            if (bezier)
+                bezier.onPathCompleted.RemoveListener(PathFinished);
         }
 
         #region Debug
@@ -174,14 +177,19 @@ namespace Level
         void AddOnPathCompleteListener()
         {
             print("Add  OnPathCompleteListener");
-            bezier?.onPathCompleted.RemoveListener(StartLoop);
-            if (timeToLoop <= 0) bezier?.onPathCompleted.AddListener(StartLoop);
+            if (bezier)
+            {
+                bezier.onPathCompleted.RemoveListener(StartLoop);
+                if (timeToLoop <= 0) bezier.onPathCompleted.AddListener(StartLoop);
+            }
         }
 
         void RemoveOnOnPathCompleteListener()
         {
             print("Remove OnPathCompleteListener");
-            bezier?.onPathCompleted.RemoveListener(StartLoop);
+            
+            if (bezier)
+                bezier.onPathCompleted.RemoveListener(StartLoop);
         }
 
         protected virtual void Awake()
@@ -239,6 +247,7 @@ namespace Level
             if (!Accelerating)
             {
                 EnableColliderAndStartedMoving(true);
+                speedController.Resume();
                 ChangeSpeed(normalSpeed);
             }
             else Print($"[{name}] was accelerating before CanStartMoving was true", VerboseEnum.Speed);
@@ -353,7 +362,6 @@ namespace Level
 
         public void EnableColliderAndStartedMoving(bool value)
         {
-            speedController.HasStartedMoving = value;
             collider2d.enabled = value;
         }
 
