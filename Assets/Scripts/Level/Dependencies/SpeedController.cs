@@ -7,46 +7,67 @@ using UnityEngine;
 using static Level.GameEngine;
 
 [Serializable]
-public class SpeedController
+public class SpeedController : MonoBehaviour
 {
     #region Variables
     private float initialSpeed;
-    private string name;
     private float accelerationStep = 0;
     private int counterAccelIterations = 0;
     // This value is used when the GameSpeed is changed, because the car could be stopped while running for instance
-    private float baseSpeed;
-    private bool _accelerating;
-    private float acceleration = 1f;
     private BezierWalkerWithSpeed bezier;
-    private bool speedChanged;
+    private float baseSpeedBeforeHalt = -1;
 
     #endregion
-    
+
     #region Accessors
 
-    public float baseAcceleration = 0.2f;
-    public float BaseAcceleration => baseAcceleration;
+    /// <summary>
+    /// Variation of the speed per unit time without taking into account any variation, e.g. game speed, running, slowing down...
+    /// This will be used when returning to an unaltered acceleration
+    /// </summary>
+    public float BaseAcceleration { get; private set; } = 0.2f;
     private float Epsilon => 0.01f;
     public bool TargetSpeedReached => Mathf.Abs(CurrentSpeed - TargetSpeed) < Epsilon;
-    public bool CanAccelerate => speedChanged && !TargetSpeedReached;
-    public float Acceleration => acceleration;
+    public bool CanAccelerate => EngineRunning && Instance.IsRunning;
+    /// <summary>
+    /// Current acceleration with all variations already calculated
+    /// </summary>
+    public float Acceleration { get; private set; } = 1f;
     private float TargetSpeed => BaseSpeed * GameSpeedInt;
-    public int GameSpeedInt => (int) Instance.Speed;
-    public float BaseSpeed => baseSpeed;
-    public bool IsOnStartingLine => bezier.NormalizedT <= 0f;
-    public float CurrentSpeed
+    public int GameSpeedInt => (int)Instance.Speed;
+    /// <summary>
+    /// Normal speed without taking into account any variation, e.g. game speed, running, slowing down...
+    /// This will be used when returning to an unaltered speed
+    /// </summary>
+    public float BaseSpeed { get; private set; }
+    /// <summary>
+    /// Actual speed in this specific moment with all possible alterations already calculate
+    /// </summary>
+    public float CurrentSpeed => bezier.speed;
+    public bool IsAccelerating => !TargetSpeedReached && CanAccelerate;
+
+    /// <summary>
+    /// Default true. 
+    /// If Halt() executed, will be false.
+    /// If Resume() executed, will be true.
+    /// </summary>
+    public bool EngineRunning { get; private set; } = false;
+
+    #endregion
+
+    private void Awake()
     {
-        get => bezier.speed;
-        set => bezier.speed = value;
+        if (!TryGetComponent<RoadUser>(out var roadUser))
+            throw new NullReferenceException($"RoadUser not found along with SpeedController in GameObject {name}");
+        bezier = roadUser.Bezier;
     }
-#endregion
-    public SpeedController(string name, BezierWalkerWithSpeed bezier)
+
+    private void Update()
     {
-        this.name = name;
-        this.bezier = bezier;
+        if (IsAccelerating) Accelerate();
     }
-    public float Accelerate()
+
+    private float Accelerate()
     {
         if (!TargetSpeedReached)
         {
@@ -56,12 +77,11 @@ public class SpeedController
                 VerboseEnum.SpeedDetail);
             counterAccelIterations++;
             accelerationStep += 0.1f; // It will take 1 second to reach accelerationStep=1
-            // print($"Increasing {name} speed to { Mathf.Lerp(initialSpeed, targetSpeed, Acceleration * timeAccelerating)} t={ Acceleration * (int)instance.Speed * timeAccelerating} (delta={timeAccelerating} * gameSpeed={instance.Speed} * Accl={Acceleration})");
-            CurrentSpeed = Mathf.Lerp(initialSpeed, TargetSpeed, Acceleration * accelerationStep * GameSpeedInt);
+            
+            bezier.speed = Mathf.Lerp(initialSpeed, TargetSpeed, Acceleration * accelerationStep * GameSpeedInt);
             Print(
-                $"[{name}] acceleration iteration ended up with bezier.speed={CurrentSpeed}.   {CurrentSpeed - increment} was added with Lerp(a:{initialSpeed}, b:{TargetSpeed}, t:{Acceleration * accelerationStep }) t = Acceleration:{Acceleration} * accelerationStep:{accelerationStep}  ",
+                $"[{name}] acceleration iteration ended up with bezier.speed={CurrentSpeed}.   {CurrentSpeed - increment} was added with Lerp(a:{initialSpeed}, b:{TargetSpeed}, t:{Acceleration * accelerationStep}) t = Acceleration:{Acceleration} * accelerationStep:{accelerationStep}  ",
                 VerboseEnum.SpeedDetail);
-            CheckSpeedChangedReached();
         }
         else
         {
@@ -73,33 +93,32 @@ public class SpeedController
         return CurrentSpeed;
     }
 
-    private void CheckSpeedChangedReached()
-    {
-        speedChanged = !TargetSpeedReached;
-    }
-
     /// <summary>
     /// Change the speed of the user for the given amount
     /// </summary>
     /// <param name="newSpeed"></param>
     /// <param name="speedChanged"></param>
     /// <param name="newAcceleration">default is base acceleration</param>
-    public bool? ChangeSpeed(float newSpeed, float? newAcceleration = null)
+    public void ChangeSpeed(float newSpeed, float? newAcceleration = null)
     {
-        speedChanged = true;
-        initialSpeed = CurrentSpeed;
+        if (newAcceleration == 0 || Acceleration == 0)
+        {
+            ChangeSpeedImmediately(newSpeed);
+            return;
+        }
+
         GameEngine.Print(
-            $"Asked {name} to change its speed to {newSpeed} {(Mathf.Approximately(newSpeed, baseSpeed) ? "but it was already" : $"target was {baseSpeed} and current {initialSpeed}")} btw its {(TargetSpeedReached ? "" : "NOT")} accelerating already",
+            $"Asked {name} to change its speed to {newSpeed} {(Mathf.Approximately(newSpeed, BaseSpeed) ? "but it was already" : $"target was {BaseSpeed} and current {initialSpeed}")} btw its {(TargetSpeedReached ? "" : "NOT")} accelerating already",
             VerboseEnum.Speed);
-        /*if (!hasStartedMoving) Debug.LogWarning($"[{name}] asked to move before its hasStartedMoving was completed!");*/
-        if (/*hasStartedMoving && */Mathf.Approximately(newSpeed, baseSpeed)) return null;
-        //Moving(newSpeed != 0); // If new speed is diff of 0, then Moving(true)
-        baseSpeed = newSpeed;
-       // Moving(newSpeed != 0);
-        acceleration = newAcceleration ?? BaseAcceleration; 
+        
+        if (Mathf.Approximately(newSpeed, BaseSpeed)) return;
+        initialSpeed = CurrentSpeed;
+
+        BaseSpeed = newSpeed;
+
+        Acceleration = newAcceleration ?? BaseAcceleration;
         accelerationStep = 0;
         counterAccelIterations = 0;
-        return newSpeed != 0;
     }
 
     /// <summary>
@@ -107,42 +126,61 @@ public class SpeedController
     /// because in a Game speed change makes no sense an acceleration effect
     /// </summary>
     /// <param name="state"></param>
-    public virtual void GameSpeedChanged(GameSpeed state)
+   /* public virtual void GameSpeedChanged(GameSpeed state)
     {
         Print(
-            $"Speed of {name} {(state == GameSpeed.Paused || !TargetSpeedReached ? $"changed to {(state == GameSpeed.Paused ? "0" : (bezier.speed = baseSpeed * (int)state))} due to GameSpeed changed to {state}" : "didn't change")}",
+            $"Speed of {name} {(state == GameSpeed.Paused || !TargetSpeedReached ? $"changed to {(state == GameSpeed.Paused ? "0" : (bezier.speed = BaseSpeed * (int)state))} due to GameSpeed changed to {state}" : "didn't change")}",
             VerboseEnum.Speed);
         if (state == GameSpeed.Paused) bezier.speed = 0;
-        else if (!TargetSpeedReached) bezier.speed = baseSpeed * (int)state;
-    }
-    
+        else if (!TargetSpeedReached) bezier.speed = BaseSpeed * (int)state;
+    }*/
+
     /// <summary>
     /// Changes speed of user almost instantly
     /// </summary>
     /// <param name="newSpeed"></param>
-    public bool? ChangeSpeedImmediately(float newSpeed)
+    public void ChangeSpeedImmediately(float newSpeed)
     {
         Print($"[{name}] forced to change its speed quickly to {newSpeed}", VerboseEnum.Speed);
-        return ChangeSpeed(newSpeed, 100);
+        BaseSpeed = newSpeed;
+        bezier.speed = newSpeed;
+        //return ChangeSpeed(newSpeed, 100);
     }
 
     public void LoopStarted()
     {
     }
-    
-  //  public IEnumerator LocateOnStartLine()
-  //  {
-      //  bezier.NormalizedT = 0;
-        //baseSpeed = 1;
-        /*
-         * This speed to 1 and the fact that this method is a coroutine is because in order to not hit anybody while backing
-         * to the start, I need to disable the collider, but bezier won't move back to the start until we have a couple of
-         * frames moving.
-         * 
-         */
-       // bezier.speed = 1f;
-      //  yield return new WaitWhile(() => IsOnStartingLine);
-      //  bezier.speed = 0;
-     // yield return null;
-   // }
+
+   /* public void SetInitValues(RoadUser roadUser)
+    {
+        this.name = roadUser.name;
+        this.bezier = roadUser.Bezier;
+    }
+
+    public void SetInitValues(string name, BezierWalkerWithSpeedVariant bezier)
+    {
+        this.name = name;
+        this.bezier = bezier;
+    }*/
+
+    /// <summary>
+    /// You can execute this method if some condition is not met. It will save the state of the last speed set and stop immediately, i.e. CurrentSpeed = 0.
+    /// When Resume() is executed and if the rest of the conditions are met, it will accelerate until last speed set was reached
+    /// </summary>
+    public void Halt()
+    {
+        baseSpeedBeforeHalt = BaseSpeed;
+        ChangeSpeedImmediately(0);
+        EngineRunning = false;
+    }
+
+    /// <summary>
+    /// This will revert Halt() method i.e. it will restore last speed set by accelerating
+    /// </summary>
+    public void Resume()
+    {
+        if (EngineRunning) return;
+        ChangeSpeed(baseSpeedBeforeHalt);
+        EngineRunning = true;
+    }
 }
