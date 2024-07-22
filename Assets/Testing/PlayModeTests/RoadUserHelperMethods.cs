@@ -35,7 +35,7 @@ public class RoadUserHelperMethods
     {
         gameEngineFaker.GameEngine.Speed = GameEngine.GameSpeed.Normal;
         gameEngineFaker.GameEngine.Verbose = GameEngine.VerboseEnum.GameTrace;
-        yield return MakeRoadUserStartMoving(roadUser, speed, gameEngineFaker, durations);
+        yield return MakeRoadUserStartMoving(roadUser, speed, durations);
         durations.normalDuration = Time.time - durations.t;
     }
 
@@ -43,7 +43,7 @@ public class RoadUserHelperMethods
     {
         gameEngineFaker.GameEngine.Speed = GameEngine.GameSpeed.Fast;
         gameEngineFaker.GameEngine.Verbose = GameEngine.VerboseEnum.GameTrace;
-        yield return MakeRoadUserStartMoving(roadUser, speed, gameEngineFaker, durations);
+        yield return MakeRoadUserStartMoving(roadUser, speed, durations);
         durations.fastDuration = Time.time - durations.t;
     }
 
@@ -51,15 +51,15 @@ public class RoadUserHelperMethods
     {
         gameEngineFaker.GameEngine.Speed = GameEngine.GameSpeed.SuperFast;
         gameEngineFaker.GameEngine.Verbose = GameEngine.VerboseEnum.GameTrace;
-        yield return MakeRoadUserStartMoving(roadUser, speed, gameEngineFaker, durations);
+        yield return MakeRoadUserStartMoving(roadUser, speed, durations);
         durations.fastestDuration = Time.time - durations.t;
     }
 
-    private static IEnumerator MakeRoadUserStartMoving(RoadUser roadUser, float speed, GameEngineFaker gameEngineFaker, TestingDurations durations)
+    private static IEnumerator MakeRoadUserStartMoving(RoadUser roadUser, float speed, TestingDurations durations)
     {
         roadUser.StartLoop();
         yield return WaitWhileLooping(roadUser);
-        yield return WaitWhileCantStartMoving(roadUser);
+       // yield return WaitWhileCantStartMoving(roadUser);
         SetRoadUserAtStart(roadUser.Bezier);
         durations.t = Time.time;
         roadUser.ChangeSpeed(speed); // Acceleration is included in this test
@@ -83,14 +83,6 @@ public class RoadUserHelperMethods
     public static IEnumerator WaitWhileOnFinishLine(BezierWalkerWithSpeedVariant bezier)
     {
         while (1 - bezier.NormalizedT <= HelperUtilities.Epsilon)
-        {
-            yield return null;
-        }
-    }
-
-    public static IEnumerator WaitWhileCantStartMoving(RoadUser roadUser)
-    {
-        while (!roadUser.HasStartedMoving)
         {
             yield return null;
         }
