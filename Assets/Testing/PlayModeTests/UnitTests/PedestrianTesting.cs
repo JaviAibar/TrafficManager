@@ -13,6 +13,7 @@ namespace UnitTests
         {
             GameEngineFaker gameEngineFaker = GameEngineFaker.CreateDefaultPlayground();
             PedestrianController pedestrian = RoadUserHelperMethods.CreateDefaultPedestrian(gameEngineFaker);
+            pedestrian.RespectsTheRules = false; // So the pedestrian doesn't get affected by traffic light in default playground
 
             TestingDurations durations = new();
 
@@ -30,10 +31,11 @@ namespace UnitTests
         }
 
         [UnityTest]
-        public IEnumerator _00_GameSpeedChangingTest_FastestIsProportional([Values(100, 40, 30, 20)] float speed)
+        public IEnumerator _01_GameSpeedChangingTest_FastestIsProportional([Values(100, 40, 30, 20)] float speed)
         {
             GameEngineFaker gameEngineFaker = GameEngineFaker.CreateDefaultPlayground();
             PedestrianController pedestrian = RoadUserHelperMethods.CreateDefaultPedestrian(gameEngineFaker);
+            pedestrian.RespectsTheRules = false; // So the pedestrian doesn't get affected by traffic light in default playground
 
             TestingDurations durations = new();
             yield return RoadUserHelperMethods.CalculateTimesSpeedRoadUser_NormalSpeed(pedestrian, gameEngineFaker, speed, durations);

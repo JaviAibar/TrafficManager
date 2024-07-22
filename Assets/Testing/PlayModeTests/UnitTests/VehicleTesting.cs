@@ -19,6 +19,7 @@ namespace UnitTests
         {
             GameEngineFaker gameEngineFaker = GameEngineFaker.CreateDefaultPlayground();
             VehicleController vehicle = RoadUserHelperMethods.CreateDefaultVehicle(gameEngineFaker);
+            vehicle.RespectsTheRules = false; // So the vehicle doesn't get affected by traffic light in default playground
             TestingDurations durations = new();
 
             yield return RoadUserHelperMethods.CalculateTimesSpeedRoadUser_NormalSpeed(vehicle, gameEngineFaker, speed, durations);
@@ -39,6 +40,7 @@ namespace UnitTests
         {
             GameEngineFaker gameEngineFaker = GameEngineFaker.CreateDefaultPlayground();
             VehicleController vehicle = RoadUserHelperMethods.CreateDefaultVehicle(gameEngineFaker);
+            vehicle.RespectsTheRules = false; // So the vehicle doesn't get affected by traffic light in default playground
             TestingDurations durations = new();
 
             yield return RoadUserHelperMethods.CalculateTimesSpeedRoadUser_NormalSpeed(vehicle, gameEngineFaker, speed, durations);
