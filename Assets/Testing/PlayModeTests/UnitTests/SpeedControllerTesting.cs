@@ -167,6 +167,7 @@ namespace UnitTests
         {
             var speedController = CreateDefaultSpeedController();
             var ARBITRARY_SPEED = float.MaxValue;
+            speedController.Resume();
             speedController.ChangeSpeed(ARBITRARY_SPEED);
             Assert.AreEqual(ARBITRARY_SPEED, speedController.BaseSpeed);
             yield return new WaitWhile(() => speedController.IsAccelerating);
@@ -182,6 +183,7 @@ namespace UnitTests
         {
             var speedController = CreateDefaultSpeedController();
             var ARBITRARY_SPEED = float.MaxValue;
+            speedController.Resume();
             speedController.ChangeSpeed(ARBITRARY_SPEED);
             yield return new WaitForEndOfFrame();
 
