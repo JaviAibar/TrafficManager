@@ -10,7 +10,9 @@ namespace Level
 {
     public class TutorialController : MonoBehaviour
     {
-        [SerializeField] private List<Moment> moments;
+        [TutorialEventTypeSelector]
+        /* [SerializeReference] */
+        [SerializeField] private List<TutorialEvent> tutorialEvents;
         [SerializeField] private Transform mask;
         [SerializeField] private float additionalScalePercentage = 0.15f;
         [SerializeField] private GameObject curtain;
@@ -21,35 +23,60 @@ namespace Level
         [SerializeField] private float timeThreshold = 0.5f;
         [SerializeField] private float curtainThreshold = 2f;
 
-        private IEnumerator<Moment> momentEnumerator;
+        private IEnumerator<TutorialEvent> tutorialEventEnumerator;
         private GameEngine gameEngine;
+
+        public GameObject TutorialWindow => tutorialWindow;
+
+        public TMP_Text TutorialText => tutorialText;
 
         private void Awake() => gameEngine = FindObjectOfType<GameEngine>();
 
         private void Start()
         {
-            momentEnumerator = moments.GetEnumerator();
-            momentEnumerator.Reset();
-            momentEnumerator.MoveNext();
+            tutorialEventEnumerator = tutorialEvents.GetEnumerator();
+            tutorialEventEnumerator.Reset();
+            tutorialEventEnumerator.MoveNext();
 
             // This action is performed with priority to prevent timer to update sooner than it should
-            if (momentEnumerator.Current.eventType == EventType.ChangeSpeed && momentEnumerator.Current.time == 0)
-                ChangeSpeed(momentEnumerator.Current.newSpeed);
+           /* if (TutorialEventEnumerator.Current.eventType == EventType.ChangeSpeed && TutorialEventEnumerator.Current.time == 0)
+                ChangeSpeed(TutorialEventEnumerator.Current.newSpeed);*/
         }
 
         private void Update()
         {
             int speed = (int)gameEngine.Speed;
             timer += Time.deltaTime * speed;
-            Moment moment = momentEnumerator.Current;
-            float nextTimestamp = momentEnumerator.Current.time;
-
-            if (moment.asap || IsTheMoment(nextTimestamp))
+            TutorialEvent tutorialEvent = tutorialEventEnumerator.Current;
+            if( tutorialEvent == null )
             {
-                switch (moment.eventType)
+                Debug.Log("No more events");
+                return;
+            }
+            if (tutorialEvent.initiated == false)
+                tutorialEvent.Awake();
+            float nextTimestamp = tutorialEventEnumerator.Current.Time;
+
+            if (tutorialEvent.Asap || IsTheTutorialEvent(nextTimestamp))
+            {
+               /* print($"Tutorial: {tutorialEvent.name}");
+                if (tutorialEvent is ShowMessageTutorialScriptableObject)
+                {
+                    print(((ShowMessageTutorialScriptableObject)tutorialEvent).messageIndex);
+                } else
+                {
+                    print(((ShowMessageTutorialScriptableObject)tutorialEvent).messageIndex);
+
+                }*/
+                tutorialEvent.Execute();
+                if (tutorialEvent.Completed)
+                {
+                    tutorialEventEnumerator.MoveNext();
+                }
+               /* switch (TutorialEvent.eventType)
                 {
                     case EventType.ChangeSpeed:
-                        ChangeSpeed(moment.newSpeed);
+                        ChangeSpeed(TutorialEvent.newSpeed);
                         break;
                     case EventType.HideCurtain:
                         HideCurtain();
@@ -58,21 +85,22 @@ namespace Level
                         HideMessageWindow();
                         break;
                     case EventType.ShowMessage:
-                        ShowTutorialMessage(moment.messageIndex);
+                        ShowTutorialMessage(TutorialEvent.messageIndex);
                         break;
                     case EventType.MoveToTarget:
-                        StartCoroutine(MoveCurtain(moment.target));
+                        StartCoroutine(MoveCurtain(TutorialEvent.target));
                         break;
-                }
+                }*/
             }
 
+            // TODO: Check if needed condition ShowMessage event
             if (tutorialWindow && Input.GetKeyDown(KeyCode.Escape) && tutorialWindow.activeSelf)
             {
                 HideMessageWindow();
             }
         }
 
-        private bool IsTheMoment(float nextTimestamp)
+        private bool IsTheTutorialEvent(float nextTimestamp)
         {
             return timer >= nextTimestamp && nextTimestamp <= nextTimestamp + timeThreshold;
         }
@@ -80,13 +108,13 @@ namespace Level
         private void HideMessageWindow()
         {
             tutorialWindow.SetActive(false);
-            momentEnumerator.MoveNext();
+            tutorialEventEnumerator.MoveNext();
         }
 
         public void HideCurtain()
         {
             curtain.SetActive(false);
-            momentEnumerator.MoveNext();
+            tutorialEventEnumerator.MoveNext();
         }
 
         [ContextMenu("Move to target")]
@@ -149,35 +177,34 @@ namespace Level
         {
             //ChangeSpeed(GameEngine.GameSpeed.Normal);
             tutorialWindow.SetActive(false);
-            momentEnumerator.MoveNext();
+            tutorialEventEnumerator.MoveNext();
         }
 
-        [ContextMenu("Set Tutorial Message")]
+       /* [ContextMenu("Set Tutorial Message")]
         public void ShowTutorialMessage()
         {
-            ShowTutorialMessage(momentEnumerator.Current.messageIndex);
-        }
+            ShowTutorialMessage(TutorialEventEnumerator.Current.MessageIndex);
+        }*/
         public void ShowTutorialMessage(int messageIndex)
         {
-            tutorialWindow.SetActive(true);
-            tutorialText.text = LocalizationSettings.StringDatabase.GetLocalizedString("Tutorial Messages", messageIndex.ToString("D3"));
+            
         }
 
         public void ChangeSpeed(GameSpeed newSpeed)
         {
             gameEngine.ChangeSpeed((int)newSpeed);
-            momentEnumerator.MoveNext();
+            tutorialEventEnumerator.MoveNext();
         }
 
-        public void ResetTutorial()
+        /*public void ResetTutorial()
         {
-            momentEnumerator.Reset();
-            momentEnumerator.MoveNext();
-            if (momentEnumerator.Current.eventType == EventType.ChangeSpeed && momentEnumerator.Current.time == 0)
-                ChangeSpeed(momentEnumerator.Current.newSpeed);
-        }
+            TutorialEventEnumerator.Reset();
+            TutorialEventEnumerator.MoveNext();
+            if (TutorialEventEnumerator.Current.eventType == EventType.ChangeSpeed && TutorialEventEnumerator.Current.time == 0)
+                ChangeSpeed(TutorialEventEnumerator.Current.newSpeed);
+        }*/
 
-        [System.Serializable]
+       /* [System.Serializable]
         public struct Moment
         {
             public float time;
@@ -211,11 +238,11 @@ namespace Level
                 this.newSpeed = newSpeed;
             }
         }
-
+       */
         [ContextMenu("Current moment")]
         public void PrintCurrentMoment()
         {
-            print(momentEnumerator.Current);
+            print(tutorialEventEnumerator.Current);
         }
 
         public enum EventType
